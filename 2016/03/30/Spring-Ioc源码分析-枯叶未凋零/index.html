@@ -80,15 +80,16 @@
 
 
 
-<meta name="description" content="学习、积累、分享">
-<meta property="og:type" content="website">
-<meta property="og:title" content="枯叶未凋零">
-<meta property="og:url" content="http://xianyijun.github.io/archives/2016/04/index.html">
+<meta name="description" content="【摘要】Spring Ioc 源码分析 什么是Ioc 在面对对象编程的开发过程中，以对象为核心，一个系统应用往往是由多个对象之间相互协作完成的。对象与对象之间耦合在一起，如果其中一个对象出现了问题或者需要发生改变的话，整个系统都可能会出现问题。想要解决这个问题，解决对象之间的耦合的话，就需要引用第三方来将这 阅读全文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Ioc源码分析 - 枯叶未凋零">
+<meta property="og:url" content="http://xianyijun.github.io/2016/03/30/Spring-Ioc源码分析-枯叶未凋零/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="学习、积累、分享">
+<meta property="og:description" content="【摘要】Spring Ioc 源码分析 什么是Ioc 在面对对象编程的开发过程中，以对象为核心，一个系统应用往往是由多个对象之间相互协作完成的。对象与对象之间耦合在一起，如果其中一个对象出现了问题或者需要发生改变的话，整个系统都可能会出现问题。想要解决这个问题，解决对象之间的耦合的话，就需要引用第三方来将这 阅读全文">
+<meta property="og:updated_time" content="2016-04-29T12:52:47.523Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="枯叶未凋零">
-<meta name="twitter:description" content="学习、积累、分享">
+<meta name="twitter:title" content="Spring Ioc源码分析 - 枯叶未凋零">
+<meta name="twitter:description" content="【摘要】Spring Ioc 源码分析 什么是Ioc 在面对对象编程的开发过程中，以对象为核心，一个系统应用往往是由多个对象之间相互协作完成的。对象与对象之间耦合在一起，如果其中一个对象出现了问题或者需要发生改变的话，整个系统都可能会出现问题。想要解决这个问题，解决对象之间的耦合的话，就需要引用第三方来将这 阅读全文">
 
 
 
@@ -106,7 +107,7 @@
   };
 </script>
 
-  <title> 归档 | 枯叶未凋零 </title>
+  <title> Spring Ioc源码分析 - 枯叶未凋零 | 枯叶未凋零 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -127,7 +128,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -215,251 +216,118 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 9 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2016">2016</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/25/Netty-源码分析之ByteBuf-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">Netty 源码分析之ByteBuf - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-25T21:48:00+08:00"
-              content="2016-04-25" >
-          04-25
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/22/浅析Java-Nio-之-选择器-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">浅析Java Nio  之 选择器 - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-22T20:56:00+08:00"
-              content="2016-04-22" >
-          04-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/18/JVM基础之思维导图-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">JVM基础之思维导图 - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-18T14:08:00+08:00"
-              content="2016-04-18" >
-          04-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/16/Java-线程池简单实现-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">Java 线程池简单实现 - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-16T17:12:00+08:00"
-              content="2016-04-16" >
-          04-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/14/浅析Java-Nio-之通道-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">浅析Java Nio 之通道 - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-14T11:52:00+08:00"
-              content="2016-04-14" >
-          04-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/11/浅析Java-Nio-之缓冲区-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">浅析Java Nio 之缓冲区 - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-11T14:18:00+08:00"
-              content="2016-04-11" >
-          04-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
+  
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Spring Ioc源码分析 - 枯叶未凋零
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-30T22:00:00+08:00" content="2016-03-30">
+              2016-03-30
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>【摘要】Spring Ioc 源码分析 什么是Ioc 在面对对象编程的开发过程中，以对象为核心，一个系统应用往往是由多个对象之间相互协作完成的。对象与对象之间耦合在一起，如果其中一个对象出现了问题或者需要发生改变的话，整个系统都可能会出现问题。想要解决这个问题，解决对象之间的耦合的话，就需要引用第三方来将这 <a href="http://www.cnblogs.com/xianyijun/p/5339115.html" target="_blank" rel="external">阅读全文</a></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/28/Spring-AOP源码分析-枯叶未凋零/" rel="next" title="Spring AOP源码分析 - 枯叶未凋零">
+                <i class="fa fa-chevron-left"></i> Spring AOP源码分析 - 枯叶未凋零
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/11/浅析Java-Nio-之缓冲区-枯叶未凋零/" rel="prev" title="浅析Java Nio 之缓冲区 - 枯叶未凋零">
+                浅析Java Nio 之缓冲区 - 枯叶未凋零 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -467,6 +335,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -486,8 +358,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -550,6 +431,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -646,11 +538,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   
