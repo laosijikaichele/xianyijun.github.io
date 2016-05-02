@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Nio," />
+  <meta name="keywords" content="Collection," />
 
 
 
@@ -80,16 +80,21 @@
 
 
 
-<meta name="description" content="【摘要】浅析Java Nio 之缓冲区 缓存区 缓冲区及相应工作是IO的基础，输入和输出可以简单地看做是把将数据从缓冲区移入或者移出。 进程进行IO操作，就是通过通知操作系统，对缓冲区中的数据进行移出（写），或者把数据填充到缓冲区（读）。进程通过read的系统调用，将缓冲区填满。首先内核向磁盘控制硬件发出命 阅读全文">
+<meta name="description" content="Java Collection 集合框架图//先写个Java Collection集合框架图，接下来慢慢填坑(立flag)。
+Collection接口List接口Set接口Iteratir迭代器Map接口Comprable和Comprator比较Arrays和Collections工具类">
 <meta property="og:type" content="article">
-<meta property="og:title" content="浅析Java Nio 之缓冲区 - 枯叶未凋零">
-<meta property="og:url" content="http://xianyijun.github.io/2016/04/11/浅析Java-Nio-之缓冲区-枯叶未凋零/index.html">
+<meta property="og:title" content="Java Collection 集合框架图">
+<meta property="og:url" content="http://xianyijun.github.io/2016/05/01/Java-Collection-集合框架图/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="【摘要】浅析Java Nio 之缓冲区 缓存区 缓冲区及相应工作是IO的基础，输入和输出可以简单地看做是把将数据从缓冲区移入或者移出。 进程进行IO操作，就是通过通知操作系统，对缓冲区中的数据进行移出（写），或者把数据填充到缓冲区（读）。进程通过read的系统调用，将缓冲区填满。首先内核向磁盘控制硬件发出命 阅读全文">
-<meta property="og:updated_time" content="2016-05-01T12:42:30.786Z">
+<meta property="og:description" content="Java Collection 集合框架图//先写个Java Collection集合框架图，接下来慢慢填坑(立flag)。
+Collection接口List接口Set接口Iteratir迭代器Map接口Comprable和Comprator比较Arrays和Collections工具类">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Collection.png">
+<meta property="og:updated_time" content="2016-05-02T13:57:23.079Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浅析Java Nio 之缓冲区 - 枯叶未凋零">
-<meta name="twitter:description" content="【摘要】浅析Java Nio 之缓冲区 缓存区 缓冲区及相应工作是IO的基础，输入和输出可以简单地看做是把将数据从缓冲区移入或者移出。 进程进行IO操作，就是通过通知操作系统，对缓冲区中的数据进行移出（写），或者把数据填充到缓冲区（读）。进程通过read的系统调用，将缓冲区填满。首先内核向磁盘控制硬件发出命 阅读全文">
+<meta name="twitter:title" content="Java Collection 集合框架图">
+<meta name="twitter:description" content="Java Collection 集合框架图//先写个Java Collection集合框架图，接下来慢慢填坑(立flag)。
+Collection接口List接口Set接口Iteratir迭代器Map接口Comprable和Comprator比较Arrays和Collections工具类">
+<meta name="twitter:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Collection.png">
 
 
 
@@ -107,7 +112,7 @@
   };
 </script>
 
-  <title> 浅析Java Nio 之缓冲区 - 枯叶未凋零 | 枯叶未凋零 </title>
+  <title> Java Collection 集合框架图 | 枯叶未凋零 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -237,7 +242,7 @@
             
             
               
-                浅析Java Nio 之缓冲区 - 枯叶未凋零
+                Java Collection 集合框架图
               
             
           </h1>
@@ -249,8 +254,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-11T14:18:00+08:00" content="2016-04-11">
-              2016-04-11
+            <time itemprop="dateCreated" datetime="2016-05-01T20:38:55+08:00" content="2016-05-01">
+              2016-05-01
             </time>
           </span>
 
@@ -260,8 +265,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/11/浅析Java-Nio-之缓冲区-枯叶未凋零/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/11/浅析Java-Nio-之缓冲区-枯叶未凋零/" itemprop="commentsCount"></span>
+                <a href="/2016/05/01/Java-Collection-集合框架图/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/01/Java-Collection-集合框架图/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -284,8 +289,8 @@
       
 
       
-        <p>【摘要】浅析Java Nio 之缓冲区 缓存区 缓冲区及相应工作是IO的基础，输入和输出可以简单地看做是把将数据从缓冲区移入或者移出。 进程进行IO操作，就是通过通知操作系统，对缓冲区中的数据进行移出（写），或者把数据填充到缓冲区（读）。进程通过read的系统调用，将缓冲区填满。首先内核向磁盘控制硬件发出命 <a href="http://www.cnblogs.com/xianyijun/p/5378245.html" target="_blank" rel="external">阅读全文</a></p>
-
+        <h1 id="Java-Collection-集合框架图"><a href="#Java-Collection-集合框架图" class="headerlink" title="Java Collection 集合框架图"></a>Java Collection 集合框架图</h1><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/Collection.png" alt="collections"><br>//先写个Java Collection集合框架图，接下来慢慢填坑(立flag)。</p>
+<h2 id="Collection接口"><a href="#Collection接口" class="headerlink" title="Collection接口"></a><strong>Collection接口</strong></h2><h3 id="List接口"><a href="#List接口" class="headerlink" title="List接口"></a><strong>List接口</strong></h3><h3 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a><strong>Set接口</strong></h3><h3 id="Iteratir迭代器"><a href="#Iteratir迭代器" class="headerlink" title="Iteratir迭代器"></a><strong>Iteratir迭代器</strong></h3><h2 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a><strong>Map接口</strong></h2><h2 id="Comprable和Comprator比较"><a href="#Comprable和Comprator比较" class="headerlink" title="Comprable和Comprator比较"></a><strong>Comprable和Comprator比较</strong></h2><h2 id="Arrays和Collections工具类"><a href="#Arrays和Collections工具类" class="headerlink" title="Arrays和Collections工具类"></a><strong>Arrays和Collections工具类</strong></h2>
       
     </div>
     
@@ -305,7 +310,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Nio/" rel="tag">#Nio</a>
+            <a href="/tags/Collection/" rel="tag">#Collection</a>
           
         </div>
       
@@ -314,16 +319,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/30/Spring-Ioc源码分析-枯叶未凋零/" rel="next" title="Spring Ioc源码分析 - 枯叶未凋零">
-                <i class="fa fa-chevron-left"></i> Spring Ioc源码分析 - 枯叶未凋零
+              <a href="/2016/04/30/Netty源码分析之NioEventLoop/" rel="next" title="Netty源码分析之NioEventLoop">
+                <i class="fa fa-chevron-left"></i> Netty源码分析之NioEventLoop
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/04/14/浅析Java-Nio-之通道-枯叶未凋零/" rel="prev" title="浅析Java Nio 之通道 - 枯叶未凋零">
-                浅析Java Nio 之通道 - 枯叶未凋零 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/05/01/Java-Concurrent-框架图/" rel="prev" title="Java Concurrent 框架图">
+                Java Concurrent 框架图 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -373,8 +378,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/04/11/浅析Java-Nio-之缓冲区-枯叶未凋零/"
-           data-title="浅析Java Nio 之缓冲区 - 枯叶未凋零" data-url="http://xianyijun.github.io/2016/04/11/浅析Java-Nio-之缓冲区-枯叶未凋零/">
+      <div class="ds-thread" data-thread-key="2016/05/01/Java-Collection-集合框架图/"
+           data-title="Java Collection 集合框架图" data-url="http://xianyijun.github.io/2016/05/01/Java-Collection-集合框架图/">
       </div>
     
   </div>
@@ -478,7 +483,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Collection-集合框架图"><span class="nav-number">1.</span> <span class="nav-text">Java Collection 集合框架图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Collection接口"><span class="nav-number">1.1.</span> <span class="nav-text">Collection接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#List接口"><span class="nav-number">1.1.1.</span> <span class="nav-text">List接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set接口"><span class="nav-number">1.1.2.</span> <span class="nav-text">Set接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iteratir迭代器"><span class="nav-number">1.1.3.</span> <span class="nav-text">Iteratir迭代器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map接口"><span class="nav-number">1.2.</span> <span class="nav-text">Map接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Comprable和Comprator比较"><span class="nav-number">1.3.</span> <span class="nav-text">Comprable和Comprator比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Arrays和Collections工具类"><span class="nav-number">1.4.</span> <span class="nav-text">Arrays和Collections工具类</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
