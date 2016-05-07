@@ -239,6 +239,115 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/06/Netty源码分析之Unsafe/" itemprop="url">
+                  Netty源码分析之Unsafe
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-06T16:22:08+08:00" content="2016-05-06">
+              2016-05-06
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/06/Netty源码分析之Unsafe/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/06/Netty源码分析之Unsafe/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Netty源码分析之UnsafeUnsafeUnsafe是Channel实现的辅助接口，不应该被用户直接调用。
+AbstractUnsafeAbstractUnsafe实现了Unsafe接口，为Unsafe提供了基础API的实现。
+
+registerregister方法将当前unsafe对应的Cha
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/06/Netty源码分析之Unsafe/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/04/Netty源码分析之Channel/" itemprop="url">
                   Netty源码分析之Channel
                 </a>
@@ -290,8 +399,8 @@
       
         
           
-          **Netty源码分析之ChannelChannel是Netty提供网络操作的接口，用于异步操作。Unsafe是内部接口，聚合在Channel协助进行网络读写的操作，是一个内部辅助类
-ChannelChannel提供了一系列功能方法，如网络的读、写、客户端发起连接、主动关闭连接、链路关闭、获取通信双
+          Netty源码分析之ChannelChannel是Netty提供网络操作的接口，用于异步操作。Unsafe是内部接口，聚合在Channel协助进行网络读写的操作，是一个内部辅助类
+ChannelChannel提供了一系列功能方法，如网络的读、写、客户端发起连接、主动关闭连接、链路关闭、获取通信双方的
           ...
 
           <div class="post-more-link text-center">
@@ -1178,112 +1287,6 @@ Netty线程模型Netty的线程模型可以根据不同的用户参数来选择�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/16/Java-线程池简单实现-枯叶未凋零/" itemprop="url">
-                  Java 线程池简单实现 - 枯叶未凋零
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-16T17:12:00+08:00" content="2016-04-16">
-              2016-04-16
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/16/Java-线程池简单实现-枯叶未凋零/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/16/Java-线程池简单实现-枯叶未凋零/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          【摘要】Java 线程池简单实现 线程池的作用 对于一些并发量不高，不要求服务器快速响应请求的任务，我们可以通过每接收一个任务，创建一个线程来执行任务的方式来完成，但是对于一些高并发下场景下，很容易就会性能瓶颈的。一个任务一个线程的话，系统会创建大量的线程，导致操作系统频繁地进行上下文切换，增加系统
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/16/Java-线程池简单实现-枯叶未凋零/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1329,7 +1332,7 @@ Netty线程模型Netty的线程模型可以根据不同的用户参数来选择�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
