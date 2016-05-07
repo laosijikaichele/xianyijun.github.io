@@ -80,25 +80,30 @@
 
 
 
-<meta name="description" content="Netty源码分析之UnsafeUnsafeUnsafe是Channel实现的辅助接口，不应该被用户直接调用。
+<meta name="description" content="Netty源码分析之Unsafe
+UnsafeUnsafe是Channel实现的辅助接口，不应该被用户直接调用。
 AbstractUnsafeAbstractUnsafe实现了Unsafe接口，为Unsafe提供了基础API的实现。
 
-registerregister方法将当前unsafe对应的Channel注册到EventLoop中的多路复用器上，然后调用ChannelPipeline的fireC">
+registerregister方法将当前unsafe对应的Channel注册到EventLoop中的多路复用器上，然后调用ChannelPipeline的fire">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Netty源码分析之Unsafe">
 <meta property="og:url" content="http://xianyijun.github.io/2016/05/06/Netty源码分析之Unsafe/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="Netty源码分析之UnsafeUnsafeUnsafe是Channel实现的辅助接口，不应该被用户直接调用。
+<meta property="og:description" content="Netty源码分析之Unsafe
+UnsafeUnsafe是Channel实现的辅助接口，不应该被用户直接调用。
 AbstractUnsafeAbstractUnsafe实现了Unsafe接口，为Unsafe提供了基础API的实现。
 
-registerregister方法将当前unsafe对应的Channel注册到EventLoop中的多路复用器上，然后调用ChannelPipeline的fireC">
-<meta property="og:updated_time" content="2016-05-07T02:42:40.133Z">
+registerregister方法将当前unsafe对应的Channel注册到EventLoop中的多路复用器上，然后调用ChannelPipeline的fire">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Unsafe.png">
+<meta property="og:updated_time" content="2016-05-07T02:49:43.969Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty源码分析之Unsafe">
-<meta name="twitter:description" content="Netty源码分析之UnsafeUnsafeUnsafe是Channel实现的辅助接口，不应该被用户直接调用。
+<meta name="twitter:description" content="Netty源码分析之Unsafe
+UnsafeUnsafe是Channel实现的辅助接口，不应该被用户直接调用。
 AbstractUnsafeAbstractUnsafe实现了Unsafe接口，为Unsafe提供了基础API的实现。
 
-registerregister方法将当前unsafe对应的Channel注册到EventLoop中的多路复用器上，然后调用ChannelPipeline的fireC">
+registerregister方法将当前unsafe对应的Channel注册到EventLoop中的多路复用器上，然后调用ChannelPipeline的fire">
+<meta name="twitter:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Unsafe.png">
 
 
 
@@ -293,7 +298,8 @@ registerregister方法将当前unsafe对应的Channel注册到EventLoop中的多
       
 
       
-        <h1 id="Netty源码分析之Unsafe"><a href="#Netty源码分析之Unsafe" class="headerlink" title="Netty源码分析之Unsafe"></a><strong>Netty源码分析之Unsafe</strong></h1><h2 id="Unsafe"><a href="#Unsafe" class="headerlink" title="Unsafe"></a><strong>Unsafe</strong></h2><p>Unsafe是Channel实现的辅助接口，不应该被用户直接调用。</p>
+        <h1 id="Netty源码分析之Unsafe"><a href="#Netty源码分析之Unsafe" class="headerlink" title="Netty源码分析之Unsafe"></a><strong>Netty源码分析之Unsafe</strong></h1><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/Unsafe.png" alt="unsafe"></p>
+<h2 id="Unsafe"><a href="#Unsafe" class="headerlink" title="Unsafe"></a><strong>Unsafe</strong></h2><p>Unsafe是Channel实现的辅助接口，不应该被用户直接调用。</p>
 <h2 id="AbstractUnsafe"><a href="#AbstractUnsafe" class="headerlink" title="AbstractUnsafe"></a><strong>AbstractUnsafe</strong></h2><p>AbstractUnsafe实现了Unsafe接口，为Unsafe提供了基础API的实现。</p>
 <ul>
 <li><p>register<br>register方法将当前unsafe对应的Channel注册到EventLoop中的多路复用器上，然后调用ChannelPipeline的fireChannelRegistered方法，如果通道是第一次注册和激活的话，则调用ChannelPipeline的fireChannelActive方法。<br>register方法首先对通道的状态进行验证，如果验证通过的话，就判断当前线程是否Channel对应的NioEventLoop的线程，如果是的话，直接调用register0方法进行注册，否则的话，则是用户线程或者其他线程的发起的注册操作，需要把register0方法封装成Task，添加到NioEventLoop任务队列中。在register0方法中首先调用ensureOpen判断当前Channel是否打开，如果没有打开则无法注册，否则调用doRegister,这个方法是由子类具体实现，</p>
