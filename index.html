@@ -239,6 +239,112 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/07/Netty源码分析之编码与解码/" itemprop="url">
+                  Netty源码分析之编码与解码
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-07T20:50:58+08:00" content="2016-05-07">
+              2016-05-07
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/07/Netty源码分析之编码与解码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/Netty源码分析之编码与解码/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Netty源码分析之编码与解码解码ByteToMessageDecoder在进行网络编程的时候，我们往往需要将读取到的字节数组或者缓冲区数组转化为对应业务逻辑的POJO对象。Netty为我们提供ByteToMessageDecoder抽象工具类将ByteBuf转为POJO对象，我们只需要继续Byte
+          ...
+
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/07/Netty源码分析之编码与解码/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/07/Netty源码分析之ChannelPipeline和ChannelHandler/" itemprop="url">
                   Netty源码分析之ChannelPipeline和ChannelHandler
                 </a>
@@ -1181,112 +1287,6 @@ Netty线程模型Netty的线程模型可以根据不同的用户参数来选择�
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/22/浅析Java-Nio-之-选择器-枯叶未凋零/" itemprop="url">
-                  浅析Java Nio  之 选择器 - 枯叶未凋零
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-22T20:56:00+08:00" content="2016-04-22">
-              2016-04-22
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/22/浅析Java-Nio-之-选择器-枯叶未凋零/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/22/浅析Java-Nio-之-选择器-枯叶未凋零/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          【摘要】浅析Java Nio 之 选择器 Selector Selector是SelectableChannel的多路复用器。Selector可以通过静态工厂方法open调用系统默认的selector provider来创建，也可以通过自定义的SelectorProvider调用openSelect
-          ...
-
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/22/浅析Java-Nio-之-选择器-枯叶未凋零/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1332,7 +1332,7 @@ Netty线程模型Netty的线程模型可以根据不同的用户参数来选择�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
