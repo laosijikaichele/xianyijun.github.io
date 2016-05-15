@@ -93,19 +93,22 @@
 
 
 <meta name="description" content="Java Collection 集合框架图//先写个Java Collection集合框架图，接下来慢慢填坑(立flag)。
-Collection接口List接口Set接口Iteratir迭代器Map接口Comprable和Comprator比较Arrays和Collections工具类">
+Collection接口Collection是一个集合接口，主要提供了集合相关操作的方法，要求其实现类都必须要实现对应的方法。Collection集合可以分为List和Set集合两种
+List接口List接口是一个有序列表，每一个元素都有对应的索引，第一个元素的索引为0。L">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java Collection 集合框架图">
 <meta property="og:url" content="http://xianyijun.github.io/2016/05/01/Java-Collection-集合框架图/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="Java Collection 集合框架图//先写个Java Collection集合框架图，接下来慢慢填坑(立flag)。
-Collection接口List接口Set接口Iteratir迭代器Map接口Comprable和Comprator比较Arrays和Collections工具类">
+Collection接口Collection是一个集合接口，主要提供了集合相关操作的方法，要求其实现类都必须要实现对应的方法。Collection集合可以分为List和Set集合两种
+List接口List接口是一个有序列表，每一个元素都有对应的索引，第一个元素的索引为0。L">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Collection.png">
-<meta property="og:updated_time" content="2016-05-02T13:57:23.079Z">
+<meta property="og:updated_time" content="2016-05-15T06:16:21.634Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Collection 集合框架图">
 <meta name="twitter:description" content="Java Collection 集合框架图//先写个Java Collection集合框架图，接下来慢慢填坑(立flag)。
-Collection接口List接口Set接口Iteratir迭代器Map接口Comprable和Comprator比较Arrays和Collections工具类">
+Collection接口Collection是一个集合接口，主要提供了集合相关操作的方法，要求其实现类都必须要实现对应的方法。Collection集合可以分为List和Set集合两种
+List接口List接口是一个有序列表，每一个元素都有对应的索引，第一个元素的索引为0。L">
 <meta name="twitter:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Collection.png">
 
 
@@ -302,7 +305,14 @@ Collection接口List接口Set接口Iteratir迭代器Map接口Comprable和Comprat
 
       
         <h1 id="Java-Collection-集合框架图"><a href="#Java-Collection-集合框架图" class="headerlink" title="Java Collection 集合框架图"></a>Java Collection 集合框架图</h1><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/Collection.png" alt="collections"><br>//先写个Java Collection集合框架图，接下来慢慢填坑(立flag)。</p>
-<h2 id="Collection接口"><a href="#Collection接口" class="headerlink" title="Collection接口"></a><strong>Collection接口</strong></h2><h3 id="List接口"><a href="#List接口" class="headerlink" title="List接口"></a><strong>List接口</strong></h3><h3 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a><strong>Set接口</strong></h3><h3 id="Iteratir迭代器"><a href="#Iteratir迭代器" class="headerlink" title="Iteratir迭代器"></a><strong>Iteratir迭代器</strong></h3><h2 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a><strong>Map接口</strong></h2><h2 id="Comprable和Comprator比较"><a href="#Comprable和Comprator比较" class="headerlink" title="Comprable和Comprator比较"></a><strong>Comprable和Comprator比较</strong></h2><h2 id="Arrays和Collections工具类"><a href="#Arrays和Collections工具类" class="headerlink" title="Arrays和Collections工具类"></a><strong>Arrays和Collections工具类</strong></h2>
+<h2 id="Collection接口"><a href="#Collection接口" class="headerlink" title="Collection接口"></a><strong>Collection接口</strong></h2><p>Collection是一个集合接口，主要提供了集合相关操作的方法，要求其实现类都必须要实现对应的方法。Collection集合可以分为List和Set集合两种</p>
+<h3 id="List接口"><a href="#List接口" class="headerlink" title="List接口"></a><strong>List接口</strong></h3><p>List接口是一个有序列表，每一个元素都有对应的索引，第一个元素的索引为0。List的主要实现类有LinkedList、ArrayList、Stack和Vector。</p>
+<h3 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a><strong>Set接口</strong></h3><p>Set接口是一个不允许有重复元素的集合，包含的元素之间没有特定的顺序。Set的主要实现类有HashSet、LinkedHashSet和TreeSet。</p>
+<h3 id="Iteratir迭代器"><a href="#Iteratir迭代器" class="headerlink" title="Iteratir迭代器"></a><strong>Iteratir迭代器</strong></h3><p>Iterator是个用来遍历集合的迭代器工具，它取代了古老的Enumeration来遍历集合，Collection依赖于Iterator，因为Collection的实现类都需要实现iterator方法，返回对应集合的Iterator对象。ListIterator是Iterator的子类，是用遍历List集合。</p>
+<h2 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a><strong>Map接口</strong></h2><p>Map是一个保存映射关系对象的集合，里面存储Key，Value两组值，Key和Value可以引用任意类型对象的引用，Key不允许重复。Map的主要实现类有HashMap、TreeMap、LinkedHashMap、IdentityHashMap和WeakHashMap。</p>
+<h2 id="Comprable和Comprator比较"><a href="#Comprable和Comprator比较" class="headerlink" title="Comprable和Comprator比较"></a><strong>Comprable和Comprator比较</strong></h2><p>Comprable是一个标志接口，实现了该接口的类可以用来比较排序，需要实现compareTo方法，我们可以通过Arrays或者Collections的sort方法对它们进行自然排序。<br>Comprator是一个比较器，需要实现接口的方法，实现比较逻辑，可以需要进行比较的地方，传入对应的Compartor来指定特定的比较逻辑，将排序实现和比较逻辑分离。</p>
+<h2 id="Arrays和Collections工具类"><a href="#Arrays和Collections工具类" class="headerlink" title="Arrays和Collections工具类"></a><strong>Arrays和Collections工具类</strong></h2><p>用来操作Collection和Array的工具类，提供了一系列的操作。</p>
+
       
     </div>
     
