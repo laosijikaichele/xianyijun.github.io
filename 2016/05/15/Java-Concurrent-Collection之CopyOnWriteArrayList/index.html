@@ -92,18 +92,18 @@
 
 
 
-<meta name="description" content="Java Concurrent Collection之CopyOnWriteArrayListCopyOnWriteArrayListCopyOnWriteArrayList是ArrayList的线程安全时候，它是在执行可变操作(mutative operations)的时候通过对底层数组进行复制来实现线程安全的，CopyOnWriteArrayList的元素允许为null。
+<meta name="description" content="Java Concurrent Collection之CopyOnWriteArrayListCopyOnWriteArrayListCopyOnWriteArrayList是ArrayList的线程安全实现，它是在执行可变操作(mutative operations)的时候通过对底层数组进行复制来实现线程安全的，CopyOnWriteArrayList的元素允许为null。
 源码分析　成员变量">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java Concurrent Collection之CopyOnWriteArrayList">
 <meta property="og:url" content="http://xianyijun.github.io/2016/05/15/Java-Concurrent-Collection之CopyOnWriteArrayList/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="Java Concurrent Collection之CopyOnWriteArrayListCopyOnWriteArrayListCopyOnWriteArrayList是ArrayList的线程安全时候，它是在执行可变操作(mutative operations)的时候通过对底层数组进行复制来实现线程安全的，CopyOnWriteArrayList的元素允许为null。
+<meta property="og:description" content="Java Concurrent Collection之CopyOnWriteArrayListCopyOnWriteArrayListCopyOnWriteArrayList是ArrayList的线程安全实现，它是在执行可变操作(mutative operations)的时候通过对底层数组进行复制来实现线程安全的，CopyOnWriteArrayList的元素允许为null。
 源码分析　成员变量">
-<meta property="og:updated_time" content="2016-05-15T13:32:00.022Z">
+<meta property="og:updated_time" content="2016-05-16T03:09:06.437Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Concurrent Collection之CopyOnWriteArrayList">
-<meta name="twitter:description" content="Java Concurrent Collection之CopyOnWriteArrayListCopyOnWriteArrayListCopyOnWriteArrayList是ArrayList的线程安全时候，它是在执行可变操作(mutative operations)的时候通过对底层数组进行复制来实现线程安全的，CopyOnWriteArrayList的元素允许为null。
+<meta name="twitter:description" content="Java Concurrent Collection之CopyOnWriteArrayListCopyOnWriteArrayListCopyOnWriteArrayList是ArrayList的线程安全实现，它是在执行可变操作(mutative operations)的时候通过对底层数组进行复制来实现线程安全的，CopyOnWriteArrayList的元素允许为null。
 源码分析　成员变量">
 
 
@@ -299,7 +299,7 @@
       
 
       
-        <h1 id="Java-Concurrent-Collection之CopyOnWriteArrayList"><a href="#Java-Concurrent-Collection之CopyOnWriteArrayList" class="headerlink" title="Java Concurrent Collection之CopyOnWriteArrayList"></a><strong>Java Concurrent Collection之CopyOnWriteArrayList</strong></h1><h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a><strong>CopyOnWriteArrayList</strong></h2><p>CopyOnWriteArrayList是ArrayList的线程安全时候，它是在执行可变操作(mutative operations)的时候通过对底层数组进行复制来实现线程安全的，CopyOnWriteArrayList的元素允许为null。</p>
+        <h1 id="Java-Concurrent-Collection之CopyOnWriteArrayList"><a href="#Java-Concurrent-Collection之CopyOnWriteArrayList" class="headerlink" title="Java Concurrent Collection之CopyOnWriteArrayList"></a><strong>Java Concurrent Collection之CopyOnWriteArrayList</strong></h1><h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a><strong>CopyOnWriteArrayList</strong></h2><p>CopyOnWriteArrayList是ArrayList的线程安全实现，它是在执行可变操作(mutative operations)的时候通过对底层数组进行复制来实现线程安全的，CopyOnWriteArrayList的元素允许为null。</p>
 <h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析　"></a><strong>源码分析</strong>　</h2><h3 id="成员变量"><a href="#成员变量" class="headerlink" title="成员变量　"></a><strong>成员变量</strong>　</h3><ul>
 <li>ReentrantLock lock lock是ReentrantLock类型成员变量，是一个可重入锁，利用lock可以实现互斥保护数据并发修改，在对数据进行添加、修改和删除等修改数组结构等操作的时候，需要获取锁，在执行完成操作之后对数据进行更新再释放锁。</li>
 <li>Object[] array　array使用了volatile进行修饰，保证线程对变量的可见性，确保在任何时候，线程对数据进行读写的时候都是最新的，volatile要求线程对数据进行读操作的时候需要从主内存中获取，进行写操作的时候都会把数据刷新到主内存中。</li>
