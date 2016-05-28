@@ -1,0 +1,705 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="mysql," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Innodb体系架构
+后台线程Innodb存储引擎是多线程模型，后台有多个不同的后台线程，用来处理不同的任务。
+Master ThreadMaster Thread是个核心的后台线程，它主要是负责将缓冲区池中的数据异步刷新到磁盘，保证数据的一致性，包括脏页的刷新、合并插入缓冲、undo页的回收等。
+IO Thread在Innodb存储引擎中使用AIO来处理写请求。IO Thread主要是负责IO请">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql之innodb体系架构">
+<meta property="og:url" content="http://xianyijun.github.io/2016/05/27/Mysql之innodb体系架构/index.html">
+<meta property="og:site_name" content="枯叶未凋零">
+<meta property="og:description" content="Innodb体系架构
+后台线程Innodb存储引擎是多线程模型，后台有多个不同的后台线程，用来处理不同的任务。
+Master ThreadMaster Thread是个核心的后台线程，它主要是负责将缓冲区池中的数据异步刷新到磁盘，保证数据的一致性，包括脏页的刷新、合并插入缓冲、undo页的回收等。
+IO Thread在Innodb存储引擎中使用AIO来处理写请求。IO Thread主要是负责IO请">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Diagram1.png">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_025.png">
+<meta property="og:updated_time" content="2016-05-28T05:58:35.983Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql之innodb体系架构">
+<meta name="twitter:description" content="Innodb体系架构
+后台线程Innodb存储引擎是多线程模型，后台有多个不同的后台线程，用来处理不同的任务。
+Master ThreadMaster Thread是个核心的后台线程，它主要是负责将缓冲区池中的数据异步刷新到磁盘，保证数据的一致性，包括脏页的刷新、合并插入缓冲、undo页的回收等。
+IO Thread在Innodb存储引擎中使用AIO来处理写请求。IO Thread主要是负责IO请">
+<meta name="twitter:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Diagram1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Mysql之innodb体系架构 | 枯叶未凋零 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">枯叶未凋零</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">高山仰止，景行行止，虽不能至，心向往之</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mysql之innodb体系架构
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-27T20:52:46+08:00" content="2016-05-27">
+              2016-05-27
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/27/Mysql之innodb体系架构/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/27/Mysql之innodb体系架构/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Innodb体系架构"><a href="#Innodb体系架构" class="headerlink" title="Innodb体系架构"></a><strong>Innodb体系架构</strong></h1><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/Diagram1.png" alt="innodb"></p>
+<h2 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a><strong>后台线程</strong></h2><p>Innodb存储引擎是多线程模型，后台有多个不同的后台线程，用来处理不同的任务。</p>
+<h3 id="Master-Thread"><a href="#Master-Thread" class="headerlink" title="Master Thread"></a><strong>Master Thread</strong></h3><p>Master Thread是个核心的后台线程，它主要是负责将缓冲区池中的数据异步刷新到磁盘，保证数据的一致性，包括脏页的刷新、合并插入缓冲、undo页的回收等。</p>
+<h3 id="IO-Thread"><a href="#IO-Thread" class="headerlink" title="IO Thread"></a><strong>IO Thread</strong></h3><p>在Innodb存储引擎中使用AIO来处理写请求。IO Thread主要是负责IO请求的回调处理。IO Thread主要是write、read、insert buffer和IO thread。read thread和write thread数量默认为４，可以通过innodb_read_io_threads和innodb_write_io_threads参数进行设置。</p>
+<h3 id="Purge-Thread"><a href="#Purge-Thread" class="headerlink" title="Purge Thread"></a><strong>Purge Thread</strong></h3><p>事务被提交后，其使用的undolog可能就不会在需要，因此需要PurgeThread来进行回收已经使用并分配的undo页。<br>在innodb1.1版本之后，我们可以在mysql数据库配置文件中添加以下配置来启动独立Purge Thread进行处理，来减轻Master Thread的工作，从而提供CPU的使用率和提供性能。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">innodb_purge_threads = 1</span><br></pre></td></tr></table></figure></p>
+<p>在innodb1.2版本之后，可以配置多个purge threads来处理，可以进一步加快undo页的回收。而且Purge Thread需要离散地读取undo页，可以进一步利用磁盘的随机读取性能。</p>
+<h3 id="Page-cleaner-Thread"><a href="#Page-cleaner-Thread" class="headerlink" title="Page cleaner Thread"></a><strong>Page cleaner Thread</strong></h3><p>Page cleaner Thread是将原先在Master Thread中将脏页刷新操作放入到独立线程来完成，主要减轻Master Thread的工作和用户查询线程的阻塞，提高存储引擎的性能。</p>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a><strong>内存</strong></h2><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/Selection_025.png" alt="memory"></p>
+<h3 id="缓冲池"><a href="#缓冲池" class="headerlink" title="缓冲池"></a><strong>缓冲池</strong></h3><p>Innodb存储引擎是基于磁盘存储的，并将其中的记录按照页的方式进行管理。由于CPU速度与磁盘速度之间的差距，通常会使用缓冲区技术来提供数据库性能。<br>缓冲池是一块内存区域，通过内存来弥补磁盘速度对数据库性能的影响。在数据库进行读取页操作的时候，首先把磁盘读到的页存放在缓冲池中，在下一次读取页操作的时候，首先判断该页是否在缓冲池中，如果该页在缓冲池中，就称该页在缓冲池被命中，直接读取该页，否则就读取在磁盘上的页。<br>对数据库中页的修改操作，首先会缓冲池中的页，然后根据一定的频率刷新到磁盘中，innodb引擎是通过一种checkpoint的机制将页刷新到磁盘中的。<br>innodb引擎是可以通过设置innodb_buffer_pool_size来配置缓冲池大小，也可以通过配置innodb_buffer_pool_instances来缓冲池个数，减少数据库内部的资源竞争，增加数据库并发处理的能力。<br>缓冲池缓存的数据页类型有：索引页、数据页、undo页、插入缓冲(insert buffer)、自适应哈希索引(adaptive hash index)、Innodb存储的锁信息(lock info)、数据字典信息(data dictionary)等。</p>
+<h3 id="LRU-List、Free-List和Flush-List"><a href="#LRU-List、Free-List和Flush-List" class="headerlink" title="LRU List、Free List和Flush List"></a><strong>LRU List、Free List和Flush List</strong></h3><p>缓冲池中缓冲各种类型的页，通过LRU(lastest recent used)最近最少使用算法进行管理，也就是说最频繁使用的页放在LRU列表的首部，最少使用的页放在LRU列表的尾端，如果缓冲池不能存放最新读取到的页，将首先释放的LRU列表中尾端的页。<br>在innodb引擎中，缓冲池页的大小默认为16KB,同样使用LRU算法对缓冲池进行管理，不过innodb在LRU算法的基础上添加midpoint位置，最新读到的页，并不是直接放到LRU列表的首部，而是放到LRU列表的midpoint位置，在默认配置中，midpoint位置位于LRU列表长度的5/8处,midpoint位置可以通过innodb_old_blocks_pct进行配置。innodb_old_blocks_pct默认值为37，表示新读取的页会插入到LRU列表尾端的37%位置。在innodb存储引擎中，把midpoint之后的列表称为old列表，之前的列表称为new列表。<br>使用midpoint优化的LRU算法可以防止缓冲池中数据页被刷新出，影响数据库性能。如果新读取的数据直接加到LRU列表的头部，如果读取的数据页比较多(通常为数据或者索引的扫描操作)，可能会把之前活跃的热点数据刷新出去，这样的话，如果下一次需要读取之前活跃热点数据的话，需要重新从磁盘中读取。<br>我们可以通过设置innodb_old_blocks_time来设置页读取到midpoint位置后需要等待多长时间才会被加入达到LRU列表的new端。<br>LRU列表是用来管理已经读取的页，数据库刚启动的时候，LRU列表是空的，页都是放在Free List中的。如果需要从缓冲池中分页时，首先从Free列表中查找是否有可用的空闲页，如果有的话就将该页从Free列表中删除，放到LRU List中，否则的话，根据LRU算法，将LRU List中尾端的页淘汰，将该内存空间分配给新的页。当页的old部分加入到new 部分的话，就称此时的操作为page made young,如果由于innodb_old_blocks_time的设置导致页没有从old部分移动到new部分的操作称为page not made young。<br>我们可以通过show engine innodb status来观察LRU列表的使用情况和运行状态。<br>Buffer pool size表示当前数据库有多少个页，即8192*16K，总共124M的缓冲池，Free Buffers表示当前Free List中页的数量，Database pages表示当前LRU列表中页的数量。<br>pages made young表示LRU列表中页移动到前端的次数。<br>Buffer pool hit rate表示缓冲池的命中率<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">BUFFER POOL AND MEMORY</span><br><span class="line">----------------------</span><br><span class="line">Total memory allocated 137363456; in additional pool allocated 0</span><br><span class="line">Dictionary memory allocated 257292</span><br><span class="line">Buffer pool size   8192</span><br><span class="line">Free buffers       7739</span><br><span class="line">Database pages     453</span><br><span class="line">Old database pages 0</span><br><span class="line">Modified db pages  0</span><br><span class="line">Pending reads 0</span><br><span class="line">Pending writes: LRU 0, flush list 0, single page 0</span><br><span class="line">Pages made young 0, not young 0</span><br><span class="line">0.00 youngs/s, 0.00 non-youngs/s</span><br><span class="line">Pages read 453, created 0, written 1</span><br><span class="line">0.00 reads/s, 0.00 creates/s, 0.00 writes/s</span><br><span class="line">No buffer pool page gets since the last printout</span><br><span class="line">Pages read ahead 0.00/s, evicted without access 0.00/s, Random read ahead 0.00/s</span><br><span class="line">LRU len: 453, unzip_LRU len: 0</span><br><span class="line">I/O sum[0]:cur[0], unzip sum[0]:cur[0]</span><br></pre></td></tr></table></figure></p>
+<p>Innodb引擎支持压缩页的功能，可以将原来16kb的页压缩成1kb、2kb、4kb、8kb,对于非16kb的页是通过unzip_LRU列表进行管理的,不过LRU列表的页包含了unzip_LRU列表中的页。<br>unzip_LRU列表中对不同压缩页大小的页分别进行管理，然后通过伙伴算法进行内存分配。例如需要从缓冲池中申请4kb大小的页。</p>
+<ul>
+<li>首先检查4kb的unzip_LRU列表，检查是否有可用的空闲页。</li>
+<li>如果有的话，直接分配使用</li>
+<li>如果没有的话，检查8kb的unzip_LRU列表。</li>
+<li>如果能够得到空闲页，就将页分为２个4kb页，存放到unzip_LRU列表。</li>
+<li>如果不能的话，就从LRU列表中申请一个16kb的页，然后把页分为1个8kb的页、2个4kb的页，分配存放到对应的unzip_LRU列表中。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LRU len: 453, unzip_LRU len: 0</span><br></pre></td></tr></table></figure>
+<p>当LRU列表中页被修改后，称该页为脏页，数据库会根据checkpoint机制将脏页刷新回磁盘中，Flush列表中的页即为脏页列表，脏页即存在于LRU列表中，也存在于Flush列表中，LRU列表用来管理缓冲池中页的可用性，Flush列表用来管理将页刷新会磁盘</p>
+<h3 id="重做日志缓冲"><a href="#重做日志缓冲" class="headerlink" title="重做日志缓冲"></a><strong>重做日志缓冲</strong></h3><p>Innodb存储引擎首先将重做日志信息放到重做日志缓冲，然后根据一定的频率将其刷新到重做日志文件，我们可以设置innodb_log_buffer_size设置重做日志缓冲大小，默认为8MB,一般情况下，我们不需要设置太大，通常一秒钟会将重做日志缓冲刷新到日志文件，因此用户只需要保证每秒发生的事务量在这个缓冲大小就可以了。<br>刷新机制</p>
+<ul>
+<li>Master Thread每一秒将重做日志缓冲刷新到重做日志文件。</li>
+<li>每个事务提交时会将重做日志缓冲刷新重做日志文件</li>
+<li>当重做日志缓冲剩余空间小于1/2时，重做日志缓冲刷新到重做日志文件。</li>
+</ul>
+<h3 id="额外的内存池"><a href="#额外的内存池" class="headerlink" title="额外的内存池"></a><strong>额外的内存池</strong></h3><p>在Innodb存储引擎中，对内存的管理是通过内存堆的方式进行的。在对一些数据结构本身的内存进行分配的时候(缓冲池innodb_buffer_pool的帧缓冲frame buffer和对应缓冲控制对象buffer control block)，需要从额外的内存池中进行申请，当该区域的内存不够的时候，会从缓冲池中进行申请。我们可以通过设置参数innodb_additional_mem_pool_size来设置大小</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag">#mysql</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/23/Java如何关闭一个线程/" rel="next" title="Java如何关闭一个线程">
+                <i class="fa fa-chevron-left"></i> Java如何关闭一个线程
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/27/Mysql之innodb体系架构/"
+           data-title="Mysql之innodb体系架构" data-url="http://xianyijun.github.io/2016/05/27/Mysql之innodb体系架构/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="枯叶未凋零" />
+          <p class="site-author-name" itemprop="name">枯叶未凋零</p>
+          <p class="site-description motion-element" itemprop="description">高山仰止，景行行止，虽不能至，心向往之</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/xianyijun" target="_blank" title="github">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/xianyijun" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa fa-globe fa-fw"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jm.taobao.org/" title="阿里中间件团队博客" target="_blank">阿里中间件团队博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.zhangxinxu.com/" title="张鑫旭" target="_blank">张鑫旭</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://my.oschina.net/huangyong/" title="黄勇" target="_blank">黄勇</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://rednaxelafx.iteye.com/" title="RednaxelaFX" target="_blank">RednaxelaFX</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jinnianshilongnian.iteye.com/" title="开涛" target="_blank">开涛</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Innodb体系架构"><span class="nav-number">1.</span> <span class="nav-text">Innodb体系架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#后台线程"><span class="nav-number">1.1.</span> <span class="nav-text">后台线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Master-Thread"><span class="nav-number">1.1.1.</span> <span class="nav-text">Master Thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO-Thread"><span class="nav-number">1.1.2.</span> <span class="nav-text">IO Thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Purge-Thread"><span class="nav-number">1.1.3.</span> <span class="nav-text">Purge Thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Page-cleaner-Thread"><span class="nav-number">1.1.4.</span> <span class="nav-text">Page cleaner Thread</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存"><span class="nav-number">1.2.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲池"><span class="nav-number">1.2.1.</span> <span class="nav-text">缓冲池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LRU-List、Free-List和Flush-List"><span class="nav-number">1.2.2.</span> <span class="nav-text">LRU List、Free List和Flush List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重做日志缓冲"><span class="nav-number">1.2.3.</span> <span class="nav-text">重做日志缓冲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#额外的内存池"><span class="nav-number">1.2.4.</span> <span class="nav-text">额外的内存池</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">冼毅俊</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"xianyijun"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
