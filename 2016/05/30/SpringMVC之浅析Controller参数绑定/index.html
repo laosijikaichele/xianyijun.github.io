@@ -92,23 +92,20 @@
 
 
 
-<meta name="description" content="[toc]
-SpringMVC之浅析Controller参数绑定写这边博文主要是前几天在进行项目接口对接的时候，由于我们的项目基于restful风格的，全站ajax，后端只需要接收json参数，进行业务逻辑处理之后返回json数据就可以了，但是我后端是springmvc利用@RquestBody和@RequestParam来进行参数接收的，无法直接接收json参数完成变量映射，现在只能通过map来">
+<meta name="description" content="SpringMVC之浅析Controller参数绑定写这篇博文主要是前几天在进行项目接口对接的时候，由于我们的项目基于restful风格的，全站ajax，后端只需要接收json参数，进行业务逻辑处理之后返回json数据就可以了，但是我后端是springmvc利用@RquestBody和@RequestParam来进行参数接收的，无法直接接收json参数完成变量映射，现在只能通过map来接收参数了。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC之浅析Controller参数绑定">
 <meta property="og:url" content="http://xianyijun.github.io/2016/05/30/SpringMVC之浅析Controller参数绑定/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="[toc]
-SpringMVC之浅析Controller参数绑定写这边博文主要是前几天在进行项目接口对接的时候，由于我们的项目基于restful风格的，全站ajax，后端只需要接收json参数，进行业务逻辑处理之后返回json数据就可以了，但是我后端是springmvc利用@RquestBody和@RequestParam来进行参数接收的，无法直接接收json参数完成变量映射，现在只能通过map来">
+<meta property="og:description" content="SpringMVC之浅析Controller参数绑定写这篇博文主要是前几天在进行项目接口对接的时候，由于我们的项目基于restful风格的，全站ajax，后端只需要接收json参数，进行业务逻辑处理之后返回json数据就可以了，但是我后端是springmvc利用@RquestBody和@RequestParam来进行参数接收的，无法直接接收json参数完成变量映射，现在只能通过map来接收参数了。">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/DispatcherServlet.png">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/RequestResponseBodyMethodProcessor.png">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_030.png">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_029.png">
-<meta property="og:updated_time" content="2016-05-31T13:10:05.863Z">
+<meta property="og:updated_time" content="2016-05-31T13:11:02.023Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC之浅析Controller参数绑定">
-<meta name="twitter:description" content="[toc]
-SpringMVC之浅析Controller参数绑定写这边博文主要是前几天在进行项目接口对接的时候，由于我们的项目基于restful风格的，全站ajax，后端只需要接收json参数，进行业务逻辑处理之后返回json数据就可以了，但是我后端是springmvc利用@RquestBody和@RequestParam来进行参数接收的，无法直接接收json参数完成变量映射，现在只能通过map来">
+<meta name="twitter:description" content="SpringMVC之浅析Controller参数绑定写这篇博文主要是前几天在进行项目接口对接的时候，由于我们的项目基于restful风格的，全站ajax，后端只需要接收json参数，进行业务逻辑处理之后返回json数据就可以了，但是我后端是springmvc利用@RquestBody和@RequestParam来进行参数接收的，无法直接接收json参数完成变量映射，现在只能通过map来接收参数了。">
 <meta name="twitter:image" content="http://7xrl91.com1.z0.glb.clouddn.com/DispatcherServlet.png">
 
 
@@ -304,8 +301,7 @@ SpringMVC之浅析Controller参数绑定写这边博文主要是前几天在进�
       
 
       
-        <p>[toc]</p>
-<h1 id="SpringMVC之浅析Controller参数绑定"><a href="#SpringMVC之浅析Controller参数绑定" class="headerlink" title="SpringMVC之浅析Controller参数绑定"></a><strong>SpringMVC之浅析Controller参数绑定</strong></h1><p>写这边博文主要是前几天在进行项目接口对接的时候，由于我们的项目基于restful风格的，全站ajax，后端只需要接收json参数，进行业务逻辑处理之后返回json数据就可以了，但是我后端是springmvc利用@RquestBody和@RequestParam来进行参数接收的，无法直接接收json参数完成变量映射，现在只能通过map来接收参数了。</p>
+        <h1 id="SpringMVC之浅析Controller参数绑定"><a href="#SpringMVC之浅析Controller参数绑定" class="headerlink" title="SpringMVC之浅析Controller参数绑定"></a><strong>SpringMVC之浅析Controller参数绑定</strong></h1><p>写这篇博文主要是前几天在进行项目接口对接的时候，由于我们的项目基于restful风格的，全站ajax，后端只需要接收json参数，进行业务逻辑处理之后返回json数据就可以了，但是我后端是springmvc利用@RquestBody和@RequestParam来进行参数接收的，无法直接接收json参数完成变量映射，现在只能通过map来接收参数了。</p>
 <h2 id="URL到框架的映射"><a href="#URL到框架的映射" class="headerlink" title="URL到框架的映射"></a><strong>URL到框架的映射</strong></h2><p>在分析htpp请求参数绑定前，先对SpringMVC的url映射进行分析。</p>
 <h3 id="DispatcherServlet"><a href="#DispatcherServlet" class="headerlink" title="DispatcherServlet"></a><strong>DispatcherServlet</strong></h3><p>DispatcherServlet是SpringMVC中的核心类，当一个http请求服务器的时候，会被DispatcherServlet接收，然后DispatcherServlet会根据request找到对应controller,然后委托给controller进行处理，controller主要完成数据模型的创建和业务逻辑的处理，然后把填充完数据的模型委托给DispatcherServlet进行渲染，然后根据对应数据模板视图进行结合，向response进行输出响应。<br><img src="http://7xrl91.com1.z0.glb.clouddn.com/DispatcherServlet.png" alt="DispatcherServlet"></p>
 <h4 id="DispatcherServlet初始化"><a href="#DispatcherServlet初始化" class="headerlink" title="DispatcherServlet初始化"></a><strong>DispatcherServlet初始化</strong></h4><ul>
