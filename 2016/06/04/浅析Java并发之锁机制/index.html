@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="os," />
+  <meta name="keywords" content="java," />
 
 
 
@@ -92,22 +92,19 @@
 
 
 
-<meta name="description" content="操作系统之进程间通信在进程间进行通信的时候，我们常常需要考虑几个问题。进程之间的信息如何进行传递，进程之间在进行资源竞争的时候如何保证不会出现交叉和如何保证访问资源之间存在依赖的时候确保正确的访问顺序。
-
-竞争条件在操作系统中，多个进程间进行相互协作，往往需要对某些共享数据进行访问读写，而在多个进程进行数据读写的时候，最终结果往往取决进程运行的时序，叫做竞争条件，然而这是不可控的，因此我们需要阻止">
+<meta name="description" content="浅析Java并发之锁机制线程安全锁在并发编程经常会使用到，主要是用来保护临界区资源不会因为被多个线程同时访问而受到破坏，如果多个线程对临界区资源进行访问的话，可能会导致数据的不一致性，程序运行会得到错误的结果。通过锁的话，我们可以实现线程安全，即并发环境下，多个线程对对象进行访问，对象的状态始终保持一致，并且能与在单线程环境下运行得到相同的结果，即线程的行为是正确的。
+对象头在Java虚拟机中(特">
 <meta property="og:type" content="article">
-<meta property="og:title" content="操作系统之进程间通信">
-<meta property="og:url" content="http://xianyijun.github.io/2016/05/19/操作系统之进程间通信/index.html">
+<meta property="og:title" content="浅析Java并发之锁机制">
+<meta property="og:url" content="http://xianyijun.github.io/2016/06/04/浅析Java并发之锁机制/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="操作系统之进程间通信在进程间进行通信的时候，我们常常需要考虑几个问题。进程之间的信息如何进行传递，进程之间在进行资源竞争的时候如何保证不会出现交叉和如何保证访问资源之间存在依赖的时候确保正确的访问顺序。
-
-竞争条件在操作系统中，多个进程间进行相互协作，往往需要对某些共享数据进行访问读写，而在多个进程进行数据读写的时候，最终结果往往取决进程运行的时序，叫做竞争条件，然而这是不可控的，因此我们需要阻止">
-<meta property="og:updated_time" content="2016-05-23T11:48:27.429Z">
+<meta property="og:description" content="浅析Java并发之锁机制线程安全锁在并发编程经常会使用到，主要是用来保护临界区资源不会因为被多个线程同时访问而受到破坏，如果多个线程对临界区资源进行访问的话，可能会导致数据的不一致性，程序运行会得到错误的结果。通过锁的话，我们可以实现线程安全，即并发环境下，多个线程对对象进行访问，对象的状态始终保持一致，并且能与在单线程环境下运行得到相同的结果，即线程的行为是正确的。
+对象头在Java虚拟机中(特">
+<meta property="og:updated_time" content="2016-06-05T10:40:00.668Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="操作系统之进程间通信">
-<meta name="twitter:description" content="操作系统之进程间通信在进程间进行通信的时候，我们常常需要考虑几个问题。进程之间的信息如何进行传递，进程之间在进行资源竞争的时候如何保证不会出现交叉和如何保证访问资源之间存在依赖的时候确保正确的访问顺序。
-
-竞争条件在操作系统中，多个进程间进行相互协作，往往需要对某些共享数据进行访问读写，而在多个进程进行数据读写的时候，最终结果往往取决进程运行的时序，叫做竞争条件，然而这是不可控的，因此我们需要阻止">
+<meta name="twitter:title" content="浅析Java并发之锁机制">
+<meta name="twitter:description" content="浅析Java并发之锁机制线程安全锁在并发编程经常会使用到，主要是用来保护临界区资源不会因为被多个线程同时访问而受到破坏，如果多个线程对临界区资源进行访问的话，可能会导致数据的不一致性，程序运行会得到错误的结果。通过锁的话，我们可以实现线程安全，即并发环境下，多个线程对对象进行访问，对象的状态始终保持一致，并且能与在单线程环境下运行得到相同的结果，即线程的行为是正确的。
+对象头在Java虚拟机中(特">
 
 
 
@@ -125,7 +122,7 @@
   };
 </script>
 
-  <title> 操作系统之进程间通信 | 枯叶未凋零 </title>
+  <title> 浅析Java并发之锁机制 | 枯叶未凋零 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -255,7 +252,7 @@
             
             
               
-                操作系统之进程间通信
+                浅析Java并发之锁机制
               
             
           </h1>
@@ -267,8 +264,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-19T22:11:37+08:00" content="2016-05-19">
-              2016-05-19
+            <time itemprop="dateCreated" datetime="2016-06-04T22:18:58+08:00" content="2016-06-04">
+              2016-06-04
             </time>
           </span>
 
@@ -278,8 +275,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/19/操作系统之进程间通信/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/19/操作系统之进程间通信/" itemprop="commentsCount"></span>
+                <a href="/2016/06/04/浅析Java并发之锁机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/04/浅析Java并发之锁机制/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -302,41 +299,38 @@
       
 
       
-        <h1 id="操作系统之进程间通信"><a href="#操作系统之进程间通信" class="headerlink" title="操作系统之进程间通信"></a><strong>操作系统之进程间通信</strong></h1><p>在进程间进行通信的时候，我们常常需要考虑几个问题。<br>进程之间的信息如何进行传递，进程之间在进行资源竞争的时候如何保证不会出现交叉和如何保证访问资源之间存在依赖的时候确保正确的访问顺序。</p>
+        <h1 id="浅析Java并发之锁机制"><a href="#浅析Java并发之锁机制" class="headerlink" title="浅析Java并发之锁机制"></a><strong>浅析Java并发之锁机制</strong></h1><h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a><strong>线程安全</strong></h2><p>锁在并发编程经常会使用到，主要是用来保护临界区资源不会因为被多个线程同时访问而受到破坏，如果多个线程对临界区资源进行访问的话，可能会导致数据的不一致性，程序运行会得到错误的结果。<br>通过锁的话，我们可以实现线程安全，即并发环境下，多个线程对对象进行访问，对象的状态始终保持一致，并且能与在单线程环境下运行得到相同的结果，即线程的行为是正确的。</p>
+<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a><strong>对象头</strong></h2><p>在Java虚拟机中(特指Hotspot)，对象在内存中存储的布局主要分为三个部分对象头，实例数据和对齐填充。<br>在这里我们主要讲一下对象头，对象头包括两个部分对象运行时数据和类型指针，跟锁相关的主要运行时数据这一块。<br>运行时数据主要包括hashcode、Gc分代年龄、锁状态持有的锁、偏向线程ID、偏向时间戳等。这部分被称为Mark Word.Mark Work是一个非固定的数据结构，它能根据对象的状态对存储空间进行复用。</p>
 <ul>
-<li><strong>竞争条件</strong><br>在操作系统中，多个进程间进行相互协作，往往需要对某些共享数据进行访问读写，而在多个进程进行数据读写的时候，最终结果往往取决进程运行的时序，叫做竞争条件，然而这是不可控的，因此我们需要阻止多个进程同时对共享数据进行读写，实现互斥。</li>
-<li><p><strong>临界区</strong><br>为了避免竞争条件，我们把对共享变量进行访问的程序片段称为临界区，只要我们能够在两个进程不能同时出现在临界区，即可实现互斥，避免竞争条件，但是这不能保证并发程序能够正确高效的进行协作。因此，需要满足以下的几个条件。</p>
-<ul>
-<li>任何两个进程不能同时处于其临界区中。</li>
-<li>不应该对硬件设备有所要求，即与硬件无关，不能对CPU的速度或者数量做出假设。</li>
-<li>处在临界区之外的进程不能对其他的进程进行阻塞。</li>
-<li>处在临界区外的进程不能无限期的等待，即不会发生死锁和饥饿。</li>
-</ul>
+<li>在32位系统中，普通对象的对象头如下<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcode : 25 | age : 4 | biased_lock : 1 | lock : 2</span><br></pre></td></tr></table></figure>
 </li>
-<li><strong>互斥</strong><ul>
-<li>屏蔽中断<br>在单处理器系统中，由于并发进程不能重叠，只能交替，我们可以通过屏蔽中断的方法来实现互斥，即在进程进入临界区的时候，屏蔽中断，这样CPU将不会切换到其他进程，在离开临界区的时候，在打开中断，就可以实现互斥。但是屏蔽中断会导致进程只能交替进行，执行效率会降低，同时，如果是在多处理器系统中，屏蔽中断只是对执行disable指令的CPU有效，其他CPU继续运行，然后可以访问临界区，不能保证互斥。</li>
-<li>锁变量<br>我们可以通过锁变量来实现互斥，锁变量初始值为１，进程访问共享数据，进入临界区的时候，对锁变量进行检查，如果锁变量为负值，进程就被挂起，如果值为一的话，锁变量减为零，进程就立即进入临界区，接着之后的每一个进程试图去访问临界区都会让锁变量减一，然后添加到等待队列中，当进程从临界区退出后，锁变量加一，然后唤醒等待队列中一个被阻塞的线程，进程置于就绪状态，在下一次调度的时候，就可以进入临界区了。但是如果一个进程在发现锁变量为１，试图进入临界区并对锁变量进行减一操作的时候，另一个进程调度运行，也发现锁变量为１，试图进入临界区，这样的话就会导致有两个进程可以访问临界区。</li>
-<li>严格轮换法<br>严格轮换法通过turn变量，用来记录那个进程进入临界区，当一个进程０检查turn变量的时候，发现其值为０，就进入临界区，另一个进程试图访问临界区的时候，发现turn变量为０，它就会不停的循环去测试变量什么时候变量为某个值，称为忙等待。忙等待会一直循环, 损耗CPU资源，浪费CPU时间，一般用于等待时间比较短的情况，如果一个进程比另一个进程慢很多的话，就不应该轮流进入临界区。</li>
 </ul>
+<p>表示在Mark Word中有25位比特用来表明对象的哈希值，4位比特表示对象的分代年龄，1位比特表示是否为偏向锁，2位比特表示锁的信息。</p>
+<ul>
+<li>偏向锁<br>对于偏向锁的对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JavaThread* : <span class="number">23</span> | epoch : <span class="number">2</span> | age : <span class="number">4</span> | biased_lock　：<span class="number">1</span> | <span class="number">01</span></span><br></pre></td></tr></table></figure>
+<p>前23位比特表示持有锁的线程，后两位比特表示偏向锁的时间戳(epoch)，4位比特表示对象年龄，年龄后一位比特固定为1，表示偏向锁，最后2位表示可偏向/未锁定。</p>
+<ul>
+<li>轻量级锁</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| ptr : 30 | 00 | locked</span><br></pre></td></tr></table></figure>
+<p>当对象被轻量级锁锁定的时候，ptr指向获得锁的线程栈中该对象的真实对象头，最后2位比特为00.</p>
+<ul>
+<li>重量级锁</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|ptr : 30 | 01 | monitor</span><br></pre></td></tr></table></figure>
+<p>当对象被重量级锁锁定的时候，ptr指向的是Monitor，最后两位比特是01</p>
+<ul>
+<li>未锁定<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcode : 25 | age : 4 | biased_lock : 0 | 01</span><br></pre></td></tr></table></figure>
 </li>
-<li><strong>睡眠与唤醒</strong><br>睡眠是一个引起调用进程阻塞的系统调用，即将挂起，直到另一个进程将其唤醒，唤醒会将睡眠进程加入到运行队列中，直到下次调用器调度的时候才会被运行。</li>
 </ul>
-<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a><strong>信号量</strong></h2><p>信号量使用整型变量来累计唤醒次数，取值为０表示没有保存下来的唤醒操作，或者正值表示有一个或者多个唤醒操作。<br>信号量有两种操作：sleep和wakeup,对信号量执行sleep操作，首先对信号量的值进行检查，如果大于０，就将值减一，继续执行操作，否则等于０的话，进程就会睡眠。检查变量、修改变量值和可能会发生的睡眠操作都是原子操作，在操作完成之前，其他进程对信号量的操作都是不允许的。执行wakeup操作，对信号量的值加一，如果之前有进程在信号量上睡眠了，会选择一个进程进行唤醒，继续执行剩余的操作，因此，对一个有进程睡眠的信号量来说，执行wwakeup操作，不会修改信号量的值，只是在其上睡眠的进程少了一个。<br>信号量除了可以用来实现互斥，也可以用来实现同步，用来保证只有一个进程能对临界区的共享数据进行读写访问。</p>
-<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量　"></a><strong>互斥量</strong>　</h2><p>互斥量是信号量的简化版本，没有信号量的计数功能，互斥量是处于两态之一的变量：解锁或者加锁，一般情况下使用整型变量来表示，０表示解锁，其他的值则表示加锁。当一个进程访问临界区的时候，需要对互斥量进行检验，如果当前的互斥量是解锁的，则访问成功，可以对临界区进行访问，否则互斥量已经加锁的话，调用进程就会阻塞，直到进入临界区的进程退出临界区为止，如果有多个进程阻塞在临界区外，则随机选择一个进程唤醒获取到锁。</p>
-<h2 id="管程"><a href="#管程" class="headerlink" title="管程　"></a><strong>管程</strong>　</h2><p>管程可以看成是一种程序结构，他包括：</p>
-<ul>
-<li>多个可以彼此交互并共享资源的进程。</li>
-<li>多个与资源使用有关的条件变量</li>
-<li>一个互斥锁</li>
-<li>一个用来避免静态条件的不变量</li>
-</ul>
-<p>管程提供了一种机制，可以让进程临时放弃互斥访问，等到条件变量满足之后，重新获得执行权恢复互斥访问，如果每个执行的进程在放弃互斥锁之前都能保证不变量成立，就是说所有的进程都不会导致竞态条件成立，当一个进程执行管程中的子程序时，即占用了管程，管程能保证在一个时间点之内，最多只有一个进程占用管程，即实现了互斥。<br>如果我们需要调用一个在管程中的子程序的时候，需要等到已经没有其他进程在执行该管程的子程序。每一个管程对象都一个把互斥锁，初始状态为解锁，在管程的子程序的入口给互斥锁加锁，在出口给互斥锁解锁。管程还提供条件变量为进程在无法继续执行的时候阻塞，并把另一个在管程外的进程调入到管程中。</p>
-<h2 id="消息传递"><a href="#消息传递" class="headerlink" title="消息传递　"></a><strong>消息传递</strong>　</h2><p>在操作系统中，如果两个进程之间不存在可以直接访问的共享空间，必须利用操作系统提供的消息传递方法实现进程通信，通过send和receive原语进行数据传输。</p>
-<ul>
-<li>直接通信方式：如果发送进程可以把数据直接发送到接收进程，就可以把数据挂在接收进程的消息缓冲队列上，接收进程则可以通过从缓冲队列中获取数据了。</li>
-<li>间接通信方式：可以通过创建一个一定数量消息进程缓冲的地方，叫做信箱，在使用信箱进程数据传输的时候，send和receive元素指定的地址不再是源地址或者目的地址，而是信息地址。缓冲机制主要是用来容纳那些已经发送但是还没有被接收进程接收的消息。当时我们也可以取消缓冲，调用send方法时发送进程会被阻塞，直到receive调用，这种行为可以称为rendezvous。</li>
-</ul>
-<h2 id="屏障"><a href="#屏障" class="headerlink" title="屏障　"></a><strong>屏障</strong>　</h2><p>屏障主要是用于进程组，如果应用要求所有的进程都到达一个阶段就绪，否则任何进程都不能进入下一个阶段，我们可以在每一个阶段的结尾放置一个屏障来实现这种行为，当一个进程到达屏障时，也就被屏障阻拦，主要所有的进程达到屏障，才能打破屏障，到达下一个阶段。</p>
+<p>前29位表示对象的哈希值和年龄，倒数第三位为0,最后两位为01,表示未锁定，虚拟机通过倒数第三位来判断是否为偏向锁。</p>
+<h2 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a><strong>锁机制</strong></h2><h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a><strong>偏向锁</strong></h3><p>偏向锁表示如果程序没有竞争，就取消之前已经取得锁读的线程同步操作，即某一锁被线程获取后，进入偏向模式，当线程再次请求这个锁的时候，就不需要再进行相关的同步操作，节省时间。如果在线程持有锁期间，有其他线程进行锁请求，则锁退出偏向模式。<br>在JVM使用-XX:+UseBiasedLocking可以设置启动偏向锁。当锁对象处于偏向模式时，对象头会记录获得锁的线程。</p>
+<h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a><strong>轻量级锁</strong></h3><p>如果偏向锁失败，虚拟机会让线程去申请轻量级锁。轻量级锁在虚拟机中是使用BasicObjectLock的对象实现。对象内部持有BasicLock对象和一个持有该锁的对象指针。BasicObjectLock对象存储在Java虚拟机栈的栈帧中，在BasicLock对象内部维护displaced_header用来备份对象的Mark Word，obj字段指向轻量级锁对象<br>当对象被轻量级锁锁定的时候，Mark Word最后两位比特为0,整个Mark Word为执行BasicLock对象的指针，由于BasicObjectLock对象在虚拟机栈中，因此指针必然指向轻量级锁所在的虚拟机栈空间，即我们只需要判断某一个线程是否持有该对象锁时，只需要判断该对象头的指针是否在当前线程的栈地址范围内就可以了。<br>轻量级加锁操作首先由BasicLock通过备份原对象的Mark Word，然后通过cas操作，尝试将BasicLock复制到对象头的Mark Word,如果复制成功，则加锁成功，否则加锁失败，那么轻量级锁可能会膨胀为重量级锁。</p>
+<h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a><strong>重量级锁</strong></h3><p>当轻量级锁失败的时候，虚拟机就有可能使用重量级锁，对象头的Mark Word的最后两位比特会被设置为01,然后Mark Work会指向monitor对象的指针。<br>轻量级锁失败后，启用重量级锁的时候会废弃BasicLock备份的对象头信息，然后正式启用重量级锁，首先获取对象的ObjectMonitor，然后试图去进入该锁。在试图进入临界区的时候，线程可能会被挂起。</p>
+<h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a><strong>自旋锁</strong></h3><p>锁膨胀的时候，线程有可能会被挂起，虚拟机为了线程能够尽快进入临界区而不是被挂起，虚拟机会使用自旋锁。<br>自旋锁可以让线程在没有得到锁的时候，不被挂起，而是去执行一个空循环，在执行若干的循环后，如果线程获得锁，则继续执行，否则的话，线程就会被挂起。<br>自旋锁对于那些竞争不怎么激烈，锁占用时间短的并发线程，可以减少挂起几率，保证线程执行的连贯，否则对于那些锁竞争激烈，锁占用时间长的并发程序，自旋锁在自旋等待之后仍然没有获得锁的话，浪费了CPU时间，最后还是会被挂起，浪费了系统资源。<br>在JDK1.6的时候，可以通过-XX:+UseSpinning参数来开启自旋锁，使用-XX:PreBlockSpin参数来设置自旋锁的等待次数。<br>在JDK1.7的时候，虚拟机取消了自旋锁的参数设置，虚拟机会自行调整自旋锁和等待次数。</p>
+<h3 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a><strong>锁消除</strong></h3><p>锁清除是指虚拟机在JIT编译的时候，通过对运行上下文的扫描，基于逃逸分析技术，去除不可能存在共享资源竞争的锁，可以通过锁清除，减少请求锁的时间。<br>逃逸分析和锁消除可以通过-XX:+DoEscapeAnalysis和-XX:+EliminateLocks开启，不过锁消除必须是使用在-server模式下。</p>
 
       
     </div>
@@ -357,7 +351,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/os/" rel="tag">#os</a>
+            <a href="/tags/java/" rel="tag">#java</a>
           
         </div>
       
@@ -366,16 +360,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/16/Java-Concurrent之LockSupport/" rel="next" title="Java Concurrent之LockSupport">
-                <i class="fa fa-chevron-left"></i> Java Concurrent之LockSupport
+              <a href="/2016/06/01/Tomcat共享session配置redis-Manager/" rel="next" title="Tomcat共享session配置redis Manager">
+                <i class="fa fa-chevron-left"></i> Tomcat共享session配置redis Manager
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/21/Java之阻塞队列的简单实现/" rel="prev" title="Java之阻塞队列的简单实现">
-                Java之阻塞队列的简单实现 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/06/04/Java-Concurrent之ConcurrentLinkedQueue/" rel="prev" title="Java Concurrent之ConcurrentLinkedQueue">
+                Java Concurrent之ConcurrentLinkedQueue <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -425,8 +419,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/19/操作系统之进程间通信/"
-           data-title="操作系统之进程间通信" data-url="http://xianyijun.github.io/2016/05/19/操作系统之进程间通信/">
+      <div class="ds-thread" data-thread-key="2016/06/04/浅析Java并发之锁机制/"
+           data-title="浅析Java并发之锁机制" data-url="http://xianyijun.github.io/2016/06/04/浅析Java并发之锁机制/">
       </div>
     
   </div>
@@ -564,7 +558,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#操作系统之进程间通信"><span class="nav-number">1.</span> <span class="nav-text">操作系统之进程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#信号量"><span class="nav-number">1.1.</span> <span class="nav-text">信号量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#互斥量"><span class="nav-number">1.2.</span> <span class="nav-text">互斥量　</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管程"><span class="nav-number">1.3.</span> <span class="nav-text">管程　</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息传递"><span class="nav-number">1.4.</span> <span class="nav-text">消息传递　</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#屏障"><span class="nav-number">1.5.</span> <span class="nav-text">屏障　</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浅析Java并发之锁机制"><span class="nav-number">1.</span> <span class="nav-text">浅析Java并发之锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程安全"><span class="nav-number">1.1.</span> <span class="nav-text">线程安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象头"><span class="nav-number">1.2.</span> <span class="nav-text">对象头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁机制"><span class="nav-number">1.3.</span> <span class="nav-text">锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#偏向锁"><span class="nav-number">1.3.1.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#轻量级锁"><span class="nav-number">1.3.2.</span> <span class="nav-text">轻量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重量级锁"><span class="nav-number">1.3.3.</span> <span class="nav-text">重量级锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自旋锁"><span class="nav-number">1.3.4.</span> <span class="nav-text">自旋锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁消除"><span class="nav-number">1.3.5.</span> <span class="nav-text">锁消除</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
         </section>
