@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="浅析Java并发之锁机制线程安全锁在并发编程经常会使用到，主要是用来保护临界区资源不会因为被多个线程同时访问而受到破坏，如果多个线程对临界区资源进行访问的话，可能会导致数据的不一致性，程序运行会得到错误的结果。通过锁的话，我们可以实现线程安全，即并发环境下，多个线程对对象进行访问，对象的状态始终保持一致，并且能与在单线程环境下运行得到相同的结果，即线程的行为是正确的。
 对象头在Java虚拟机中(特">
-<meta property="og:updated_time" content="2016-06-05T10:40:00.668Z">
+<meta property="og:updated_time" content="2016-06-05T11:16:02.516Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析Java并发之锁机制">
 <meta name="twitter:description" content="浅析Java并发之锁机制线程安全锁在并发编程经常会使用到，主要是用来保护临界区资源不会因为被多个线程同时访问而受到破坏，如果多个线程对临界区资源进行访问的话，可能会导致数据的不一致性，程序运行会得到错误的结果。通过锁的话，我们可以实现线程安全，即并发环境下，多个线程对对象进行访问，对象的状态始终保持一致，并且能与在单线程环境下运行得到相同的结果，即线程的行为是正确的。
@@ -302,9 +302,9 @@
         <h1 id="浅析Java并发之锁机制"><a href="#浅析Java并发之锁机制" class="headerlink" title="浅析Java并发之锁机制"></a><strong>浅析Java并发之锁机制</strong></h1><h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a><strong>线程安全</strong></h2><p>锁在并发编程经常会使用到，主要是用来保护临界区资源不会因为被多个线程同时访问而受到破坏，如果多个线程对临界区资源进行访问的话，可能会导致数据的不一致性，程序运行会得到错误的结果。<br>通过锁的话，我们可以实现线程安全，即并发环境下，多个线程对对象进行访问，对象的状态始终保持一致，并且能与在单线程环境下运行得到相同的结果，即线程的行为是正确的。</p>
 <h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a><strong>对象头</strong></h2><p>在Java虚拟机中(特指Hotspot)，对象在内存中存储的布局主要分为三个部分对象头，实例数据和对齐填充。<br>在这里我们主要讲一下对象头，对象头包括两个部分对象运行时数据和类型指针，跟锁相关的主要运行时数据这一块。<br>运行时数据主要包括hashcode、Gc分代年龄、锁状态持有的锁、偏向线程ID、偏向时间戳等。这部分被称为Mark Word.Mark Work是一个非固定的数据结构，它能根据对象的状态对存储空间进行复用。</p>
 <ul>
-<li>在32位系统中，普通对象的对象头如下<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcode : 25 | age : 4 | biased_lock : 1 | lock : 2</span><br></pre></td></tr></table></figure>
-</li>
+<li>在32位系统中，普通对象的对象头如下</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcode : 25 | age : 4 | biased_lock : 1 | lock : 2</span><br></pre></td></tr></table></figure>
 <p>表示在Mark Word中有25位比特用来表明对象的哈希值，4位比特表示对象的分代年龄，1位比特表示是否为偏向锁，2位比特表示锁的信息。</p>
 <ul>
 <li>偏向锁<br>对于偏向锁的对象</li>
@@ -322,9 +322,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|ptr : 30 | 01 | monitor</span><br></pre></td></tr></table></figure>
 <p>当对象被重量级锁锁定的时候，ptr指向的是Monitor，最后两位比特是01</p>
 <ul>
-<li>未锁定<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcode : 25 | age : 4 | biased_lock : 0 | 01</span><br></pre></td></tr></table></figure>
-</li>
+<li>未锁定</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcode : 25 | age : 4 | biased_lock : 0 | 01</span><br></pre></td></tr></table></figure>
 <p>前29位表示对象的哈希值和年龄，倒数第三位为0,最后两位为01,表示未锁定，虚拟机通过倒数第三位来判断是否为偏向锁。</p>
 <h2 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a><strong>锁机制</strong></h2><h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a><strong>偏向锁</strong></h3><p>偏向锁表示如果程序没有竞争，就取消之前已经取得锁读的线程同步操作，即某一锁被线程获取后，进入偏向模式，当线程再次请求这个锁的时候，就不需要再进行相关的同步操作，节省时间。如果在线程持有锁期间，有其他线程进行锁请求，则锁退出偏向模式。<br>在JVM使用-XX:+UseBiasedLocking可以设置启动偏向锁。当锁对象处于偏向模式时，对象头会记录获得锁的线程。</p>
 <h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a><strong>轻量级锁</strong></h3><p>如果偏向锁失败，虚拟机会让线程去申请轻量级锁。轻量级锁在虚拟机中是使用BasicObjectLock的对象实现。对象内部持有BasicLock对象和一个持有该锁的对象指针。BasicObjectLock对象存储在Java虚拟机栈的栈帧中，在BasicLock对象内部维护displaced_header用来备份对象的Mark Word，obj字段指向轻量级锁对象<br>当对象被轻量级锁锁定的时候，Mark Word最后两位比特为0,整个Mark Word为执行BasicLock对象的指针，由于BasicObjectLock对象在虚拟机栈中，因此指针必然指向轻量级锁所在的虚拟机栈空间，即我们只需要判断某一个线程是否持有该对象锁时，只需要判断该对象头的指针是否在当前线程的栈地址范围内就可以了。<br>轻量级加锁操作首先由BasicLock通过备份原对象的Mark Word，然后通过cas操作，尝试将BasicLock复制到对象头的Mark Word,如果复制成功，则加锁成功，否则加锁失败，那么轻量级锁可能会膨胀为重量级锁。</p>
@@ -475,7 +475,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
