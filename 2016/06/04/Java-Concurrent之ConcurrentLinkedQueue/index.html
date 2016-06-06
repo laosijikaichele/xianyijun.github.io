@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="cocurrent collection java," />
+  <meta name="keywords" content="java,cocurrent,collection," />
 
 
 
@@ -106,7 +106,7 @@ head
 head
 
 1private transient volati">
-<meta property="og:updated_time" content="2016-06-06T04:03:55.343Z">
+<meta property="og:updated_time" content="2016-06-06T04:14:10.891Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java Concurrent之ConcurrentLinkedQueue">
 <meta name="twitter:description" content="Java Concurrent之ConcurrentLinkedQueueConcurrentLinkedQueueConcurrentLinkedQueue是一个基于单向链表实现的无界线程安全队列，它是按照FIFO(先进先出)的元素对元素进行排序，元素不允许为null。在队列的尾部进行插入元素，在头部进行取出元素。
@@ -332,10 +332,8 @@ head
 <p>peek方法从头节点遍历队列，首先对节点的item域进行判断，如果不为null的话或者item域和next域都为null的话，就更新头节点，返回item；否则的话，说明有可能其他线程在期间进行了poll操作，需要重新获取头节点，进行循环。</p>
 <h4 id="remove"><a href="#remove" class="headerlink" title="remove"></a><strong>remove</strong></h4><p>remove方法从队列中清除指定节点。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (o == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    Node&lt;E&gt; pred = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">for</span> (Node&lt;E&gt; p = first(); p != <span class="keyword">null</span>; p = succ(p)) &#123;</span><br><span class="line">        E item = p.item;</span><br><span class="line">        <span class="keyword">if</span> (item != <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">            o.equals(item) &amp;&amp;</span><br><span class="line">            p.casItem(item, <span class="keyword">null</span>)) &#123;</span><br><span class="line">            Node&lt;E&gt; next = succ(p);</span><br><span class="line">            <span class="keyword">if</span> (pred != <span class="keyword">null</span> &amp;&amp; next != <span class="keyword">null</span>)</span><br><span class="line">                pred.casNext(p, next);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        pred = p;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>first</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Node&lt;E&gt; <span class="title">first</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    restartFromHead:</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">for</span> (Node&lt;E&gt; h = head, p = h, q;;) &#123;</span><br><span class="line">            <span class="keyword">boolean</span> hasItem = (p.item != <span class="keyword">null</span>);</span><br><span class="line">            <span class="keyword">if</span> (hasItem || (q = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                updateHead(h, p);</span><br><span class="line">                <span class="keyword">return</span> hasItem ? p : <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (p == q)</span><br><span class="line">                <span class="keyword">continue</span> restartFromHead;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                p = q;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>succ</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;E&gt; <span class="title">succ</span><span class="params">(Node&lt;E&gt; p)</span> </span>&#123;</span><br><span class="line">    Node&lt;E&gt; next = p.next;</span><br><span class="line">    <span class="keyword">return</span> (p == next) ? head : next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>first<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Node&lt;E&gt; <span class="title">first</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    restartFromHead:</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        <span class="keyword">for</span> (Node&lt;E&gt; h = head, p = h, q;;) &#123;</span><br><span class="line">            <span class="keyword">boolean</span> hasItem = (p.item != <span class="keyword">null</span>);</span><br><span class="line">            <span class="keyword">if</span> (hasItem || (q = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                updateHead(h, p);</span><br><span class="line">                <span class="keyword">return</span> hasItem ? p : <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (p == q)</span><br><span class="line">                <span class="keyword">continue</span> restartFromHead;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                p = q;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>succ<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;E&gt; <span class="title">succ</span><span class="params">(Node&lt;E&gt; p)</span> </span>&#123;</span><br><span class="line">    Node&lt;E&gt; next = p.next;</span><br><span class="line">    <span class="keyword">return</span> (p == next) ? head : next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>remove方法首先对传入的对象进行判断，如果为null的话，返回false，否则的话进行循环，通过first方法获取队列的头节点(跳过poll的节点,即item域为nulld的节点)，通过succ方法返回下一个节点来遍历去查找匹配的节点，如果匹配成功的话，就通过cas对节点进行更新，将删除节点的pre节点的next域设置为删除节点的next域，进行队列节点更新，然后返回true。如果遍历队列结束都没有找到对应的对象，即队列中不存在该节点，返回false;</p>
 
       
@@ -357,7 +355,11 @@ head
       
         <div class="post-tags">
           
-            <a href="/tags/cocurrent-collection-java/" rel="tag">#cocurrent collection java</a>
+            <a href="/tags/java/" rel="tag">#java</a>
+          
+            <a href="/tags/cocurrent/" rel="tag">#cocurrent</a>
+          
+            <a href="/tags/collection/" rel="tag">#collection</a>
           
         </div>
       
@@ -481,7 +483,7 @@ head
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
