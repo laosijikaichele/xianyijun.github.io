@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="jvm," />
+  <meta name="keywords" content="Jvm," />
 
 
 
@@ -98,7 +98,7 @@
 <meta property="og:url" content="http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:1234567891">
-<meta property="og:updated_time" content="2016-06-09T06:28:18.410Z">
+<meta property="og:updated_time" content="2016-06-09T14:08:51.556Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机之Class文件结构">
 <meta name="twitter:description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:1234567891">
@@ -296,14 +296,110 @@
       
 
       
-        <h1 id="Java虚拟机之Class文件结构"><a href="#Java虚拟机之Class文件结构" class="headerlink" title="Java虚拟机之Class文件结构"></a><strong>Java虚拟机之Class文件结构</strong></h1><p>在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。<br>Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，<br>则使用u1数组来表示。<br>根据Java虚拟机规范，一个class文件可以描述为:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile&#123;</span><br><span class="line">	u4		magic;</span><br><span class="line">    u2		minor_version;</span><br><span class="line">    u2		major_version;</span><br><span class="line">    u2		constant_pool_count;</span><br><span class="line">    cp_info		constant_pool[constant_pool_count<span class="number">-1</span>];</span><br><span class="line">    u2		access_flag;</span><br><span class="line">    u2		this_class;</span><br><span class="line">    u2		super_class;</span><br><span class="line">    u2		interfaces_count;</span><br><span class="line">    u2		interfaces[interfaces_count];</span><br><span class="line">    u2		fields_count;</span><br><span class="line">    field_info		fields[fidlds_count];</span><br><span class="line">    u2		method_count;</span><br><span class="line">    method_info		method[method_count];</span><br><span class="line">    u2		attributes_count;</span><br><span class="line">    attribute_info		attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h1 id="Java虚拟机之Class文件结构"><a href="#Java虚拟机之Class文件结构" class="headerlink" title="Java虚拟机之Class文件结构"></a><strong>Java虚拟机之Class文件结构</strong></h1><p>在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。<br>Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，<br>则使用u1数组来表示。<br>根据Java虚拟机规范，一个class文件可以描述为:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile&#123;</span><br><span class="line">	u4		magic;</span><br><span class="line">    u2		minor_version;</span><br><span class="line">    u2		major_version;</span><br><span class="line">    u2		constant_pool_count;</span><br><span class="line">    cp_info		constant_pool[constant_pool_count-<span class="number">1</span>];</span><br><span class="line">    u2		access_flag;</span><br><span class="line">    u2		this_class;</span><br><span class="line">    u2		super_class;</span><br><span class="line">    u2		interfaces_count;</span><br><span class="line">    u2		interfaces[interfaces_count];</span><br><span class="line">    u2		fields_count;</span><br><span class="line">    field_info		fields[fidlds_count];</span><br><span class="line">    u2		method_count;</span><br><span class="line">    method_info		method[method_count];</span><br><span class="line">    u2		attributes_count;</span><br><span class="line">    attribute_info		attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>Class文件以一个４字节的魔数开头，紧跟着两个大小版本号，然后就是常量池，常量池的个数为constant_pool_count，而常量池的项只有constant_pool_size-1个；常量池之后就是类的访问修饰符、类的自身引用、父类引用和接口个数和实现的接口引用;然后就是类的字段个数、字段描述和方法个数、方法描述；最后存放着类文件的属性信息。</p>
 <h2 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a><strong>魔数</strong></h2><p>魔数是Class文件的标志，它是用来告诉虚拟机这个文件是Class文件，魔数是一个无符号的4字节整数，固定是0xCAFEBABE，<br>如果class文件不是以0xCAFEBABE开头的话，虚拟机在进行文件验证的时候会抛出ClassFormatErroe错误:<br>Incompatiable magic value 184466110 in class file</p>
 <h2 id="Class文件版本"><a href="#Class文件版本" class="headerlink" title="Class文件版本"></a><strong>Class文件版本</strong></h2><p>在Class文件魔数之后跟着两个2字节整数：大版本号和小版本号，表明Class文件是由哪个版本的编译器编译器产生的。<br>首先出现的是小版本号，是一个两字节的无符号整数，之后为大版本号，也是两个字节表示。<br>高版本的Java虚拟机可以执行由低版本编译生成的class文件，但是低版本的虚拟机不能执行高版本编译生成的class文件，会抛出UnsupportedClassValueVersionError错误：Unsupported major.minor version 。</p>
-<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a><strong>常量池</strong></h2><p>常量池是Class文件的核心内容，它对Class文件的字段和方法解析有着重要的作用。<br>常量池的表项的结构：</p>
-<pre><code class="c">
-</code></pre>
-<h2 id="Class的访问标记"><a href="#Class的访问标记" class="headerlink" title="Class的访问标记"></a><strong>Class的访问标记</strong></h2><h2 id="类、父类和接口"><a href="#类、父类和接口" class="headerlink" title="类、父类和接口"></a><strong>类、父类和接口</strong></h2><h2 id="Class的字段"><a href="#Class的字段" class="headerlink" title="Class的字段"></a><strong>Class的字段</strong></h2><h2 id="Class方法的基本结构"><a href="#Class方法的基本结构" class="headerlink" title="Class方法的基本结构"></a><strong>Class方法的基本结构</strong></h2><h2 id="记录行号－LineNumberTable"><a href="#记录行号－LineNumberTable" class="headerlink" title="记录行号－LineNumberTable"></a><strong>记录行号－LineNumberTable</strong></h2><h2 id="方法执行主体－Code属性"><a href="#方法执行主体－Code属性" class="headerlink" title="方法执行主体－Code属性　"></a><strong>方法执行主体－Code属性</strong>　</h2><h2 id="局部变量和参数－LocalVariableTable"><a href="#局部变量和参数－LocalVariableTable" class="headerlink" title="局部变量和参数－LocalVariableTable"></a><strong>局部变量和参数－LocalVariableTable</strong></h2><h2 id="字节码类型校验－StackMapTable属性"><a href="#字节码类型校验－StackMapTable属性" class="headerlink" title="字节码类型校验－StackMapTable属性"></a><strong>字节码类型校验－StackMapTable属性</strong></h2><h2 id="异常－Exceptions属性"><a href="#异常－Exceptions属性" class="headerlink" title="异常－Exceptions属性"></a><strong>异常－Exceptions属性</strong></h2><h2 id="Class来源－SourceFile"><a href="#Class来源－SourceFile" class="headerlink" title="Class来源－SourceFile"></a><strong>Class来源－SourceFile</strong></h2><h2 id="动态调用－BootstrapMethod属性"><a href="#动态调用－BootstrapMethod属性" class="headerlink" title="动态调用－BootstrapMethod属性"></a><strong>动态调用－BootstrapMethod属性</strong></h2><h2 id="内部类－InnerClasses属性"><a href="#内部类－InnerClasses属性" class="headerlink" title="内部类－InnerClasses属性"></a><strong>内部类－InnerClasses属性</strong></h2><h2 id="Depercated属性"><a href="#Depercated属性" class="headerlink" title="Depercated属性"></a><strong>Depercated属性</strong></h2>
+<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a><strong>常量池</strong></h2><p>常量池是Class文件的核心内容，它对Class文件的字段和方法解析有着重要的作用。<br>常量池的表项的类型如下，不同类型的表项结构也不一样。<br>数字为类型的tag，表示该常量的整数枚举值。</p>
+<ul>
+<li>CONSTANT_Class         7</li>
+<li>CONSTANT_Method        10</li>
+<li>CONSTANT_String        8</li>
+<li>CONSTANT_Float        4</li>
+<li>CONSTANT_Double        6</li>
+<li>CONSTANT_Utf8            1</li>
+<li>CONSTANT_MethodType        16</li>
+<li>CONSTANT_Fieldref        9</li>
+<li>CONSTANT_InterfaceMethodRef        11</li>
+<li>CONSTANT_Integer        3</li>
+<li>CONSTANT_Long        5</li>
+<li>CONSTANT_NameAndType        12</li>
+<li>CONSTANT_MethodHandle        15</li>
+<li>CONSTANT_InvokeDynamic        18</li>
+</ul>
+<h3 id="CONTSTANT-UTF8"><a href="#CONTSTANT-UTF8" class="headerlink" title="CONTSTANT_UTF8"></a><strong>CONTSTANT_UTF8</strong></h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Utf8_info&#123;</span><br><span class="line">	u1	tag;</span><br><span class="line">    u2	length;</span><br><span class="line">    u1	bytes[length];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CONSTANT_Utf8_info表示Utf8的字符串，utf8的tag值为１，然后length表示字符串的长度,最后的是字符串的内容。<br>CONSTANT_UTF8字符串经常被其他常量引用。</p>
+<h3 id="CONSTANT-Class"><a href="#CONSTANT-Class" class="headerlink" title="CONSTANT_Class"></a><strong>CONSTANT_Class</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Class_info&#123;</span><br><span class="line">	u1	tag;</span><br><span class="line">    u2	name_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CONSTANT_Class_info的tag为７，表示一个CONSTANT_Class常量，它的name_index是一个两字节的整数，他表示常量池的索引，指向的是一个Constant_Utf8的字符串。</p>
+<h3 id="CONSTANT-Integer、CONSTANT-Long、CONSTANT-Double、CONSTANT-Float"><a href="#CONSTANT-Integer、CONSTANT-Long、CONSTANT-Double、CONSTANT-Float" class="headerlink" title="CONSTANT_Integer、CONSTANT_Long、CONSTANT_Double、CONSTANT_Float"></a><strong>CONSTANT_Integer、CONSTANT_Long、CONSTANT_Double、CONSTANT_Float</strong></h3><p>当我们使用final去定义一个数字常量的时候，Class文件就会生成一个数字的常量。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Integer_info&#123;</span><br><span class="line">	u1	tag;</span><br><span class="line">    u4	bytes;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CONSTANT_Float_info&#123;</span><br><span class="line">	u1	tag;</span><br><span class="line">    u4	bytes;</span><br><span class="line">&#125;</span><br><span class="line">CONSTANT_Double_info&#123;</span><br><span class="line">	u1	tag;</span><br><span class="line">    u4	high_bytes;</span><br><span class="line">    u4	low_bytes</span><br><span class="line">&#125;</span><br><span class="line">CONSTANT_Long_info&#123;</span><br><span class="line">	u1	tag;</span><br><span class="line">    u4	high_bytes;</span><br><span class="line">    u4	low_bytes</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="CONSTANT-String"><a href="#CONSTANT-String" class="headerlink" title="CONSTANT_String　"></a><strong>CONSTANT_String</strong>　</h3><p>CONSTANT_String是一个字符串常量。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_String_info&#123;</span><br><span class="line">	u1 tag;</span><br><span class="line">    u2 String_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>CONSTANT_String_info的tag是８，string_index无符号整数指向常量池的索引，表示该字符串对应的UTF8内容。</p>
+<h3 id="CONSTANT-NameAndType"><a href="#CONSTANT-NameAndType" class="headerlink" title="CONSTANT_NameAndType"></a><strong>CONSTANT_NameAndType</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_NameAndType_info&#123;</span><br><span class="line">	u1 tag;</span><br><span class="line">    u2 name_index;</span><br><span class="line">    u2 descriptor_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CONSTANT_NameAndType_info的tag是12,name_index表示名称，值为常量池的索引，用来表示字段或者方法的名称，descriptor_index表示方法的签名或者字段的类型。<br>CONSTANT_NameAndType的discriptor_index使用特殊的字符串来表示类型.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">字符串</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">字符串</th>
+<th style="text-align:left">类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">B</td>
+<td style="text-align:left">byte</td>
+<td style="text-align:left">C</td>
+<td style="text-align:left">char</td>
+</tr>
+<tr>
+<td style="text-align:left">D</td>
+<td style="text-align:left">double</td>
+<td style="text-align:left">F</td>
+<td style="text-align:left">float</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">int</td>
+<td style="text-align:left">J</td>
+<td style="text-align:left">long</td>
+</tr>
+<tr>
+<td style="text-align:left">S</td>
+<td style="text-align:left">short</td>
+<td style="text-align:left">Z</td>
+<td style="text-align:left">boolean</td>
+</tr>
+<tr>
+<td style="text-align:left">V</td>
+<td style="text-align:left">void</td>
+<td style="text-align:left">L</td>
+<td style="text-align:left">表示对象</td>
+</tr>
+<tr>
+<td style="text-align:left">[</td>
+<td style="text-align:left">数组</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>对于对象类型来说，以L开头，接着类的全限定名，用分号结尾。数组的话就以[作为标记。</p>
+<h3 id="CONSTANT-Methodref和CONSTANT-Fieldref"><a href="#CONSTANT-Methodref和CONSTANT-Fieldref" class="headerlink" title="CONSTANT_Methodref和CONSTANT_Fieldref"></a><strong>CONSTANT_Methodref和CONSTANT_Fieldref</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Methodref_info&#123;</span><br><span class="line">	u1 tag;</span><br><span class="line">    u2 class_index;</span><br><span class="line">    u2 name_and_type_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_Fieldref_info&#123;</span><br><span class="line">	u1 tag;</span><br><span class="line">    u2 class_index;</span><br><span class="line">    u2 name_and_type_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CONSTANT_Methodref_info的tag为10,CONSTANT_Fieldref_info的tag为９,表明它们是一个CONSTANT_Methodref或者CONSTANT_Fieldref_info,它的class_index是常量池的索引，它指向一个CONSTANT_Class;name_and_type_index也是指向常量池的索引，它表示的是一个CONSTANT_NameAndType结构，定义一个类的方法签名或者字段的类型和名字。</p>
+<h3 id="CONSTANT-InterfaceMethodref"><a href="#CONSTANT-InterfaceMethodref" class="headerlink" title="CONSTANT_InterfaceMethodref"></a><strong>CONSTANT_InterfaceMethodref</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_InterfaceMethodref_info&#123;</span><br><span class="line">	u1 tag;</span><br><span class="line">    u2	class_index;</span><br><span class="line">    u2	name_and_type_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CONSTANT_InterfaceMethodref表示一个接口的方法,如果Java程序中出现了对接口方法的调用，就会在常量池中生成一个对接口方法的引用。</p>
+<h3 id="CONSTANT-MethodHandle、CONSTANT-MethodType、CONSTANT-InvokeDynamic"><a href="#CONSTANT-MethodHandle、CONSTANT-MethodType、CONSTANT-InvokeDynamic" class="headerlink" title="CONSTANT_MethodHandle、CONSTANT_MethodType、CONSTANT_InvokeDynamic"></a><strong>CONSTANT_MethodHandle、CONSTANT_MethodType、CONSTANT_InvokeDynamic</strong></h3><p>CONSTANT_MethodHandle、CONSTANT_MethodType、CONSTANT_InvokeDynamic表示函数句柄、函数类型签名和动态调用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_MethodType_info&#123;</span><br><span class="line">	u1 tag;</span><br><span class="line">    u2 descriptor_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>CONSTANT_MethodType_info的tag为16,descriptor_index指向常量池中UTF8字符串的索引，主要是用来描述一个方法签名。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_MethodHandle_info&#123;</span><br><span class="line">	u1 tag;</span><br><span class="line">    u2 reference_kind;</span><br><span class="line">    u2 reference_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>CONSTANT_MethodHandle_info的tag为15,reference_kind表示方法句柄的类型，reference_index指向常量池的索引，reference_index指向具体的类型由reference_kind决定。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANT_InvokeDynamic_info&#123;</span><br><span class="line">	u1 tag;</span><br><span class="line">    u2 bootstrap_method_attr_index;</span><br><span class="line">    uw name_and_type_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>CONSTANT_InvokeDynamic_info的tag为18,bootstrap_method_attr_index是指向引导方法的索引，定位到一个引导方法。引导方法用在于动态调用时进行运行时函数查找和绑定，引导方法表是Class的一个属性，name_and_type_index指向常量池的索引，指向的表项必须是CONSTANT_NameAndType，用来表示方法的名字和签名。</p>
+<h2 id="Class的访问标记"><a href="#Class的访问标记" class="headerlink" title="Class的访问标记"></a><strong>Class的访问标记</strong></h2><p>访问标志用2字节来表示，用来表示类的访问信息，每一种类型都是设置访问标志中的特定位来实现的。</p>
+<ul>
+<li>ACC_PUBLIC 0x0001    表示public类</li>
+<li>ACC_FINAL    0x0010    是否为final类</li>
+<li>ACC_SUPER    0x0020    使用增强方法调用父类方法</li>
+<li>ACC_INTERFACE    0x0200    是否为接口</li>
+<li>ACC_ABSTRACT    0x0400    是否是抽象类</li>
+<li>ACC_SYNTHETIC    0x1000    由编译器产生的类，没有源码</li>
+<li>ACC_ANNOTATION    0x2000    是否是注解类</li>
+<li>ACC_ENUM    0x4000    是否是枚举</li>
+</ul>
+<h2 id="类、父类和接口"><a href="#类、父类和接口" class="headerlink" title="类、父类和接口"></a><strong>类、父类和接口</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">u2	this_class</span><br><span class="line">u2	super_class</span><br><span class="line">u2	interfaces_count;</span><br><span class="line">u2	interfaces[interfaces_count]</span><br></pre></td></tr></table></figure>
+<p>this_class和super_class都是2字节无符号整数,指向常量池中的CONSTANT_Class,表示当前的类和父类，super_class指向的父类不可以是final的。<br>如果类没有实现接口的话,interfaces_count为０,interfaces指向为空,否则的话以数组的形式保存多个接口的索引，每一个索引都指向一个常量池中的CONSTANT_Class。</p>
+<h2 id="Class的字段"><a href="#Class的字段" class="headerlink" title="Class的字段"></a><strong>Class的字段</strong></h2><p>在接口描述之后，由于一个类可以有多个字段,需要指明类的个数：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">u2	fields_count;</span><br><span class="line">field_info fields[fields_count]</span><br></pre></td></tr></table></figure></p>
+<p>字段的数目是２字节无符号整数。字段的具体信息为field_info的结构。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">field_info&#123;</span><br><span class="line">	u2	access_flags;</span><br><span class="line">    u2	name_index;</span><br><span class="line">    u2	descriptor_index;</span><br><span class="line">    u2	attributes_count;</span><br><span class="line">    attribute_info	attributes[attributes_count]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>access_flags是字段的访问属性，然后是name_index指向常量池中的一个CONSTANT_Utf8结构表示字段的名称，descriptor_index也是指向常量池的CONSTANT_Utf8结构表示字段的类型。<br>attributes用来存储字段的额外属性信息，例如初始化值和注释信息等，attributes_count表示属性的个数，attributes表示属性的具体内容，每个属性都用attribute_info来表示。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CONSTANTValue_attribute&#123;</span><br><span class="line">	u2	attribute_name_index;</span><br><span class="line">    u4	attribute_length;</span><br><span class="line">    u2	constantvalue_index;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Class方法的基本结构"><a href="#Class方法的基本结构" class="headerlink" title="Class方法的基本结构"></a><strong>Class方法的基本结构</strong></h2><h2 id="记录行号－LineNumberTable"><a href="#记录行号－LineNumberTable" class="headerlink" title="记录行号－LineNumberTable"></a><strong>记录行号－LineNumberTable</strong></h2><h2 id="方法执行主体－Code属性"><a href="#方法执行主体－Code属性" class="headerlink" title="方法执行主体－Code属性　"></a><strong>方法执行主体－Code属性</strong>　</h2><h2 id="局部变量和参数－LocalVariableTable"><a href="#局部变量和参数－LocalVariableTable" class="headerlink" title="局部变量和参数－LocalVariableTable"></a><strong>局部变量和参数－LocalVariableTable</strong></h2><h2 id="字节码类型校验－StackMapTable属性"><a href="#字节码类型校验－StackMapTable属性" class="headerlink" title="字节码类型校验－StackMapTable属性"></a><strong>字节码类型校验－StackMapTable属性</strong></h2><h2 id="异常－Exceptions属性"><a href="#异常－Exceptions属性" class="headerlink" title="异常－Exceptions属性"></a><strong>异常－Exceptions属性</strong></h2><h2 id="Class来源－SourceFile"><a href="#Class来源－SourceFile" class="headerlink" title="Class来源－SourceFile"></a><strong>Class来源－SourceFile</strong></h2><h2 id="动态调用－BootstrapMethod属性"><a href="#动态调用－BootstrapMethod属性" class="headerlink" title="动态调用－BootstrapMethod属性"></a><strong>动态调用－BootstrapMethod属性</strong></h2><h2 id="内部类－InnerClasses属性"><a href="#内部类－InnerClasses属性" class="headerlink" title="内部类－InnerClasses属性"></a><strong>内部类－InnerClasses属性</strong></h2><h2 id="Depercated属性"><a href="#Depercated属性" class="headerlink" title="Depercated属性"></a><strong>Depercated属性</strong></h2>
       
     </div>
     
@@ -323,7 +419,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/jvm/" rel="tag">#jvm</a>
+            <a href="/tags/Jvm/" rel="tag">#Jvm</a>
           
         </div>
       
@@ -443,7 +539,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -513,6 +609,10 @@
                   <a href="http://huangz.me/" title="黄健宏" target="_blank">黄健宏</a>
                 </li>
               
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.sina.com.cn/hailiangshuju" title="淘宝沈询" target="_blank">淘宝沈询</a>
+                </li>
+              
             </ul>
           </div>
         
@@ -526,7 +626,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java虚拟机之Class文件结构"><span class="nav-number">1.</span> <span class="nav-text">Java虚拟机之Class文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#魔数"><span class="nav-number">1.1.</span> <span class="nav-text">魔数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class文件版本"><span class="nav-number">1.2.</span> <span class="nav-text">Class文件版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量池"><span class="nav-number">1.3.</span> <span class="nav-text">常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class的访问标记"><span class="nav-number">1.4.</span> <span class="nav-text">Class的访问标记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类、父类和接口"><span class="nav-number">1.5.</span> <span class="nav-text">类、父类和接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class的字段"><span class="nav-number">1.6.</span> <span class="nav-text">Class的字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class方法的基本结构"><span class="nav-number">1.7.</span> <span class="nav-text">Class方法的基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录行号－LineNumberTable"><span class="nav-number">1.8.</span> <span class="nav-text">记录行号－LineNumberTable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法执行主体－Code属性"><span class="nav-number">1.9.</span> <span class="nav-text">方法执行主体－Code属性　</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局部变量和参数－LocalVariableTable"><span class="nav-number">1.10.</span> <span class="nav-text">局部变量和参数－LocalVariableTable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字节码类型校验－StackMapTable属性"><span class="nav-number">1.11.</span> <span class="nav-text">字节码类型校验－StackMapTable属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常－Exceptions属性"><span class="nav-number">1.12.</span> <span class="nav-text">异常－Exceptions属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class来源－SourceFile"><span class="nav-number">1.13.</span> <span class="nav-text">Class来源－SourceFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态调用－BootstrapMethod属性"><span class="nav-number">1.14.</span> <span class="nav-text">动态调用－BootstrapMethod属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类－InnerClasses属性"><span class="nav-number">1.15.</span> <span class="nav-text">内部类－InnerClasses属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Depercated属性"><span class="nav-number">1.16.</span> <span class="nav-text">Depercated属性</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java虚拟机之Class文件结构"><span class="nav-number">1.</span> <span class="nav-text">Java虚拟机之Class文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#魔数"><span class="nav-number">1.1.</span> <span class="nav-text">魔数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class文件版本"><span class="nav-number">1.2.</span> <span class="nav-text">Class文件版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量池"><span class="nav-number">1.3.</span> <span class="nav-text">常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CONTSTANT-UTF8"><span class="nav-number">1.3.1.</span> <span class="nav-text">CONTSTANT_UTF8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-Class"><span class="nav-number">1.3.2.</span> <span class="nav-text">CONSTANT_Class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-Integer、CONSTANT-Long、CONSTANT-Double、CONSTANT-Float"><span class="nav-number">1.3.3.</span> <span class="nav-text">CONSTANT_Integer、CONSTANT_Long、CONSTANT_Double、CONSTANT_Float</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-String"><span class="nav-number">1.3.4.</span> <span class="nav-text">CONSTANT_String　</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-NameAndType"><span class="nav-number">1.3.5.</span> <span class="nav-text">CONSTANT_NameAndType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-Methodref和CONSTANT-Fieldref"><span class="nav-number">1.3.6.</span> <span class="nav-text">CONSTANT_Methodref和CONSTANT_Fieldref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-InterfaceMethodref"><span class="nav-number">1.3.7.</span> <span class="nav-text">CONSTANT_InterfaceMethodref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-MethodHandle、CONSTANT-MethodType、CONSTANT-InvokeDynamic"><span class="nav-number">1.3.8.</span> <span class="nav-text">CONSTANT_MethodHandle、CONSTANT_MethodType、CONSTANT_InvokeDynamic</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class的访问标记"><span class="nav-number">1.4.</span> <span class="nav-text">Class的访问标记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类、父类和接口"><span class="nav-number">1.5.</span> <span class="nav-text">类、父类和接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class的字段"><span class="nav-number">1.6.</span> <span class="nav-text">Class的字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class方法的基本结构"><span class="nav-number">1.7.</span> <span class="nav-text">Class方法的基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录行号－LineNumberTable"><span class="nav-number">1.8.</span> <span class="nav-text">记录行号－LineNumberTable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法执行主体－Code属性"><span class="nav-number">1.9.</span> <span class="nav-text">方法执行主体－Code属性　</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局部变量和参数－LocalVariableTable"><span class="nav-number">1.10.</span> <span class="nav-text">局部变量和参数－LocalVariableTable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字节码类型校验－StackMapTable属性"><span class="nav-number">1.11.</span> <span class="nav-text">字节码类型校验－StackMapTable属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常－Exceptions属性"><span class="nav-number">1.12.</span> <span class="nav-text">异常－Exceptions属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class来源－SourceFile"><span class="nav-number">1.13.</span> <span class="nav-text">Class来源－SourceFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态调用－BootstrapMethod属性"><span class="nav-number">1.14.</span> <span class="nav-text">动态调用－BootstrapMethod属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类－InnerClasses属性"><span class="nav-number">1.15.</span> <span class="nav-text">内部类－InnerClasses属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Depercated属性"><span class="nav-number">1.16.</span> <span class="nav-text">Depercated属性</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
