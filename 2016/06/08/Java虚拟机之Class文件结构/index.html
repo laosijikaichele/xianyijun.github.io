@@ -92,22 +92,19 @@
 
 
 
-<meta name="description" content="[toc]
-Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
-123">
+<meta name="description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
+123456789">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java虚拟机之Class文件结构">
 <meta property="og:url" content="http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="[toc]
-Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
-123">
-<meta property="og:updated_time" content="2016-06-10T09:35:07.834Z">
+<meta property="og:description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
+123456789">
+<meta property="og:updated_time" content="2016-06-10T09:36:03.370Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机之Class文件结构">
-<meta name="twitter:description" content="[toc]
-Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
-123">
+<meta name="twitter:description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
+123456789">
 
 
 
@@ -302,8 +299,7 @@ Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一�
       
 
       
-        <p>[toc]</p>
-<h1 id="Java虚拟机之Class文件结构"><a href="#Java虚拟机之Class文件结构" class="headerlink" title="Java虚拟机之Class文件结构"></a><strong>Java虚拟机之Class文件结构</strong></h1><p>在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。<br>Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，<br>则使用u1数组来表示。<br>根据Java虚拟机规范，一个class文件可以描述为:</p>
+        <h1 id="Java虚拟机之Class文件结构"><a href="#Java虚拟机之Class文件结构" class="headerlink" title="Java虚拟机之Class文件结构"></a><strong>Java虚拟机之Class文件结构</strong></h1><p>在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。<br>Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，<br>则使用u1数组来表示。<br>根据Java虚拟机规范，一个class文件可以描述为:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile&#123;</span><br><span class="line">	u4		magic;</span><br><span class="line">    u2		minor_version;</span><br><span class="line">    u2		major_version;</span><br><span class="line">    u2		constant_pool_count;</span><br><span class="line">    cp_info		constant_pool[constant_pool_count-<span class="number">1</span>];</span><br><span class="line">    u2		access_flag;</span><br><span class="line">    u2		this_class;</span><br><span class="line">    u2		super_class;</span><br><span class="line">    u2		interfaces_count;</span><br><span class="line">    u2		interfaces[interfaces_count];</span><br><span class="line">    u2		fields_count;</span><br><span class="line">    field_info		fields[fidlds_count];</span><br><span class="line">    u2		method_count;</span><br><span class="line">    method_info		method[method_count];</span><br><span class="line">    u2		attributes_count;</span><br><span class="line">    attribute_info		attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Class文件以一个４字节的魔数开头，紧跟着两个大小版本号，然后就是常量池，常量池的个数为constant_pool_count，而常量池的项只有constant_pool_size-1个；常量池之后就是类的访问修饰符、类的自身引用、父类引用和接口个数和实现的接口引用;然后就是类的字段个数、字段描述和方法个数、方法描述；最后存放着类文件的属性信息。</p>
 <h2 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a><strong>魔数</strong></h2><p>魔数是Class文件的标志，它是用来告诉虚拟机这个文件是Class文件，魔数是一个无符号的4字节整数，固定是0xCAFEBABE，<br>如果class文件不是以0xCAFEBABE开头的话，虚拟机在进行文件验证的时候会抛出ClassFormatErroe错误:<br>Incompatiable magic value 184466110 in class file</p>
@@ -464,6 +460,10 @@ Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一�
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2016/06/14/Java知乎爬虫之模拟登陆/" rel="prev" title="Java知乎爬虫之模拟登录">
+                Java知乎爬虫之模拟登录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -557,7 +557,7 @@ Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-count">37</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -567,7 +567,7 @@ Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一�
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
