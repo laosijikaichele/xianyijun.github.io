@@ -92,16 +92,22 @@
 
 
 
-<meta name="description" content="学习、积累、分享">
+<meta name="description" content="浅析Mysql数据库之索引索引基础索引是数据库存储引擎用来快速找到记录的一种数据结构，主要是用来对查询性能进行优化。索引可以是一个值或者多个列的值，如果是多个列的话，需要注意列的顺序，因为MySQL是使用索引的最左前缀列进行匹配的。
+索引类型MySQL主要支持以下几种索引。
+B+树索引B+树索引是使用b+树数据结构来存储数据的，不同的数据引擎会对B+树进行不同的优化，例如MyISAM使用前缀压缩技">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅析Mysql数据库之索引">
 <meta property="og:url" content="http://xianyijun.github.io/2016/06/24/浅析Mysql数据库之索引/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="学习、积累、分享">
-<meta property="og:updated_time" content="2016-06-24T13:36:18.906Z">
+<meta property="og:description" content="浅析Mysql数据库之索引索引基础索引是数据库存储引擎用来快速找到记录的一种数据结构，主要是用来对查询性能进行优化。索引可以是一个值或者多个列的值，如果是多个列的话，需要注意列的顺序，因为MySQL是使用索引的最左前缀列进行匹配的。
+索引类型MySQL主要支持以下几种索引。
+B+树索引B+树索引是使用b+树数据结构来存储数据的，不同的数据引擎会对B+树进行不同的优化，例如MyISAM使用前缀压缩技">
+<meta property="og:updated_time" content="2016-07-21T17:24:37.347Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析Mysql数据库之索引">
-<meta name="twitter:description" content="学习、积累、分享">
+<meta name="twitter:description" content="浅析Mysql数据库之索引索引基础索引是数据库存储引擎用来快速找到记录的一种数据结构，主要是用来对查询性能进行优化。索引可以是一个值或者多个列的值，如果是多个列的话，需要注意列的顺序，因为MySQL是使用索引的最左前缀列进行匹配的。
+索引类型MySQL主要支持以下几种索引。
+B+树索引B+树索引是使用b+树数据结构来存储数据的，不同的数据引擎会对B+树进行不同的优化，例如MyISAM使用前缀压缩技">
 
 
 
@@ -296,7 +302,22 @@
       
 
       
-        
+        <h1 id="浅析Mysql数据库之索引"><a href="#浅析Mysql数据库之索引" class="headerlink" title="浅析Mysql数据库之索引"></a><strong>浅析Mysql数据库之索引</strong></h1><h2 id="索引基础"><a href="#索引基础" class="headerlink" title="索引基础"></a><strong>索引基础</strong></h2><p>索引是数据库存储引擎用来快速找到记录的一种数据结构，主要是用来对查询性能进行优化。<br>索引可以是一个值或者多个列的值，如果是多个列的话，需要注意列的顺序，因为MySQL是使用索引的最左前缀列进行匹配的。</p>
+<h2 id="索引类型"><a href="#索引类型" class="headerlink" title="索引类型"></a><strong>索引类型</strong></h2><p>MySQL主要支持以下几种索引。</p>
+<h3 id="B-树索引"><a href="#B-树索引" class="headerlink" title="B+树索引"></a><strong>B+树索引</strong></h3><p>B+树索引是使用b+树数据结构来存储数据的，不同的数据引擎会对B+树进行不同的优化，例如MyISAM使用前缀压缩技术让索引更小，<br>而Innodb的话则是按照原数据格式进行存储。MyISAM索引通过数据的物理位置引用被索引的行，而Innodb则是通过主键引用被索引的行。</p>
+<p>B+树的所有值都是按顺序进行存储的，同时根到每一个叶子节点的距离都是相等的，<br>B+树可以通过减少读取磁盘IO的次数来加快访问数据的速度，B+树不需要对数据进行全表扫描来获取数据，<br>它只需要从根的节点开始搜索，通过对节点进行比较和根据要查找的值来进行下一层的节点，减少了读取的次数。<br>由于每往下一层都需要进行一次读取操作，那么B+树的高度就决定了查询需要进行读取的次数，<br>B+树的高度是由B+树的节点的个数和B+树的序数有关，当数据量一定的时候，<br>一次磁盘IO读取的磁盘块的大小(innodb为16kb)除以每一个索引项大小即为每一个节点的数据项的数量，<br>如果节点的数据项数量越大，那么B+树的高度就越小。由于一次磁盘IO读取的磁盘块的大小是固定的，<br>而且数据量一定的时候，索引项的大小越小，B+树的高度就越小，即可以减少磁盘读取的次数，加快数据查询的次数。</p>
+<p>B+树的索引列存储是顺序组织存储的，因为范围查询比较方便，B+树索引的查询类型主要是全键值、键值范围或者键前缀查找三种。</p>
+<blockquote>
+<ul>
+<li>全值匹配</li>
+<li>匹配最左前缀</li>
+<li>匹配列前缀</li>
+<li>匹配范围值</li>
+<li>精确匹配某一列并范围匹配另外一列</li>
+<li>只访问索引的查询</li>
+</ul>
+</blockquote>
+<h2 id="索引策略"><a href="#索引策略" class="headerlink" title="索引策略"></a><strong>索引策略</strong></h2>
       
     </div>
     
@@ -521,7 +542,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浅析Mysql数据库之索引"><span class="nav-number">1.</span> <span class="nav-text">浅析Mysql数据库之索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引基础"><span class="nav-number">1.1.</span> <span class="nav-text">索引基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引类型"><span class="nav-number">1.2.</span> <span class="nav-text">索引类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#B-树索引"><span class="nav-number">1.2.1.</span> <span class="nav-text">B+树索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引策略"><span class="nav-number">1.3.</span> <span class="nav-text">索引策略</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
