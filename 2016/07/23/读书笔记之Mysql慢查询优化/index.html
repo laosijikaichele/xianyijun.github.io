@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="MySQL," />
+  <meta name="keywords" content="Hexo, World" />
 
 
 
@@ -99,7 +99,7 @@
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="读书笔记之Mysql慢查询优化什么是慢查询我们可以把查询看成一个任务，一个任务是由一系列的子任务组合而成的，每一个子任务都会去消耗一定的时间，如果我们想要对查询进行优化，主要就对子任务进行优化，通过消除子任务、减少子任务的执行次数和更快子任务的运行。查询任务的生命周期主要是从客户端通过TCP/IP访问服务器，在服务器上进行解析，生成执行计划，执行计划然后返回结果给客户端。执行是整个过程中最重要的一">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_045.png">
-<meta property="og:updated_time" content="2016-07-28T17:36:17.702Z">
+<meta property="og:updated_time" content="2016-07-29T02:31:09.143Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="读书笔记之Mysql慢查询优化">
 <meta name="twitter:description" content="读书笔记之Mysql慢查询优化什么是慢查询我们可以把查询看成一个任务，一个任务是由一系列的子任务组合而成的，每一个子任务都会去消耗一定的时间，如果我们想要对查询进行优化，主要就对子任务进行优化，通过消除子任务、减少子任务的执行次数和更快子任务的运行。查询任务的生命周期主要是从客户端通过TCP/IP访问服务器，在服务器上进行解析，生成执行计划，执行计划然后返回结果给客户端。执行是整个过程中最重要的一">
@@ -360,7 +360,9 @@
 <h3 id="查询优化处理"><a href="#查询优化处理" class="headerlink" title="查询优化处理"></a><strong>查询优化处理</strong></h3><p>查询会将一个SQL语句转换成一个执行计划，MySQL然后按照这个执行计划和存储引擎进行交互，这包括多个子阶段：解析SQL、预处理、优化SQL执行计划。</p>
 <ul>
 <li>语法解析器和预处理<br>语法解析器将使用MySQL语法规则验证和解析查询生成解析树，预处理器的话就会根据MySQL规则进一步解析树是否合法。</li>
-<li><p>查询优化器<br>解析树会由优化器将其转化成执行计划，一条查询可以有多种执行计划，都返回相同结果，优化器的作用就是找到其中最好的执行计划。<br>MySQL使用基于成本的优化器，它会将预测一个查询使用某种执行计划时的成本，并选择其中成本最小的一个，可以通过查询当前会话的Last_Query_cost的值来得知MySQL计算的当前查询的成本。<br>表明优化器认为需要进行Value（根据每一个表或者索引的页面个数，索引的基数，索引和数据行的长度，索引分布情况）个数据页（单位为随机读取一个4K数据业的成本）的随机查找才能完成查询（不考虑缓存，假设读取任何数据都需要进行磁盘IO）。<br>优化器的优化策略主要分为两种静态优化和动态优化，静态优化可以直接对解析树进行分析，并完成优化，可以看成是编译时优化，不依赖参数值。动态优化的话则与上下文有关，在每次查询的时候都要重新评估，可以看成是运行时优化。<br> MySQL的优化类型：</p>
+<li><p>查询优化器<br>解析树会由优化器将其转化成执行计划，一条查询可以有多种执行计划，都返回相同结果，优化器的作用就是找到其中最好的执行计划。<br>MySQL使用基于成本的优化器，它会将预测一个查询使用某种执行计划时的成本，并选择其中成本最小的一个，可以通过查询当前会话的Last_Query_cost的值来得知MySQL计算的当前查询的成本。<br>表明优化器认为需要进行Value（根据每一个表或者索引的页面个数，索引的基数，索引和数据行的长度，索引分布情况）个数据页（单位为随机读取一个4K数据业的成本）的随机查找才能完成查询（不考虑缓存，假设读取任何数据都需要进行磁盘IO）。<br>优化器的优化策略主要分为两种静态优化和动态优化，静态优化可以直接对解析树进行分析，并完成优化，可以看成是编译时优化，不依赖参数值。动态优化的话则与上下文有关，在每次查询的时候都要重新评估，可以看成是运行时优化。</p>
+<blockquote>
+<p>  MySQL的优化类型：</p>
 <ul>
 <li>重新定义关联表的顺序<br>数据表的关联顺序不一定是按照查询中指定的顺序进行，是由优化器进行决定的。</li>
 <li>将外连接转化为内连接<br>where 条件、库表结构可能会让外连接等价于一个内连接，MySQL可以进行识别和重写查询，调整关联顺序。</li>
@@ -373,6 +375,7 @@
 <li>等值传播<br>如果两个列的值通过等式关联，MySQL能够把其中的一个列的where条件传递到另一个列上。</li>
 <li>列表IN()比较<br>MySQL会将in()列表中的数据进行排序，然后通过二分查找的方式来确定列表中的值是否满足条件。</li>
 </ul>
+</blockquote>
 </li>
 <li><p>数据和索引的统计信息<br>MySQL在服务器层有查询优化器，但是没有保存数据和索引的统计信息，统计信息有存储引擎实现，不同存储引擎可能会储存不同的统计信息。<br>由于服务器层没有统计信息，因此在MySQL查询优化器会在生成查询的执行计划时，需要向存储引擎获取相应的统计信息，例如每一个表或者索引有多少个页面，每一个表的每一个索引的基数shiite多少，数据行和索引长度，索引的分布信息。优化器根据信息来选择最优的执行计划。</p>
 </li>
@@ -387,7 +390,9 @@
 </li>
 </ul>
 <p>我们可以设置max_length_for_sort_data参数来决定使用哪种算法（当所有列的总长度小于该值的时候，使用单次传输排序）<br>要记住在进行文件排序的时候，需要使用临时存储空间来存储排序记录，每一个排序记录都会分配一个足够长的定长空间来存放（能够存储最长的字符串），因此需要合理设计表结构。<br>如果关联查询需要排序的话，MySQL会根据order by 子句的所有列是否来自关联的第一个表，如果是的话，MySQL会在关联处理第一个表的时候就进行文件排序（extra字段会有Using filesort），否则MySQL都会先将关联的结果都存放在临时表中，在所有的关联结束之后，在进行文件排序,limit会在排序之后应用(extra会有 Using temporary;Using filesort)，也就是说就算返回很少的数据，临时表和排序的数据量也会非常大（MySQL5.6不再对所有的结果进行排序，而是根据情况对不满足条件的结果，进行排序）。</p>
-<h2 id="查询执行引擎"><a href="#查询执行引擎" class="headerlink" title="查询执行引擎"></a><strong>查询执行引擎</strong></h2>
+<h2 id="查询执行引擎"><a href="#查询执行引擎" class="headerlink" title="查询执行引擎"></a><strong>查询执行引擎</strong></h2><p>MySQL会根据在解析和优化阶段生成的执行计划来完成整个查询：根据执行计划给出的指令逐步执行，通过调用存储引擎实现的接口（handler API）,每一个表有一个Handler的实例表示，可以通过实例的接口来获取表的相关信息，包括表的所有列名，索引统计信息。</p>
+<h2 id="结果返回客户端"><a href="#结果返回客户端" class="headerlink" title="结果返回客户端"></a><strong>结果返回客户端</strong></h2><p>查询执行的最后一个阶段是将结果返回给客户端，就算查询不需要返回结果集给客户端，MySQL扔会返回这个查询的信息（查询影响到的行数），如果查询可以缓存的话，这阶段会将结果存放到缓存中。<br>将结果集返回到客户端是一个增量，逐步返回的过程，它可以让服务端无须存储太多的结果，也就不需要因为返回太多的数据消耗太多的内存，也能让客户端第一时间获的返回的结果。</p>
+
       
     </div>
     
@@ -404,12 +409,6 @@
     </div>
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/MySQL/" rel="tag">#MySQL</a>
-          
-        </div>
       
 
       
@@ -614,7 +613,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#读书笔记之Mysql慢查询优化"><span class="nav-number">1.</span> <span class="nav-text">读书笔记之Mysql慢查询优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是慢查询"><span class="nav-number">1.1.</span> <span class="nav-text">什么是慢查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化数据访问"><span class="nav-number">1.2.</span> <span class="nav-text">优化数据访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构查询的方式"><span class="nav-number">1.3.</span> <span class="nav-text">重构查询的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询执行的过程"><span class="nav-number">1.4.</span> <span class="nav-text">查询执行的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端与服务端通信"><span class="nav-number">1.4.1.</span> <span class="nav-text">客户端与服务端通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询状态"><span class="nav-number">1.4.2.</span> <span class="nav-text">查询状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存"><span class="nav-number">1.4.3.</span> <span class="nav-text">查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询优化处理"><span class="nav-number">1.4.4.</span> <span class="nav-text">查询优化处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询执行引擎"><span class="nav-number">1.5.</span> <span class="nav-text">查询执行引擎</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#读书笔记之Mysql慢查询优化"><span class="nav-number">1.</span> <span class="nav-text">读书笔记之Mysql慢查询优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是慢查询"><span class="nav-number">1.1.</span> <span class="nav-text">什么是慢查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化数据访问"><span class="nav-number">1.2.</span> <span class="nav-text">优化数据访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构查询的方式"><span class="nav-number">1.3.</span> <span class="nav-text">重构查询的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询执行的过程"><span class="nav-number">1.4.</span> <span class="nav-text">查询执行的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端与服务端通信"><span class="nav-number">1.4.1.</span> <span class="nav-text">客户端与服务端通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询状态"><span class="nav-number">1.4.2.</span> <span class="nav-text">查询状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存"><span class="nav-number">1.4.3.</span> <span class="nav-text">查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询优化处理"><span class="nav-number">1.4.4.</span> <span class="nav-text">查询优化处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询执行引擎"><span class="nav-number">1.5.</span> <span class="nav-text">查询执行引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果返回客户端"><span class="nav-number">1.6.</span> <span class="nav-text">结果返回客户端</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
