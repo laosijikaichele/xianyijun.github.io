@@ -98,7 +98,7 @@
 <meta property="og:url" content="http://xianyijun.github.io/2016/07/29/读书笔记之MySQL查询优化器/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="读书笔记之MySQL查询优化器关联子查询由于博主使用的是MySQL5.6版本，这块具体懒得测试（逃在5.6版本之前不会将子查询的结果集计算出来再与其他表做join，很可能会出现dependent subquery（相关子查询）,即外层查询每扫描一条数据，子查询都要重新执行一次，导致性能下降。在MySQL对子查询处理方式进行了优化，会将子查询的结果临时存储到临时表中，临时表的索引主要使用去除重复记录">
-<meta property="og:updated_time" content="2016-07-29T15:45:11.065Z">
+<meta property="og:updated_time" content="2016-07-31T14:25:02.853Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="读书笔记之MySQL查询优化器">
 <meta name="twitter:description" content="读书笔记之MySQL查询优化器关联子查询由于博主使用的是MySQL5.6版本，这块具体懒得测试（逃在5.6版本之前不会将子查询的结果集计算出来再与其他表做join，很可能会出现dependent subquery（相关子查询）,即外层查询每扫描一条数据，子查询都要重新执行一次，导致性能下降。在MySQL对子查询处理方式进行了优化，会将子查询的结果临时存储到临时表中，临时表的索引主要使用去除重复记录">
@@ -314,9 +314,15 @@
 </ul>
 <h2 id="优化关联查询"><a href="#优化关联查询" class="headerlink" title="优化关联查询"></a><strong>优化关联查询</strong></h2><ul>
 <li>确保on 或者using子句的列上有索引</li>
-<li>确保任何的group by和order by的表达式只涉及一个表的列。<h2 id="优化子查询"><a href="#优化子查询" class="headerlink" title="优化子查询"></a><strong>优化子查询</strong></h2></li>
-<li>尽可能使用关联查询<h2 id="优化group-by和DISTINCT"><a href="#优化group-by和DISTINCT" class="headerlink" title="优化group by和DISTINCT"></a><strong>优化group by和DISTINCT</strong></h2>如果可以使用索引来优化的话，就使用索引优化。<br>无法使用索引的话，group by使用两种策略，使用文件排序或者临时表作分组。如果对关联查询作分组，并且是按照查找表中的某个列进行分组，那么采用查找表的标识列分组的效率会比其他列更高。<br>如果没有通过order by子句显性指定排序列，当使用group by子句的时候，结果集会自动按照分组的字段进行排序，如果不关心结果集的顺序，而这种默认顺序又导致需要文件排序，可以使用order by null，让ＭySQL不再进行文件排序。<h2 id="优化Group-by-with-rollup"><a href="#优化Group-by-with-rollup" class="headerlink" title="优化Ｇroup by with rollup"></a><strong>优化Ｇroup by with rollup</strong></h2>对返回的分组结果做超级聚合，可以使用with rollup子句来实现。不过最好将with rollup功能转移到应用程序中处理。<h2 id="优化limit分页"><a href="#优化limit分页" class="headerlink" title="优化limit分页"></a><strong>优化limit分页</strong></h2>在需要进行分页操作的时候，可以通过limit加上偏移量实现（可以加上合适的order by子句），不过当偏移量很大的时候，可能会查询很多条记录而只返回少量记录，代价比较大，要进行优化的话，可以是页面中限制分页的数量或者优化大偏移量的性能。<br>优化分页查询可以使用覆盖索引进行扫描，然后根据需要进行一次关联操作返回所需要的列，它可以让ＭySQL扫描尽可能少的页面，获取需要访问的记录后在根据关联列返回原表查询需要的所有列。<h2 id="优化union查询"><a href="#优化union查询" class="headerlink" title="优化union查询"></a><strong>优化union查询</strong></h2>union通过创建和填充临时表来执行union查询，需要将where,limit,order by子句下推到union的各个子查询找，以便优化器利用这些条件进行优化，除非是需要消除重复的行，否则一定要使用union all，如果没有all关键字的话，MySQL会给临时表添加distinct选项，对整个临时表数据作唯一性检查。</li>
+<li>确保任何的group by和order by的表达式只涉及一个表的列。</li>
 </ul>
+<h2 id="优化子查询"><a href="#优化子查询" class="headerlink" title="优化子查询"></a><strong>优化子查询</strong></h2><ul>
+<li>尽可能使用关联查询</li>
+</ul>
+<h2 id="优化group-by和DISTINCT"><a href="#优化group-by和DISTINCT" class="headerlink" title="优化group by和DISTINCT"></a><strong>优化group by和DISTINCT</strong></h2><p>如果可以使用索引来优化的话，就使用索引优化。<br>无法使用索引的话，group by使用两种策略，使用文件排序或者临时表作分组。如果对关联查询作分组，并且是按照查找表中的某个列进行分组，那么采用查找表的标识列分组的效率会比其他列更高。<br>如果没有通过order by子句显性指定排序列，当使用group by子句的时候，结果集会自动按照分组的字段进行排序，如果不关心结果集的顺序，而这种默认顺序又导致需要文件排序，可以使用order by null，让ＭySQL不再进行文件排序。</p>
+<h2 id="优化Group-by-with-rollup"><a href="#优化Group-by-with-rollup" class="headerlink" title="优化Ｇroup by with rollup"></a><strong>优化Ｇroup by with rollup</strong></h2><p>对返回的分组结果做超级聚合，可以使用with rollup子句来实现。不过最好将with rollup功能转移到应用程序中处理。</p>
+<h2 id="优化limit分页"><a href="#优化limit分页" class="headerlink" title="优化limit分页"></a><strong>优化limit分页</strong></h2><p>在需要进行分页操作的时候，可以通过limit加上偏移量实现（可以加上合适的order by子句），不过当偏移量很大的时候，可能会查询很多条记录而只返回少量记录，代价比较大，要进行优化的话，可以是页面中限制分页的数量或者优化大偏移量的性能。<br>优化分页查询可以使用覆盖索引进行扫描，然后根据需要进行一次关联操作返回所需要的列，它可以让ＭySQL扫描尽可能少的页面，获取需要访问的记录后在根据关联列返回原表查询需要的所有列。</p>
+<h2 id="优化union查询"><a href="#优化union查询" class="headerlink" title="优化union查询"></a><strong>优化union查询</strong></h2><p>union通过创建和填充临时表来执行union查询，需要将where,limit,order by子句下推到union的各个子查询找，以便优化器利用这些条件进行优化，除非是需要消除重复的行，否则一定要使用union all，如果没有all关键字的话，MySQL会给临时表添加distinct选项，对整个临时表数据作唯一性检查。</p>
 
       
     </div>
