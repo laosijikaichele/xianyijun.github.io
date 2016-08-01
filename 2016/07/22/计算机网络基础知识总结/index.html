@@ -110,7 +110,12 @@
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_053.png">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_054.png">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_055.png">
-<meta property="og:updated_time" content="2016-07-31T17:13:15.266Z">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_056.png">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_057.png">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_058.png">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_059.png">
+<meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_060.png">
+<meta property="og:updated_time" content="2016-08-01T14:40:06.531Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机网络基础知识总结">
 <meta name="twitter:description" content="计算机网络基础知识总结TCP/IP协议族现代Internet主要使用的协议族是TCP/IP协议族，它是一个四层协议系统，自顶向下的话是应用层，传输层，网络层，数据链路层。每一层都有自己需要完成的功能，包含着若干协议的实现，上层协议的使用依赖下层协议提供的服务。
@@ -329,8 +334,10 @@
 </ul>
 <h3 id="分用"><a href="#分用" class="headerlink" title="分用"></a><strong>分用</strong></h3><p>当帧到达目的主机之后，会沿着协议栈自底向上依次传递。每层协议会依次处理帧中本层负责的头部数据，获取所需的信息，并最终将处理后的帧交给目标应用数据。<br>分用是根据头部信息中的类型字段实现的。<br><img src="http://7xrl91.com1.z0.glb.clouddn.com/Selection_054.png" alt="分用"></p>
 <ul>
-<li>由于IP\ARP协议都是使用帧来传输数据的，帧的头部需要提供一个字段来进行区分，以太网帧使用２字节的类型字段来标志上层协议，如果主机接收到的以太网帧的类型字段的值为0x800,则帧的数据报部分为IP数据报，以太网启动程序就会将其交付给IP模块;如果类型字段为0x806，那帧的数据部分为ARP请求或应答报文，以太网驱动程序将帧交付给ARP模块；若类型字段的值为0x835，则帧的数据部分为RARP请求或应答报文，以太网驱动就会将其交给ARP模块处理；如果类型字段为0x835，则帧的数据报部分为RARP请求或应答报文，以太网驱动程序就会将其交给RARP模块。</li>
-<li>ICMP/TCP/UDP协议都使用了IP协议，所以IP数据报的头部采用16位的协议字段来进行区分。</li>
+<li><p>由于IP\ARP协议都是使用帧来传输数据的，帧的头部需要提供一个字段来进行区分，以太网帧使用２字节的类型字段来标志上层协议，如果主机接收到的以太网帧的类型字段的值为0x800,则帧的数据报部分为IP数据报，以太网启动程序就会将其交付给IP模块;如果类型字段为0x806，那帧的数据部分为ARP请求或应答报文，以太网驱动程序将帧交付给ARP模块；若类型字段的值为0x835，则帧的数据部分为RARP请求或应答报文，以太网驱动就会将其交给ARP模块处理；如果类型字段为0x835，则帧的数据报部分为RARP请求或应答报文，以太网驱动程序就会将其交给RARP模块。</p>
+</li>
+<li><p>ICMP/TCP/UDP协议都使用了IP协议，所以IP数据报的头部采用16位的协议字段来进行区分。</p>
+</li>
 <li>TCP/UDP则是在头部使用了16位的端口号字段来区分上层应用程序，DNS端口号为53,http端口号为80,我们可以在/etc/services文件找到知名应用层协议使用的端口号。</li>
 <li>最后分用完成之后，就将封装之前的数据送至给目标服务。<h2 id="IP-ARP-RARP协议"><a href="#IP-ARP-RARP协议" class="headerlink" title="IP/ARP/RARP协议"></a><strong>IP/ARP/RARP协议</strong></h2><h3 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a><strong>ARP协议</strong></h3>ARP协议能实现任意网络层地址到任务物理地址的转换，原理主要是每个安装有TCP/IP协议的主机或者路由器，都有一个ARP缓存表，表里面的IP地址和Mac地址是一一对应的，当主机A向主机B发送数据的时候，主机A首先会检查自己的ARP缓存表，查找是否有目标主机B的IP地址，如果找到了的话，就会将对应的mac地址写回帧中返回就可以了；否则没有找到的话，主机A就在其所在的网络发送一个广播(ARP请求)，请求的目标mac地址为‘FF.FF.FF.FF.FF.FF’,表示在同一网段的所有主机发起询问，只有目标主机才能接收这个帧，响应ARP询问，其他主机不响应，然后主机A就知道了主机B的mac地址，可以发送数据了，同时主机A会更新ARP缓存表，当下次向主机B发起请求的时候，可以直接从缓存表中获取，不需要发起广播。<h4 id="ARP请求／应答报文"><a href="#ARP请求／应答报文" class="headerlink" title="ARP请求／应答报文"></a><strong>ARP请求／应答报文</strong></h4><img src="http://7xrl91.com1.z0.glb.clouddn.com/Selection_055.png" alt="ARP表文"></li>
 </ul>
@@ -342,7 +349,71 @@
 <li>无连接<br>无连接是指IP通信的双方都不会长时间维持对方的任何信息，这需要我们每次发送数据的时候，都需要指定对方的IP地址。</li>
 <li>不可靠<br>不可靠是指IP协议并不能保证发送端发出的数据能够准确地发送到接收端，它只能保证尽最大努力去发送，一旦发送端的IP模块检测到IP数据报发送失败，就只是通知上层协议发送失败，而不会重传数据报。</li>
 </ul>
-<h4 id="IP头部信息"><a href="#IP头部信息" class="headerlink" title="IP头部信息"></a><strong>IP头部信息</strong></h4><h3 id="IP数据包的路由和转发"><a href="#IP数据包的路由和转发" class="headerlink" title="IP数据包的路由和转发"></a><strong>IP数据包的路由和转发</strong></h3><h2 id="TCP-UDP协议"><a href="#TCP-UDP协议" class="headerlink" title="TCP/UDP协议"></a><strong>TCP/UDP协议</strong></h2><h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a><strong>TCP</strong></h3><h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a><strong>UDP</strong></h3><h2 id="DHCP协议"><a href="#DHCP协议" class="headerlink" title="DHCP协议"></a><strong>DHCP协议</strong></h2><h2 id="DNS协议"><a href="#DNS协议" class="headerlink" title="DNS协议"></a><strong>DNS协议</strong></h2><h3 id="迭代和递归解析"><a href="#迭代和递归解析" class="headerlink" title="迭代和递归解析"></a><strong>迭代和递归解析</strong></h3><h2 id="Http协议"><a href="#Http协议" class="headerlink" title="Http协议"></a><strong>Http协议</strong></h2><h3 id="Http请求和响应"><a href="#Http请求和响应" class="headerlink" title="Http请求和响应"></a><strong>Http请求和响应</strong></h3><h3 id="HttpMethod"><a href="#HttpMethod" class="headerlink" title="HttpMethod"></a><strong>HttpMethod</strong></h3><h3 id="Http状态码"><a href="#Http状态码" class="headerlink" title="Http状态码"></a><strong>Http状态码</strong></h3><h3 id="Http-Header"><a href="#Http-Header" class="headerlink" title="Http Header"></a><strong>Http Header</strong></h3>
+<h4 id="IP头部信息"><a href="#IP头部信息" class="headerlink" title="IP头部信息"></a><strong>IP头部信息</strong></h4><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/Selection_056.png" alt="ip头部"></p>
+<ul>
+<li>４位版本号指定IP协议的版本，对于IPv4，即是４</li>
+<li>４位头部长度，标志该IP头部有多少个bit字（１字４字节），4位最大值为15，所以IP头部最长是60字节.</li>
+<li>７位DSCP包括一个３位的优先权字段，４位的TOS字段，４位的TOS字段表示最小延时、最大吞吐量、最高可靠性和最小费用，最多有一个标志位能设置为1.</li>
+<li>1位保留字段，必须置0</li>
+<li>16位总长度是指整个IP数据报的长度，以字节为单位，也就是说IP数据报的最大长度为65534字节，但是由于MTU的限制，长度超过MTU的数据报都要分片传输。</li>
+<li>16位标志符标志主机发送的每一个数据报，其初始值是由系统随机生成的：每发送一个数据报，其值就会加1,该值会在数据报分片的时候复制到每一个分片中，即同一个数据报的所有分片的标识值都会相同。</li>
+<li>3位标志字段，第一位保留，第二位表示禁止分片，如果设置了禁止分片的话，IP模块就不会对数据报进行分片，如果IP数据报的长度超过了MTU，那么IP模块会丢弃该数据报并返回一个ICMP差错报文，第三标志位表示更多分片，除了数据报的最后一个分片之外，其他分片都要设置为1．</li>
+<li>13位分片偏移是指分片相对于原始IP数据报开始处的偏移，实际的偏移值是该值左移３位后得到的，即除了最后一个IP分片之外，每一个IP分片的数据部分的长度必须是８的整数倍。</li>
+<li>8位存活时间，是指数据报到达目的地之前允许经过的路由器跳数，TTL值被发送端设置(常见为64)，数据报在转发过程中每经过一个路由，该值就被路由器减１，当TTL值减为０时，路由器将丢弃数据报，并向源端发送一个ICMP差错报文，TTL可以防止数据报陷入路由循环。</li>
+<li>8位协议可以用来区分上层协议，ICMP为1,TCP为6,UDP为17，详细的可以在/etc/protocols文件中查看。</li>
+<li>16位头部检验和，由发送端填充，接收端对其使用CRC算法对IP数据报头部进行检验是否发生损坏。</li>
+<li>32位的源IP地址和目标IP地址，用来标志数据报的发送端和接收端。</li>
+<li><p>选项字段是可变长的可选信息，最多包含40字节，可用的IP选项有：</p>
+<ul>
+<li>记录路由　告诉数据报途径的所有路由器将自己的IP地址填入IP头部</li>
+<li>时间戳    告诉每个路由器都将数据报被转发的时间填入到IP头部</li>
+<li>松散源路由选择　指定一个路由器IP地址列表，数据报发送过程必须经过其中所有的路由器</li>
+<li>严格源路由选择　数据报只能经过被指定的路由器<h3 id="IP数据包的分片、路由和转发"><a href="#IP数据包的分片、路由和转发" class="headerlink" title="IP数据包的分片、路由和转发"></a><strong>IP数据包的分片、路由和转发</strong></h3><h4 id="分片和组装"><a href="#分片和组装" class="headerlink" title="分片和组装"></a><strong>分片和组装</strong></h4>当IP数据报的长度超过帧的MTU时候，它就会被分片传输，分片可能发生在可能在传输过程中被多次分片，但只有目标机器上，分片才会被内核的IP模块组装。<br>IP数据报通过三个字段给IP的分片和重组提供信息：数据报标志，标志和片偏移。一个IP数据报的每个分片有自己的IP头部，他们具有相同的标志值，但是具有不同的片偏移，并且除了最后一个分片之外，都设置MF标志，此外，每个分片的IP头部的总长度字段都将设置为该分片的长度,分片偏移量会设置为合适的值和首部检验和会重新计算。<br>当接收端发现接收的报文更多分片标志位或者分片偏移量不为0的时候，它就会将其数据和分片偏移量和更多分片标志保存下来，直到收到更多分片标志未被设置的报文，就可以知道原始数据报的总长，一旦收集齐所有分片报文，就可以将他们组装起来交给上层协议。<br><img src="http://7xrl91.com1.z0.glb.clouddn.com/Selection_057.png" alt="分片和组装"><h4 id="路由"><a href="#路由" class="headerlink" title="路由"></a><strong>路由</strong></h4>IP协议还有核心点就是路由，即决定发送数据报到目的机器的路径。<br><img src="http://7xrl91.com1.z0.glb.clouddn.com/Selection_058.png" alt="ip模块"><br>当IP模块接收到来自数据链路层的IP数据报时,他会对该数据报的头部作CRC检验，检验成功之后就根据头部信息进行分析。<br>如果IP数据报的头部设置了源站选路选项（松散源路由选择或者严格源路由选择），则调用IP模块调用数据报转发子模块来处理该数据报，或者该数据报头部中的目标IP地址是本机的某个IP地址，或者是广播地址，也就是说该数据报是发送给本机的，那么IP模块就会根据数据报头部中协议字段来决定将其派发给哪个上层协议，否则IP数据报发现这个数据包不是发送给本机的，也会调用数据报转发子模块来处理数据报。<br>数据报IP转发子模块首先会检查系统是否允许转发，如果不允许的话，IP模块就会将数据报丢弃，如果允许的话，数据报转发子模块会对数据报进行操作，然后将其交给IP数据报输出子模块。<br>计算下一跳子模块通过路由表决定IP数据报会发送至哪个下一跳路由，以及经过哪个网卡来发送，它根据数据报的目标IP地址分类，同一类型的IP数据报会发我能够相同的下一跳路由器。<br>IP输出队列存放的是所有等待发送的IP数据报，除了需要转发的IP数据报和封装了本机上层数据(ICMP报文，TCP报文段和UDP数据报)的IP数据报。<br>我们可以通过route命令来查看路由表<br><img src="http://7xrl91.com1.z0.glb.clouddn.com/Selection_059.png" alt="route"></li>
+</ul>
+</li>
+<li><p>Destination表示目标网络或者主机</p>
+</li>
+<li>Gateway　网关地址，*表示目标和本机在同一个网络</li>
+<li>Genmask　网络掩码</li>
+<li>Flags 路由项标志　<ul>
+<li>U　该路由项是活动的</li>
+<li>H　该路由项的目标是一台主机</li>
+<li>G　该路由项的目标是网关</li>
+<li>D　该路由项是重定向生成的</li>
+<li>M　该路由向被重定向修改过。</li>
+</ul>
+</li>
+<li>Metric　路由距离，即可到达制定能够网络所需的中转数</li>
+<li>Ref　路由项被引用的次数</li>
+<li>Use　该路由项被使用的次数</li>
+<li><p>Iface　该路由项对应的输出网卡接口<br>路由表的第一项是default，表示默认路由，flags为Ｇ，表示下一条目标是网关，地址是192.168.1.1，另一个路由项的目标项是192.168.1.0表示本地局域网，该路由项的网关地址为*,表示数据报不需要路由中转，可以直接发送到目标机器。<br>IP的路由机制：首先查找路由表中有没有与目的IP地址完全匹配的主机IP地址，如果找到的话，就使用该路由项，否则的话查找路由表中和数据报中的目的IP地址具有相同的网络ID的网络IP地址，如果找到则使用该路由项，否则就选择默认路由项，一般表示就是下一跳路由是网关。<br>路由的更新可以是通过route或者工具手动修改路由表，即静态路由更新，否则可以通过BGP、RIP和OSPF等协议动态更新路由</p>
+<h4 id="转发"><a href="#转发" class="headerlink" title="转发"></a><strong>转发</strong></h4><p>对于允许IP数据报转发的系统（主机或者路由器），数据报转发子模块将对期望转发的数据报执行以下操作，首先检查数据报头部的TTL值，如果是０,则丢弃该数据报，否则话就查看数据报头部是否设置了严格源路由选择选项，设置了的话就检查数据报的目标IP地址是否是本机的某个IP地址，如果不是，则发送一个ICMP源站选择失败报文给发送端。如果有可能的话，给源端发送一个ICMP的重定向报文，告诉其一个更合理下一跳路由器。然后将TTL值减１，处理IP头部选项，有可能执行IP分片操作。</p>
+<h2 id="TCP-UDP协议"><a href="#TCP-UDP协议" class="headerlink" title="TCP/UDP协议"></a><strong>TCP/UDP协议</strong></h2><h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a><strong>TCP</strong></h3><p>TCP连接是面向连接、字节流和可靠传输的传输层协议。<br>使用TCP协议进行通信的双方必须先建立连接，然后才能开始数据的读写，双方都必须为该连接分配必要的内核资源，以管理连接的状态和连接上数据的传输,TCP连接是全双工的，即双方的数据读写可以在一个连接进行，完成数据交换之后，通信双方都必须断开连接来释放系统资源。<br>TCP连接是一对一，不可以用来多播或者广播。</p>
+<h4 id="TCP头部信息"><a href="#TCP头部信息" class="headerlink" title="TCP头部信息"></a><strong>TCP头部信息</strong></h4><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/Selection_060.png" alt="tcp头部"></p>
+</li>
+<li><p>16位源端口／目的端口，告诉主机该报文段是来自哪里和要传给上层协议或者应用程序端口的。一般进行TCP通信的时候，客户端通常使用系统自动选择的临时端口号，而服务器使用知名服务端口号。</p>
+</li>
+<li><p>32位序列号码　一次TCP通信过程中某一个传输方向上的字节流的每一个字节的编号。在进行主机A和主机B建立TCP通信的时候，主机A发送给主机B的第一个TCP报文段中，序号值被系统初始化为某个随机值ISN(初始序号值)，在该传输方向上的后续TCP报文段中序号值被系统设置为ISN加上该报文端所携带数据的第一个字节在整个字节流中的偏移。</p>
+</li>
+<li><p>32位确认序号　用作对另一方发送来的TCP报文段的响应，其值是收到的TCP报文段的序号值加1.</p>
+</li>
+<li><p>4位头部长度，标志该TCP头部有多少个32bit字(4字节),TCP头部最长为60字节。</p>
+</li>
+<li><p>6位标志位</p>
+<ul>
+<li>URG标志，表示紧急指针是否有效</li>
+<li>ACK标志，表示确认号是否有效，带有ACK标志的报文段称为确认报文段。</li>
+<li>PSH标志　提示接收端应用程序该立即从TCP接收缓冲区中读取数据，为接收后的数据提供空间。</li>
+<li>RST标志　表示要求对方重新建立连接</li>
+<li>SYN标志　表示请求建立连接</li>
+<li>FIN标志　表示通知对方本端要关闭连接了。</li>
+</ul>
+</li>
+<li>16位窗口大小，TCP流量控制的一个手段，窗口是指接收通告窗口，它告诉对方本端的TCP接收缓冲区还能容纳多少字节的数据，让对方控制发送数据的速度。</li>
+<li>16位校验和，由发送端填充，接收端会对TCP报文段执行CRC算法检验TCP报文段在传输过程中是否损坏。(检验TCP头部和数据部分)</li>
+<li>16位紧急指针　一个正的偏移量，它与序列字段的值相加表示最后一个紧急数据的下一字节的序号。<h4 id="TCP状态转移过程"><a href="#TCP状态转移过程" class="headerlink" title="TCP状态转移过程"></a><strong>TCP状态转移过程</strong></h4><h4 id="TCP数据流"><a href="#TCP数据流" class="headerlink" title="TCP数据流"></a><strong>TCP数据流</strong></h4><h4 id="TCP数据流控制"><a href="#TCP数据流控制" class="headerlink" title="TCP数据流控制"></a><strong>TCP数据流控制</strong></h4><h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a><strong>UDP</strong></h3><h2 id="DHCP协议"><a href="#DHCP协议" class="headerlink" title="DHCP协议"></a><strong>DHCP协议</strong></h2><h2 id="DNS协议"><a href="#DNS协议" class="headerlink" title="DNS协议"></a><strong>DNS协议</strong></h2><h3 id="迭代和递归解析"><a href="#迭代和递归解析" class="headerlink" title="迭代和递归解析"></a><strong>迭代和递归解析</strong></h3><h2 id="Http协议"><a href="#Http协议" class="headerlink" title="Http协议"></a><strong>Http协议</strong></h2><h3 id="Http请求和响应"><a href="#Http请求和响应" class="headerlink" title="Http请求和响应"></a><strong>Http请求和响应</strong></h3></li>
+</ul>
+
       
     </div>
     
@@ -567,7 +638,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络基础知识总结"><span class="nav-number">1.</span> <span class="nav-text">计算机网络基础知识总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP协议族"><span class="nav-number">1.1.</span> <span class="nav-text">TCP/IP协议族</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用层"><span class="nav-number">1.1.1.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传输层"><span class="nav-number">1.1.2.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络层"><span class="nav-number">1.1.3.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据链路层"><span class="nav-number">1.1.4.</span> <span class="nav-text">数据链路层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装和分用"><span class="nav-number">1.2.</span> <span class="nav-text">封装和分用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#封装"><span class="nav-number">1.2.1.</span> <span class="nav-text">封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分用"><span class="nav-number">1.2.2.</span> <span class="nav-text">分用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP-ARP-RARP协议"><span class="nav-number">1.3.</span> <span class="nav-text">IP/ARP/RARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP协议"><span class="nav-number">1.3.1.</span> <span class="nav-text">ARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ARP请求／应答报文"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">ARP请求／应答报文</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RARP协议"><span class="nav-number">1.3.2.</span> <span class="nav-text">RARP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP协议"><span class="nav-number">1.3.3.</span> <span class="nav-text">IP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP头部信息"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">IP头部信息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP数据包的路由和转发"><span class="nav-number">1.3.4.</span> <span class="nav-text">IP数据包的路由和转发</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-UDP协议"><span class="nav-number">1.4.</span> <span class="nav-text">TCP/UDP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">1.4.1.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP"><span class="nav-number">1.4.2.</span> <span class="nav-text">UDP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP协议"><span class="nav-number">1.5.</span> <span class="nav-text">DHCP协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS协议"><span class="nav-number">1.6.</span> <span class="nav-text">DNS协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代和递归解析"><span class="nav-number">1.6.1.</span> <span class="nav-text">迭代和递归解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Http协议"><span class="nav-number">1.7.</span> <span class="nav-text">Http协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http请求和响应"><span class="nav-number">1.7.1.</span> <span class="nav-text">Http请求和响应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HttpMethod"><span class="nav-number">1.7.2.</span> <span class="nav-text">HttpMethod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Http状态码"><span class="nav-number">1.7.3.</span> <span class="nav-text">Http状态码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Http-Header"><span class="nav-number">1.7.4.</span> <span class="nav-text">Http Header</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#计算机网络基础知识总结"><span class="nav-number">1.</span> <span class="nav-text">计算机网络基础知识总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP协议族"><span class="nav-number">1.1.</span> <span class="nav-text">TCP/IP协议族</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用层"><span class="nav-number">1.1.1.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传输层"><span class="nav-number">1.1.2.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络层"><span class="nav-number">1.1.3.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据链路层"><span class="nav-number">1.1.4.</span> <span class="nav-text">数据链路层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封装和分用"><span class="nav-number">1.2.</span> <span class="nav-text">封装和分用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#封装"><span class="nav-number">1.2.1.</span> <span class="nav-text">封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分用"><span class="nav-number">1.2.2.</span> <span class="nav-text">分用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP-ARP-RARP协议"><span class="nav-number">1.3.</span> <span class="nav-text">IP/ARP/RARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARP协议"><span class="nav-number">1.3.1.</span> <span class="nav-text">ARP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ARP请求／应答报文"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">ARP请求／应答报文</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RARP协议"><span class="nav-number">1.3.2.</span> <span class="nav-text">RARP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP协议"><span class="nav-number">1.3.3.</span> <span class="nav-text">IP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP头部信息"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">IP头部信息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP数据包的分片、路由和转发"><span class="nav-number">1.3.4.</span> <span class="nav-text">IP数据包的分片、路由和转发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分片和组装"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">分片和组装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路由"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转发"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">转发</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-UDP协议"><span class="nav-number">1.4.</span> <span class="nav-text">TCP/UDP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">1.4.1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP头部信息"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">TCP头部信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP状态转移过程"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">TCP状态转移过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP数据流"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">TCP数据流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP数据流控制"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">TCP数据流控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP"><span class="nav-number">1.4.2.</span> <span class="nav-text">UDP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP协议"><span class="nav-number">1.5.</span> <span class="nav-text">DHCP协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS协议"><span class="nav-number">1.6.</span> <span class="nav-text">DNS协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代和递归解析"><span class="nav-number">1.6.1.</span> <span class="nav-text">迭代和递归解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Http协议"><span class="nav-number">1.7.</span> <span class="nav-text">Http协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http请求和响应"><span class="nav-number">1.7.1.</span> <span class="nav-text">Http请求和响应</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
         </section>
