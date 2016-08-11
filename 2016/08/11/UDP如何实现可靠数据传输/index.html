@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="枯叶未凋零的个人博客" />
+  <meta name="keywords" content="计算机网络," />
 
 
 
@@ -92,15 +92,16 @@
 
 
 
-<meta name="description" content="枯叶未凋零的个人博客，记录，积累，分享">
-<meta property="og:type" content="website">
-<meta property="og:title" content="枯叶未凋零">
-<meta property="og:url" content="http://xianyijun.github.io/archives/2016/03/index.html">
+<meta name="description" content="UDP如何实现可靠数据传输今天下午阿里电话面试的时候，面试官问到了一个问题：如何使用udp实现tcp，当时没能理解面试官的意思，没有能够答上来，不知道是要哪些方面，其实现在想想，其实就是如何用udp实现可靠性传输，因为tcp和udp都是传输层协议，tcp比udp多的也就是定时重传、应答机制、数据报重排序和流量控制这几个方面，流量控制在可靠数据传输这块的话也不算是重点，那就是要实现定时重传、应答机制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UDP如何实现可靠数据传输">
+<meta property="og:url" content="http://xianyijun.github.io/2016/08/11/UDP如何实现可靠数据传输/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
-<meta property="og:description" content="枯叶未凋零的个人博客，记录，积累，分享">
+<meta property="og:description" content="UDP如何实现可靠数据传输今天下午阿里电话面试的时候，面试官问到了一个问题：如何使用udp实现tcp，当时没能理解面试官的意思，没有能够答上来，不知道是要哪些方面，其实现在想想，其实就是如何用udp实现可靠性传输，因为tcp和udp都是传输层协议，tcp比udp多的也就是定时重传、应答机制、数据报重排序和流量控制这几个方面，流量控制在可靠数据传输这块的话也不算是重点，那就是要实现定时重传、应答机制">
+<meta property="og:updated_time" content="2016-08-11T10:03:50.454Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="枯叶未凋零">
-<meta name="twitter:description" content="枯叶未凋零的个人博客，记录，积累，分享">
+<meta name="twitter:title" content="UDP如何实现可靠数据传输">
+<meta name="twitter:description" content="UDP如何实现可靠数据传输今天下午阿里电话面试的时候，面试官问到了一个问题：如何使用udp实现tcp，当时没能理解面试官的意思，没有能够答上来，不知道是要哪些方面，其实现在想想，其实就是如何用udp实现可靠性传输，因为tcp和udp都是传输层协议，tcp比udp多的也就是定时重传、应答机制、数据报重排序和流量控制这几个方面，流量控制在可靠数据传输这块的话也不算是重点，那就是要实现定时重传、应答机制">
 
 
 
@@ -118,7 +119,7 @@
   };
 </script>
 
-  <title> 归档 | 枯叶未凋零 </title>
+  <title> UDP如何实现可靠数据传输 | 枯叶未凋零 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -149,7 +150,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,139 +238,154 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-       
-      
-      OK! 目前共计 44 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2016">2016</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/03/30/Spring-Ioc源码分析-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">Spring Ioc源码分析 - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-03-30T22:00:00+08:00"
-              content="2016-03-30" >
-          03-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/03/28/Spring-AOP源码分析-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">Spring AOP源码分析 - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-03-28T21:58:00+08:00"
-              content="2016-03-28" >
-          03-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/03/27/数据库知识归纳-枯叶未凋零/" itemprop="url">
-              
-                <span itemprop="name">数据库知识归纳 - 枯叶未凋零</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-03-27T10:24:00+08:00"
-              content="2016-03-27" >
-          03-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
+  
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                UDP如何实现可靠数据传输
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-11T17:40:46+08:00" content="2016-08-11">
+              2016-08-11
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/11/UDP如何实现可靠数据传输/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/11/UDP如何实现可靠数据传输/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="UDP如何实现可靠数据传输"><a href="#UDP如何实现可靠数据传输" class="headerlink" title="UDP如何实现可靠数据传输"></a><strong>UDP如何实现可靠数据传输</strong></h1><p>今天下午阿里电话面试的时候，面试官问到了一个问题：如何使用udp实现tcp，当时没能理解面试官的意思，没有能够答上来，不知道是要哪些方面，其实现在想想，其实就是如何用udp实现可靠性传输，因为tcp和udp都是传输层协议，tcp比udp多的也就是定时重传、应答机制、数据报重排序和流量控制这几个方面，流量控制在可靠数据传输这块的话也不算是重点，那就是要实现定时重传、应答机制和数据报重排序。<br>//现在先挖个坑，过几天再补完</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机网络/" rel="tag">#计算机网络</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/29/读书笔记之MySQL查询优化器/" rel="next" title="读书笔记之MySQL查询优化器">
+                <i class="fa fa-chevron-left"></i> 读书笔记之MySQL查询优化器
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/11/操作系统之内存管理/" rel="prev" title="操作系统之内存管理">
+                操作系统之内存管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
 
 
           </div>
@@ -377,6 +393,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/11/UDP如何实现可靠数据传输/"
+           data-title="UDP如何实现可靠数据传输" data-url="http://xianyijun.github.io/2016/08/11/UDP如何实现可靠数据传输/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -396,8 +420,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -499,6 +532,17 @@
       </section>
 
       
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UDP如何实现可靠数据传输"><span class="nav-number">1.</span> <span class="nav-text">UDP如何实现可靠数据传输</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
 
     </div>
   </aside>
@@ -597,11 +641,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   
