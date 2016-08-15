@@ -76,7 +76,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="MySQL," />
+  <meta name="keywords" content="Mysql," />
 
 
 
@@ -98,7 +98,7 @@
 <meta property="og:url" content="http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="浅析数据库之事务隔离级别与锁机制写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔">
-<meta property="og:updated_time" content="2016-08-14T17:25:38.409Z">
+<meta property="og:updated_time" content="2016-08-15T06:12:15.550Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析数据库之事务隔离级别与锁机制">
 <meta name="twitter:description" content="浅析数据库之事务隔离级别与锁机制写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔">
@@ -475,7 +475,7 @@
 </tbody>
 </table>
 <p>在这并发事务中，我们可以看到事务A先进行了一次读取，在事务B中进行了一次数据的修改，在事务C中进行了一次数据的插入，不过在事务A中第二次读取得到的数据与第一次完全相同，即它是可以进行重读的。<br>不过在这里我们首先需要对幻读和不可重复读这两种并发导致的问题进行区分</p>
-<h4 id="幻读与不可重复读"><a href="#幻读与不可重复读" class="headerlink" title="幻读与不可重复读"></a><strong>幻读与不可重复读</strong></h4><p>不可重复读主要是针对与delete和update操作来讲的，而幻读主要是针对insert操作来讲的，即不可重复读是针对数据库中已有的数据，而幻读是对原不在数据库中的数据来讲的。<br>如果是使用锁机制来实现这两种隔离级别的话（可串行化和可重复读）的话。在重复读中，查询语句在第一次读取数据后，就会对读取的数据进行加锁，那么其他事务就无法对加锁的数据进行修改，就可以实现重复读取，但是这些的话无法对insert进来新的数据进行加锁，这样的话，在事务A读取数据或者修改数据之后，事务B还是可以进行insert操作的,这样的话，在事务A就会发现多了一条新的记录，即出现了幻读，不可以通过行锁来避免，这需要可串行化隔离级别，读用读锁，写用写锁，读写互斥，而且在读取数据的时候会有获取一个范围锁（range-locks），保证读取的范围加锁，新的满足满足条件的记录不能插入（间隙锁），来避免幻读。<br>不过以上讲的是使用悲观锁机制来处理这两种问题，不过在MySQL中，都是使用以乐观锁为理论基础的MVCC（多版本并发控制）来避免问题。</p>
+<h4 id="幻读与不可重复读"><a href="#幻读与不可重复读" class="headerlink" title="幻读与不可重复读"></a><strong>幻读与不可重复读</strong></h4><p>不可重复读主要是针对与delete和update操作来讲的，而幻读主要是针对insert操作来讲的，即不可重复读是针对数据库中已有的数据，而幻读是对原不在数据库中的数据来讲的。<br>如果是使用锁机制来实现这两种隔离级别的话（可串行化和可重复读）的话。在重复读中，查询语句在第一次读取数据后，就会对读取的数据进行加锁，那么其他事务就无法对加锁的数据进行修改，就可以实现重复读取，但是这些的话无法对insert进来新的数据进行加锁，这样的话，在事务A读取数据或者修改数据之后，事务B还是可以进行insert操作的,这样的话，在事务A就会发现多了一条新的记录，即出现了幻读，不可以通过行锁来避免，这需要可串行化隔离级别，读用读锁，写用写锁，读写互斥，来避免幻读。<br>不过以上讲的是使用悲观锁机制来处理这两种问题，不过在MySQL中，都是使用以乐观锁为理论基础的MVCC（多版本并发控制）来避免问题。</p>
 <h4 id="悲观锁与乐观锁"><a href="#悲观锁与乐观锁" class="headerlink" title="悲观锁与乐观锁"></a><strong>悲观锁与乐观锁</strong></h4><ul>
 <li>悲观锁　</li>
 </ul>
@@ -483,14 +483,30 @@
 <ul>
 <li>乐观锁　<br>乐观锁相对于悲观锁而已，乐观锁机制采取比较宽松的加锁机制，悲观锁是通过依靠数据库的锁机制实现的，认为在大部分情况存在着并发访问，需要加锁来保证操作的独占性。而乐观锁则认为在大部分情况下是不存在并发访问的，不需要加锁来保证数据的独占性，而是通过数据版本（Version）记录机制来为数据作一个版本标识，即在基于数据库表的版本解决方案则是通过在数据库表增加一个version字段来实现，在进行数据读取的时候，将版本号进行一同读取，在对数据进行更新的时候，对版本号进行加一操作，同时，在提交的时候会对提交数据的版本号与数据库表对应记录的当前版本号进行对比，如果当前提交数据的版本对在数据库表中记录的版本号大的话，就进行更新，否则就认为是过期数据。</li>
 </ul>
-<h4 id="Innodb中的乐观锁实现（MVCC）"><a href="#Innodb中的乐观锁实现（MVCC）" class="headerlink" title="Innodb中的乐观锁实现（MVCC）"></a><strong>Innodb中的乐观锁实现（MVCC）</strong></h4><h4 id="当前读和快照读"><a href="#当前读和快照读" class="headerlink" title="当前读和快照读"></a><strong>当前读和快照读</strong></h4><h3 id="可串行化"><a href="#可串行化" class="headerlink" title="可串行化"></a><strong>可串行化</strong></h3><h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><strong>参考文献</strong></h1><blockquote>
+<h4 id="Innodb中的乐观锁实现（MVCC）"><a href="#Innodb中的乐观锁实现（MVCC）" class="headerlink" title="Innodb中的乐观锁实现（MVCC）"></a><strong>Innodb中的乐观锁实现（MVCC）</strong></h4><p>在MVCC的Innodb实现中，它是通过在每行数据后添加两个额外的隐藏值来实现MVCC，这两个值一个是用于记录该行数据是在什么时候被创建的，另外一个是用来记录该行数据什么时候过期或者删除，不过它存储的不是具体的时间戳，而是事务的版本号，每开启一个事务，事务的版本号就会递增。<br>在可重复读的事务隔离级别的时候，进行以下操作的时候，事务版本号的修改如下：</p>
 <ul>
-<li><a href="https://book.douban.com/subject/23008813/" target="_blank" rel="external">高性能ＭySQL</a></li>
-<li><a href="http://hedengcheng.com/?p=771" target="_blank" rel="external">MySQL 加锁处理分析</a></li>
-<li><a href="https://zh.wikipedia.org/wiki/%E4%BA%8B%E5%8B%99%E9%9A%94%E9%9B%A2" target="_blank" rel="external">事务隔离</a></li>
-<li><a href="http://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">Innodb中的事务隔离级别和锁的关系</a></li>
+<li>Select的时候，Innodb只会查找版本早于当前事务版本的数据行，可以保证事务读取的行，要么是事务开始之前就已经存在的，要么是事务自身插入或者修改过的。还有可以读取行的删除版本没有定义或者大于当前事务版本号的，用来确保事务读取到的行，在事务开始之前未被删除。</li>
+<li>Insert的时候会为新插入的每一行保存当前系统版本号作为行版本号。</li>
+<li>Delete的时候为删除的每一行保存当前系统版本号作为行删除标志。</li>
+<li>Update的时候会新插入一行新记录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为行删除标志。</li>
 </ul>
-</blockquote>
+<p>通过保存这两个额外系统版本号，使得大多数读操作不需要进行加锁，使得读性能得到提高，也能保证只会读取到符合标准的行，不过每行记录都需要额外的存储空间。MVCC只有在REPEATABLE READ和READ COMMITTED这两个隔离级别下工作，其他两个隔离界别与MVCC不兼容，因为READ UNCOMMITTED总是读取最新的数据行，而不是符合事务版本的数据行，而SERUAKIZABLE则会对所有读取的行加锁。</p>
+<p>在ＭySQL的innodb MVCC实现中，能在在可重复读的事务隔离界别中能够保证对读取的数据行进行加锁，而且在读取数据的时候会有获取一个范围锁（range-locks），保证读取的范围加锁，新的满足满足条件的记录不能插入（间隙锁），避免了幻读现象。</p>
+<h4 id="当前读和快照读"><a href="#当前读和快照读" class="headerlink" title="当前读和快照读"></a><strong>当前读和快照读</strong></h4><p>在Innodb的ＭVCC并发控制的系统，读操作可以分为两种：当前读和快照读。</p>
+<ul>
+<li>快照读：快照读是简单的select操作，不加锁。</li>
+<li>当前读：特殊的读操作，insert、update、delete操作，属于当前读，需要进行加锁。</li>
+</ul>
+<p>当前读会读取记录的最新版本，在读取之后，同时会对记录加锁，保证其他并发事务不能修改当前记录。</p>
+<p>在进行update/delete操作的时候，当ＭySQL Server接收到SQL之后，会根据where条件，读取第一条满足条件的数据，然后Innodb引擎会将第一条记录返回，并进行加锁，等MySQL Server接收到记录之后，会再放起一个Update/Delete请求，对数据进行更新或者删除操作，一条记录操作完成之后，再去读取下一条记录，直到没有符合条件的记录位置。</p>
+<p>Insert操作的话会为可能突发Unique Key的冲突检查，也会进行一个当前读的操作。</p>
+<h4 id="Next-Key锁"><a href="#Next-Key锁" class="headerlink" title="Next Key锁"></a><strong>Next Key锁</strong></h4><p>上面我们讲到MySQL Innodb MVCC实现,可以避免当前读的幻读问题，它是通过Next Key锁来实现的。<br>Next Key锁是指行锁与GAP（间隙锁）的合并。</p>
+<p>行锁可以防止不同事务版本的数据修改提交时造成数据冲突的情况，但是它不能避免其他事务插入数据的问题。<br>在可重复读的事务隔离级别下，在事务A进行了Update/delete操作的操作之后进行加锁（Gap锁），事务B无法插入新数据，事务A能够保持操作前后数据保持一致，避免了幻读。</p>
+<p>如果在检索的时候使用了索引列，Innodb存储引擎使用的是B+树索引，会在最外层节点将数据分为一段段的区间，在事务进行Update／delete操作的时候，不仅仅会锁住对应的数据行，同时也会锁住对应数据行附近的区间，加入GAP锁，这样的话事务B的话就无法对附近区间进行insert操作，这样的话Innodb在很多时候锁住不需要锁的区间。</p>
+<p>如果检索的列不是索引列，那么就会给全表加入GAP锁，不过GAP锁不会向行锁一样在MySQL Server层过滤不满足条件的锁，因为没有索引，也没有排序，就没有区别，这样的话除非事务提交，否则其他事务无法插入任何数据。</p>
+<p>这样的话，通过行锁防止事务的删除和修改，通过GAP防止其他事务的新增，行锁和GAP锁结合形成的Next-key锁防止了在可重复读隔离级别下写数据时的幻读问题。</p>
+<h3 id="可串行化"><a href="#可串行化" class="headerlink" title="可串行化"></a><strong>可串行化</strong></h3><p>在可串行化的事务隔离级别中，会从MVCC并发控制退化成基于锁的并发控制，不对当前读和快照度进行区分，所有的读操作都是当前读，读加读锁（S锁），写加写锁（x锁），读写冲突，导致并发性能下降，一般不建议使用可串行化隔离级别。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><strong>参考文献</strong></h1><p><a href="https://book.douban.com/subject/23008813/" target="_blank" rel="external">高性能ＭySQL</a><br><a href="http://hedengcheng.com/?p=771" target="_blank" rel="external">MySQL 加锁处理分析</a><br><a href="https://zh.wikipedia.org/wiki/%E4%BA%8B%E5%8B%99%E9%9A%94%E9%9B%A2" target="_blank" rel="external">事务隔离</a><br><a href="http://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">Innodb中的事务隔离级别和锁的关系</a></p>
 
       
     </div>
@@ -511,7 +527,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/MySQL/" rel="tag">#MySQL</a>
+            <a href="/tags/Mysql/" rel="tag">#Mysql</a>
           
         </div>
       
@@ -718,7 +734,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浅析数据库之事务隔离级别与锁机制"><span class="nav-number">1.</span> <span class="nav-text">浅析数据库之事务隔离级别与锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二阶段封锁"><span class="nav-number">1.1.</span> <span class="nav-text">二阶段封锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务加锁机制"><span class="nav-number">1.2.</span> <span class="nav-text">事务加锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库锁分类"><span class="nav-number">1.2.1.</span> <span class="nav-text">数据库锁分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务隔离级别"><span class="nav-number">1.2.2.</span> <span class="nav-text">事务隔离级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#未提交读"><span class="nav-number">1.2.3.</span> <span class="nav-text">未提交读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已提交读"><span class="nav-number">1.2.4.</span> <span class="nav-text">已提交读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重复读"><span class="nav-number">1.2.5.</span> <span class="nav-text">可重复读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#读"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#幻读与不可重复读"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">幻读与不可重复读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#悲观锁与乐观锁"><span class="nav-number">1.2.5.3.</span> <span class="nav-text">悲观锁与乐观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Innodb中的乐观锁实现（MVCC）"><span class="nav-number">1.2.5.4.</span> <span class="nav-text">Innodb中的乐观锁实现（MVCC）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当前读和快照读"><span class="nav-number">1.2.5.5.</span> <span class="nav-text">当前读和快照读</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可串行化"><span class="nav-number">1.2.6.</span> <span class="nav-text">可串行化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浅析数据库之事务隔离级别与锁机制"><span class="nav-number">1.</span> <span class="nav-text">浅析数据库之事务隔离级别与锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二阶段封锁"><span class="nav-number">1.1.</span> <span class="nav-text">二阶段封锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务加锁机制"><span class="nav-number">1.2.</span> <span class="nav-text">事务加锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库锁分类"><span class="nav-number">1.2.1.</span> <span class="nav-text">数据库锁分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务隔离级别"><span class="nav-number">1.2.2.</span> <span class="nav-text">事务隔离级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#未提交读"><span class="nav-number">1.2.3.</span> <span class="nav-text">未提交读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已提交读"><span class="nav-number">1.2.4.</span> <span class="nav-text">已提交读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重复读"><span class="nav-number">1.2.5.</span> <span class="nav-text">可重复读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#读"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#幻读与不可重复读"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">幻读与不可重复读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#悲观锁与乐观锁"><span class="nav-number">1.2.5.3.</span> <span class="nav-text">悲观锁与乐观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Innodb中的乐观锁实现（MVCC）"><span class="nav-number">1.2.5.4.</span> <span class="nav-text">Innodb中的乐观锁实现（MVCC）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当前读和快照读"><span class="nav-number">1.2.5.5.</span> <span class="nav-text">当前读和快照读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Next-Key锁"><span class="nav-number">1.2.5.6.</span> <span class="nav-text">Next Key锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可串行化"><span class="nav-number">1.2.6.</span> <span class="nav-text">可串行化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
             
           </div>
         </section>
