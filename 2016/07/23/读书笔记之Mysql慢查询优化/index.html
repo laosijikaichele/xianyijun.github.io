@@ -1,136 +1,47 @@
-<!doctype html>
 
-
-
-  
-
-
-<html class="theme-next mist use-motion">
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  
-  
-  
-  
-
-  
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="枯叶未凋零">
+    <title>读书笔记之Mysql慢查询优化 - 枯叶未凋零</title>
+    <meta name="author" content="冼毅俊">
     
     
-  
-
-  
-
-  
-
-  
     
-      
-    
-
-    
-  
-
-  
-    
-      
-    
-
-    
-  
-
-  
-    
-    
-    <link href="//fonts.useso.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="MySQL," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="读书笔记之Mysql慢查询优化什么是慢查询我们可以把查询看成一个任务，一个任务是由一系列的子任务组合而成的，每一个子任务都会去消耗一定的时间，如果我们想要对查询进行优化，主要就对子任务进行优化，通过消除子任务、减少子任务的执行次数和更快子任务的运行。查询任务的生命周期主要是从客户端通过TCP/IP访问服务器，在服务器上进行解析，生成执行计划，执行计划然后返回结果给客户端。执行是整个过程中最重要的一">
-<meta property="og:type" content="article">
+    <meta name="description" content="读书笔记之Mysql慢查询优化什么是慢查询我们可以把查询看成一个任务，一个任务是由一系列的子任务组合而成的，每一个子任务都会去消耗一定的时间，如果我们想要对查询进行优化，主要就对子任务进行优化，通过消除子任务、减少子任务的执行次数和更快子任务的运行。查询任务的生命周期主要是从客户端通过TCP/IP访问服务器，在服务器上进行解析，生成执行计划，执行计划然后返回结果给客户端。执行是整个过程中最重要的一">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="读书笔记之Mysql慢查询优化">
 <meta property="og:url" content="http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="读书笔记之Mysql慢查询优化什么是慢查询我们可以把查询看成一个任务，一个任务是由一系列的子任务组合而成的，每一个子任务都会去消耗一定的时间，如果我们想要对查询进行优化，主要就对子任务进行优化，通过消除子任务、减少子任务的执行次数和更快子任务的运行。查询任务的生命周期主要是从客户端通过TCP/IP访问服务器，在服务器上进行解析，生成执行计划，执行计划然后返回结果给客户端。执行是整个过程中最重要的一">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_045.png">
-<meta property="og:updated_time" content="2016-07-29T02:42:12.067Z">
+<meta property="og:updated_time" content="2016-08-18T06:07:57.312Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="读书笔记之Mysql慢查询优化">
 <meta name="twitter:description" content="读书笔记之Mysql慢查询优化什么是慢查询我们可以把查询看成一个任务，一个任务是由一系列的子任务组合而成的，每一个子任务都会去消耗一定的时间，如果我们想要对查询进行优化，主要就对子任务进行优化，通过消除子任务、减少子任务的执行次数和更快子任务的运行。查询任务的生命周期主要是从客户端通过TCP/IP访问服务器，在服务器上进行解析，生成执行计划，执行计划然后返回结果给客户端。执行是整个过程中最重要的一">
 <meta name="twitter:image" content="http://7xrl91.com1.z0.glb.clouddn.com/Selection_045.png">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> 读书笔记之Mysql慢查询优化 | 枯叶未凋零 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-  <script type="text/javascript">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://xianyijun.github.io/assets/images/avatar_01.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/font-awesome.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox-thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+    
+    <script type="text/javascript">
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -138,177 +49,156 @@
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
-  </script>
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
 
-
-
-
-
-
-
-  
-  
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">枯叶未凋零</a>
+    </h1>
     
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">枯叶未凋零</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">高山仰止，景行行止，虽不能至，心向往之</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
+            <a  class="header-right-icon st-search-show-outputs"
+                href="#search">
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+            <i class="fa fa-lg fa-search"></i>
         
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
+        </a>
+    
+</header>
 
-      
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="1">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar_01.jpg"/>
+            </a>
+            <span class="sidebar-profile-name">冼毅俊</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-circle-thin"></i>
+                    <span class="sidebar-button-desc">Accueil</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bars"></i>
+                    <span class="sidebar-button-desc">Archive</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-terminal"></i>
+                    <span class="sidebar-button-desc">À propos</span>
+                </a>
+        </li>
+        
     </ul>
-  
-
-  
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/xianyijun" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/link"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-at"></i>
+                    <span class="sidebar-button-desc">Links</span>
+                </a>
+        </li>
+        
+    </ul>
+    
 </nav>
 
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                读书笔记之Mysql慢查询优化
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-07-23T00:00:46+08:00" content="2016-07-23">
-              2016-07-23
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/07/23/读书笔记之Mysql慢查询优化/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/23/读书笔记之Mysql慢查询优化/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+        <div class="post-header main-content-wrap text-left">
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h1 id="读书笔记之Mysql慢查询优化"><a href="#读书笔记之Mysql慢查询优化" class="headerlink" title="读书笔记之Mysql慢查询优化"></a><strong>读书笔记之Mysql慢查询优化</strong></h1><h2 id="什么是慢查询"><a href="#什么是慢查询" class="headerlink" title="什么是慢查询"></a><strong>什么是慢查询</strong></h2><p>我们可以把查询看成一个任务，一个任务是由一系列的子任务组合而成的，每一个子任务都会去消耗一定的时间，如果我们想要对查询进行优化，主要就对子任务进行优化，通过消除子任务、减少子任务的执行次数和更快子任务的运行。<br>查询任务的生命周期主要是从客户端通过TCP/IP访问服务器，在服务器上进行解析，生成执行计划，执行计划然后返回结果给客户端。<br>执行是整个过程中最重要的一部分，主要是调用数据库引擎进行查询数据，然后进行数据处理（排序和分组）。</p>
+        <h1 class="post-title" itemprop="headline">
+            读书笔记之Mysql慢查询优化
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" content="Sat Jul 23 2016 00:00:46 GMT+0800">
+	
+		    23 Jul 2016
+    	
+    </time>
+    
+</div>
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h1 id="读书笔记之Mysql慢查询优化"><a href="#读书笔记之Mysql慢查询优化" class="headerlink" title="读书笔记之Mysql慢查询优化"></a><strong>读书笔记之Mysql慢查询优化</strong></h1><h2 id="什么是慢查询"><a href="#什么是慢查询" class="headerlink" title="什么是慢查询"></a><strong>什么是慢查询</strong></h2><p>我们可以把查询看成一个任务，一个任务是由一系列的子任务组合而成的，每一个子任务都会去消耗一定的时间，如果我们想要对查询进行优化，主要就对子任务进行优化，通过消除子任务、减少子任务的执行次数和更快子任务的运行。<br>查询任务的生命周期主要是从客户端通过TCP/IP访问服务器，在服务器上进行解析，生成执行计划，执行计划然后返回结果给客户端。<br>执行是整个过程中最重要的一部分，主要是调用数据库引擎进行查询数据，然后进行数据处理（排序和分组）。</p>
 <h2 id="优化数据访问"><a href="#优化数据访问" class="headerlink" title="优化数据访问"></a><strong>优化数据访问</strong></h2><p>导致查询性能较低的原因主要是访问的数据太多，我们通过减少访问的数据量的方式进行优化。</p>
 <ul>
 <li>确认应用程序是否在检索大量超过需要的数据。</li>
@@ -403,385 +293,249 @@
 <h2 id="查询执行引擎"><a href="#查询执行引擎" class="headerlink" title="查询执行引擎"></a><strong>查询执行引擎</strong></h2><p>MySQL会根据在解析和优化阶段生成的执行计划来完成整个查询：根据执行计划给出的指令逐步执行，通过调用存储引擎实现的接口（handler API）,每一个表有一个Handler的实例表示，可以通过实例的接口来获取表的相关信息，包括表的所有列名，索引统计信息。</p>
 <h2 id="结果返回客户端"><a href="#结果返回客户端" class="headerlink" title="结果返回客户端"></a><strong>结果返回客户端</strong></h2><p>查询执行的最后一个阶段是将结果返回给客户端，就算查询不需要返回结果集给客户端，MySQL扔会返回这个查询的信息（查询影响到的行数），如果查询可以缓存的话，这阶段会将结果存放到缓存中。<br>将结果集返回到客户端是一个增量，逐步返回的过程，它可以让服务端无须存储太多的结果，也就不需要因为返回太多的数据消耗太多的内存，也能让客户端第一时间获的返回的结果。</p>
 
-      
-    </div>
-    
-    <div>
-      
-        
-      
-    </div>
-
-    <div>
-      
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/MySQL/" rel="tag">#MySQL</a>
-          
+            
         </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/07/22/计算机网络基础知识总结/" rel="next" title="计算机网络基础知识总结">
-                <i class="fa fa-chevron-left"></i> 计算机网络基础知识总结
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/29/读书笔记之MySQL查询优化器/" rel="prev" title="读书笔记之MySQL查询优化器">
-                读书笔记之MySQL查询优化器 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-  <a class="jiathis_button_tsina"></a>
-  <a class="jiathis_button_tqq"></a>
-  <a class="jiathis_button_weixin"></a>
-  <a class="jiathis_button_cqq"></a>
-  <a class="jiathis_button_douban"></a>
-  <a class="jiathis_button_renren"></a>
-  <a class="jiathis_button_qzone"></a>
-  <a class="jiathis_button_kaixin001"></a>
-  <a class="jiathis_button_copy"></a>
-  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
-  <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" >
-  var jiathis_config={
-    hideMore:false
-  }
-</script>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-
-      
     </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/07/23/读书笔记之Mysql慢查询优化/"
-           data-title="读书笔记之Mysql慢查询优化" data-url="http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
-      </div>
-    
-  </div>
-
-
-        </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGÉ DANS</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/MySQL/">MySQL</a>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/07/29/读书笔记之MySQL查询优化器/"  data-tooltip="读书笔记之MySQL查询优化器">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PRÉCÉDENT</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/07/22/计算机网络基础知识总结/" data-tooltip="计算机网络基础知识总结">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">SUIVANT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
         </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="枯叶未凋零" />
-          <p class="site-author-name" itemprop="name">枯叶未凋零</p>
-          <p class="site-description motion-element" itemprop="description">高山仰止，景行行止，虽不能至，心向往之</p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">45</span>
-              <span class="site-state-item-name">日志</span>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
             </a>
-          </div>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#ds-thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">14</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
 
         
+            
+                <div id="ds-thread" class="ds-thread" data-thread-key="2016/07/23/读书笔记之Mysql慢查询优化/"
+     data-title="读书笔记之Mysql慢查询优化" data-url="http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+</div>
 
-        <div class="links-of-author motion-element">
-          
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/xianyijun" target="_blank" title="github">
-                  
-                    <i class="fa fa-globe"></i>
-                  
-                  github
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 冼毅俊. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/07/29/读书笔记之MySQL查询优化器/"  data-tooltip="读书笔记之MySQL查询优化器">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PRÉCÉDENT</span>
                 </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/xianyijun" target="_blank" title="weibo">
-                  
-                    <i class="fa fa-globe"></i>
-                  
-                  weibo
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/07/22/计算机网络基础知识总结/" data-tooltip="计算机网络基础知识总结">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">SUIVANT</span>
+                    <i class="fa fa-angle-right"></i>
                 </a>
-              </span>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#ds-thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
             
-          
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-google-plus"></i><span class="">Partager sur Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-facebook-official"></i><span>Partager sur Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/07/23/读书笔记之Mysql慢查询优化/">
+                <i class="fa fa-twitter"></i><span>Partager sur Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
         </div>
-
-        
         
 
-        
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-block">
-            <div class="links-of-blogroll-title">
-              <i class="fa fa-globe fa-fw"></i>
-              Links
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://jm.taobao.org/" title="阿里中间件团队博客" target="_blank">阿里中间件团队博客</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://www.zhangxinxu.com/" title="张鑫旭" target="_blank">张鑫旭</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://my.oschina.net/huangyong/" title="黄勇" target="_blank">黄勇</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://rednaxelafx.iteye.com/" title="RednaxelaFX" target="_blank">RednaxelaFX</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://jinnianshilongnian.iteye.com/" title="开涛" target="_blank">开涛</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://huangz.me/" title="黄健宏" target="_blank">黄健宏</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://blog.sina.com.cn/hailiangshuju" title="淘宝沈询" target="_blank">淘宝沈询</a>
-                </li>
-              
-            </ul>
-          </div>
-        
 
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#读书笔记之Mysql慢查询优化"><span class="nav-number">1.</span> <span class="nav-text">读书笔记之Mysql慢查询优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是慢查询"><span class="nav-number">1.1.</span> <span class="nav-text">什么是慢查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化数据访问"><span class="nav-number">1.2.</span> <span class="nav-text">优化数据访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构查询的方式"><span class="nav-number">1.3.</span> <span class="nav-text">重构查询的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询执行的过程"><span class="nav-number">1.4.</span> <span class="nav-text">查询执行的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端与服务端通信"><span class="nav-number">1.4.1.</span> <span class="nav-text">客户端与服务端通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询状态"><span class="nav-number">1.4.2.</span> <span class="nav-text">查询状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存"><span class="nav-number">1.4.3.</span> <span class="nav-text">查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询优化处理"><span class="nav-number">1.4.4.</span> <span class="nav-text">查询优化处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询执行引擎"><span class="nav-number">1.5.</span> <span class="nav-text">查询执行引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果返回客户端"><span class="nav-number">1.6.</span> <span class="nav-text">结果返回客户端</span></a></li></ol></li></ol></div>
-            
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">冼毅俊</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-<div style="text-align:center;width:100%;height:50">
-备案信息:粤IC备16069701
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-  
     
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"xianyijun"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
+        
     
-  
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar_01.jpg"/>
+        
+            <h4 id="about-card-name">冼毅俊</h4>
+        
+            <h5 id="about-card-bio"><p>author.bio</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                长安
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/background-4.png');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/jquery.fancybox-thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+<!--PANGU AUTO SPACE-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/3.2.1/pangu.min.js"></script>
+<script> pangu.spacingPage(); </script>
+<!--PANGU AUTO SPACE END-->
+
+    
+        <script type="text/javascript">
+            var duoshuoQuery = {short_name:'xianyijun'};
+            (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0]
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+        </script>
+    
 
 
 
-
-
-  
-  
-  
-
-  
-
-  
-
-</body>
 </html>

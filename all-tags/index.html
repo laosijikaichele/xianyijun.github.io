@@ -1,0 +1,854 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="枯叶未凋零">
+    <title>all-tags - 枯叶未凋零</title>
+    <meta name="author" content="冼毅俊">
+    
+    
+    
+    <meta name="description" content="枯叶未凋零的个人博客，记录，积累，分享">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="all-tags">
+<meta property="og:url" content="http://xianyijun.github.io/all-tags/index.html">
+<meta property="og:site_name" content="枯叶未凋零">
+<meta property="og:description" content="枯叶未凋零的个人博客，记录，积累，分享">
+<meta property="og:updated_time" content="2016-08-18T15:11:13.263Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="all-tags">
+<meta name="twitter:description" content="枯叶未凋零的个人博客，记录，积累，分享">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://xianyijun.github.io/assets/images/avatar_01.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/font-awesome.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox-thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d7a77056cb6c66982de5797b0470724d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">枯叶未凋零</a>
+    </h1>
+    
+        
+            <a  class="header-right-icon st-search-show-outputs"
+                href="#search">
+        
+        
+            <i class="fa fa-lg fa-search"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="1">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar_01.jpg"/>
+            </a>
+            <span class="sidebar-profile-name">冼毅俊</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-circle-thin"></i>
+                    <span class="sidebar-button-desc">Accueil</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bars"></i>
+                    <span class="sidebar-button-desc">Archive</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-terminal"></i>
+                    <span class="sidebar-button-desc">À propos</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/xianyijun" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/link"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-at"></i>
+                    <span class="sidebar-button-desc">Links</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                <div id="tags-archives" class="main-content-wrap">
+    <form id="filter-form" action="#">
+        <input name="tag" type="text" class="form-control input--xlarge" placeholder="Rechercher un tag" autofocus="autofocus">
+    </form>
+    <h4 class="archive-result text-color-base text-xlarge"
+        data-message-zero="aucun tags trouvé"
+        data-message-one="1 tag trouvé"
+        data-message-other="{n} tags trouvés"></h4>
+
+        <section>
+        
+            <a class="tag tag--primary tag--small" href="#Collection-list" data-tag="collection">
+                Collection
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#Concurrent-list" data-tag="concurrent">
+                Concurrent
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#JVM-list" data-tag="jvm">
+                JVM
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#Java-list" data-tag="java">
+                Java
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#MySQL-list" data-tag="mysql">
+                MySQL
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#Mysql-list" data-tag="mysql">
+                Mysql
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#Netty-list" data-tag="netty">
+                Netty
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#Nio-list" data-tag="nio">
+                Nio
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#Spring-list" data-tag="spring">
+                Spring
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#Tomcat-list" data-tag="tomcat">
+                Tomcat
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#os-list" data-tag="os">
+                os
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#spider-list" data-tag="spider">
+                spider
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#计算机网络-list" data-tag="计算机网络">
+                计算机网络
+            </a>
+        
+            <a class="tag tag--primary tag--small" href="#设计模式-list" data-tag="设计模式">
+                设计模式
+            </a>
+        
+    </section>
+    <section class="boxes">
+        
+            <div id="Collection-list" class="archive box" data-tag="collection">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/Collection">
+                        Collection (2)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/01/Java-Collection-集合框架图/">
+                                Java Collection 集合框架图
+                            </a>
+                            <span class="archive-post-date">
+                                01 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/01/Java-Concurrent-Collection-集合框架图/">
+                                Java Concurrent Collection 集合框架图
+                            </a>
+                            <span class="archive-post-date">
+                                01 may 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="Concurrent-list" class="archive box" data-tag="concurrent">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/Concurrent">
+                        Concurrent (8)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/01/Java-Concurrent-Collection-集合框架图/">
+                                Java Concurrent Collection 集合框架图
+                            </a>
+                            <span class="archive-post-date">
+                                01 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/15/Java-Concurrent-Collection之CopyOnWriteArrayList/">
+                                Java Concurrent Collection之CopyOnWriteArrayList
+                            </a>
+                            <span class="archive-post-date">
+                                15 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/06/17/Java-Concurrent-Collection之SynchronousQueue/">
+                                Java Concurrent Collection之SynchronousQueue
+                            </a>
+                            <span class="archive-post-date">
+                                17 jun 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/01/Java-Concurrent-框架图/">
+                                Java Concurrent 框架图
+                            </a>
+                            <span class="archive-post-date">
+                                01 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/06/04/Java-Concurrent之ConcurrentLinkedQueue/">
+                                Java Concurrent之ConcurrentLinkedQueue
+                            </a>
+                            <span class="archive-post-date">
+                                04 jun 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/16/Java-Concurrent之LockSupport/">
+                                Java Concurrent之LockSupport
+                            </a>
+                            <span class="archive-post-date">
+                                16 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/04/16/Java-线程池简单实现-枯叶未凋零/">
+                                Java 线程池简单实现 - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                16 apr 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/06/05/浅析Java锁优化/">
+                                浅析Java锁优化
+                            </a>
+                            <span class="archive-post-date">
+                                05 jun 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="JVM-list" class="archive box" data-tag="jvm">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/JVM">
+                        JVM (2)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/04/18/JVM基础之思维导图-枯叶未凋零/">
+                                JVM基础之思维导图 - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                18 apr 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/06/08/Java虚拟机之Class文件结构/">
+                                Java虚拟机之Class文件结构
+                            </a>
+                            <span class="archive-post-date">
+                                08 jun 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="Java-list" class="archive box" data-tag="java">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/Java">
+                        Java (3)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/21/Java之阻塞队列的简单实现/">
+                                Java之阻塞队列的简单实现
+                            </a>
+                            <span class="archive-post-date">
+                                21 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/23/Java如何关闭一个线程/">
+                                Java如何关闭一个线程
+                            </a>
+                            <span class="archive-post-date">
+                                23 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/06/04/浅析Java并发之锁机制/">
+                                浅析Java并发之锁机制
+                            </a>
+                            <span class="archive-post-date">
+                                04 jun 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="MySQL-list" class="archive box" data-tag="mysql">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/MySQL">
+                        MySQL (4)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/27/Mysql之innodb体系架构/">
+                                Mysql之innodb体系架构
+                            </a>
+                            <span class="archive-post-date">
+                                27 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/03/27/数据库知识归纳-枯叶未凋零/">
+                                数据库知识归纳 - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                27 mar 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/07/29/读书笔记之MySQL查询优化器/">
+                                读书笔记之MySQL查询优化器
+                            </a>
+                            <span class="archive-post-date">
+                                29 jul 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/07/23/读书笔记之Mysql慢查询优化/">
+                                读书笔记之Mysql慢查询优化
+                            </a>
+                            <span class="archive-post-date">
+                                23 jul 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="Mysql-list" class="archive box" data-tag="mysql">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/Mysql">
+                        Mysql (1)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                                浅析数据库之事务隔离级别与锁机制
+                            </a>
+                            <span class="archive-post-date">
+                                14 aug 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="Netty-list" class="archive box" data-tag="netty">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/Netty">
+                        Netty (7)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/04/25/Netty-源码分析之ByteBuf-枯叶未凋零/">
+                                Netty 源码分析之ByteBuf - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                25 apr 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/04/Netty源码分析之Channel/">
+                                Netty源码分析之Channel
+                            </a>
+                            <span class="archive-post-date">
+                                04 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/07/Netty源码分析之ChannelPipeline和ChannelHandler/">
+                                Netty源码分析之ChannelPipeline和ChannelHandler
+                            </a>
+                            <span class="archive-post-date">
+                                07 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/02/Netty源码分析之Future和Promise/">
+                                Netty源码分析之Future和Promise
+                            </a>
+                            <span class="archive-post-date">
+                                02 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/06/Netty源码分析之Unsafe/">
+                                Netty源码分析之Unsafe
+                            </a>
+                            <span class="archive-post-date">
+                                06 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/04/30/Netty源码分析之NioEventLoop/">
+                                Netty源码分析之NioEventLoop
+                            </a>
+                            <span class="archive-post-date">
+                                30 apr 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/07/Netty源码分析之编码与解码/">
+                                Netty源码分析之编码与解码
+                            </a>
+                            <span class="archive-post-date">
+                                07 may 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="Nio-list" class="archive box" data-tag="nio">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/Nio">
+                        Nio (3)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/04/22/浅析Java-Nio-之-选择器-枯叶未凋零/">
+                                浅析Java Nio  之 选择器 - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                22 apr 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/04/11/浅析Java-Nio-之缓冲区-枯叶未凋零/">
+                                浅析Java Nio 之缓冲区 - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                11 apr 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/04/14/浅析Java-Nio-之通道-枯叶未凋零/">
+                                浅析Java Nio 之通道 - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                14 apr 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="Spring-list" class="archive box" data-tag="spring">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/Spring">
+                        Spring (5)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/03/28/Spring-AOP源码分析-枯叶未凋零/">
+                                Spring AOP源码分析 - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                28 mar 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/03/30/Spring-Ioc源码分析-枯叶未凋零/">
+                                Spring Ioc源码分析 - 枯叶未凋零
+                            </a>
+                            <span class="archive-post-date">
+                                30 mar 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/04/29/Spring-Aop-源码分析/">
+                                Spring Aop 源码分析
+                            </a>
+                            <span class="archive-post-date">
+                                29 apr 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/30/SpringMVC之浅析Controller参数绑定/">
+                                SpringMVC之浅析Controller参数绑定
+                            </a>
+                            <span class="archive-post-date">
+                                30 may 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/08/Spring源码分析之事务管理/">
+                                Spring源码分析之事务管理
+                            </a>
+                            <span class="archive-post-date">
+                                08 may 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="Tomcat-list" class="archive box" data-tag="tomcat">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/Tomcat">
+                        Tomcat (2)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/06/01/Tomcat共享session配置redis-Manager/">
+                                Tomcat共享session配置redis Manager
+                            </a>
+                            <span class="archive-post-date">
+                                01 jun 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/11/Tomcat请求处理的过程分析/">
+                                Tomcat请求处理的过程分析
+                            </a>
+                            <span class="archive-post-date">
+                                11 may 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="os-list" class="archive box" data-tag="os">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/os">
+                        os (1)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/19/操作系统之进程间通信/">
+                                操作系统之进程间通信
+                            </a>
+                            <span class="archive-post-date">
+                                19 may 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="spider-list" class="archive box" data-tag="spider">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/spider">
+                        spider (2)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/06/14/Java知乎爬虫之模拟登陆/">
+                                Java知乎爬虫之模拟登录
+                            </a>
+                            <span class="archive-post-date">
+                                14 jun 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/06/17/Java设置ip代理方法/">
+                                Java设置ip代理方法
+                            </a>
+                            <span class="archive-post-date">
+                                17 jun 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="计算机网络-list" class="archive box" data-tag="计算机网络">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/计算机网络">
+                        计算机网络 (2)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/08/11/UDP如何实现可靠数据传输/">
+                                UDP如何实现可靠数据传输
+                            </a>
+                            <span class="archive-post-date">
+                                11 aug 2016
+                            </span>
+                        </li>
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/07/22/计算机网络基础知识总结/">
+                                计算机网络基础知识总结
+                            </a>
+                            <span class="archive-post-date">
+                                22 jul 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+            <div id="设计模式-list" class="archive box" data-tag="设计模式">
+                <h4 class="archive-title">
+                    <a class="link-unstyled" href="/tags/设计模式">
+                        设计模式 (1)
+                    </a>
+                </h4>
+                <ul class="archive-posts">
+                    
+                        <li class="archive-post">
+                            <a class="archive-post-title" href="/2016/05/31/浅析设计模式之单例模式-Java版/">
+                                浅析设计模式之单例模式(Java版)
+                            </a>
+                            <span class="archive-post-date">
+                                31 may 2016
+                            </span>
+                        </li>
+                    
+                </ul>
+            </div>
+        
+    </section>
+</div>
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 冼毅俊. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar_01.jpg"/>
+        
+            <h4 id="about-card-name">冼毅俊</h4>
+        
+            <h5 id="about-card-bio"><p>author.bio</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                长安
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/background-4.png');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/jquery.fancybox-thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+<!--PANGU AUTO SPACE-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/3.2.1/pangu.min.js"></script>
+<script> pangu.spacingPage(); </script>
+<!--PANGU AUTO SPACE END-->
+
+
+
+</html>

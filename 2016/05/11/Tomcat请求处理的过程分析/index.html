@@ -1,137 +1,48 @@
-<!doctype html>
 
-
-
-  
-
-
-<html class="theme-next mist use-motion">
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  
-  
-  
-  
-
-  
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="枯叶未凋零">
+    <title>Tomcat请求处理的过程分析 - 枯叶未凋零</title>
+    <meta name="author" content="冼毅俊">
     
     
-  
-
-  
-
-  
-
-  
     
-      
-    
-
-    
-  
-
-  
-    
-      
-    
-
-    
-  
-
-  
-    
-    
-    <link href="//fonts.useso.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Tomcat," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="[toc]
+    <meta name="description" content="[toc]
 Tomcat请求处理的过程分析Tomcat启动Tomcat启动是以Bootstrap的main方法为入口类。在加载Boostrap的时候，首先会执行Bootstrap的内部静态代码块，会对userDir、homeFile、baseFile属性进行初始化与设置。main方法首先daemon进行非空判断，daemon是Bootstrap类型的成员变量，初始值为null，所有会创建一个Boo">
-<meta property="og:type" content="article">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="Tomcat请求处理的过程分析">
 <meta property="og:url" content="http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="[toc]
 Tomcat请求处理的过程分析Tomcat启动Tomcat启动是以Bootstrap的main方法为入口类。在加载Boostrap的时候，首先会执行Bootstrap的内部静态代码块，会对userDir、homeFile、baseFile属性进行初始化与设置。main方法首先daemon进行非空判断，daemon是Bootstrap类型的成员变量，初始值为null，所有会创建一个Boo">
-<meta property="og:updated_time" content="2016-08-03T08:17:02.037Z">
+<meta property="og:updated_time" content="2016-08-18T06:07:57.292Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat请求处理的过程分析">
 <meta name="twitter:description" content="[toc]
 Tomcat请求处理的过程分析Tomcat启动Tomcat启动是以Bootstrap的main方法为入口类。在加载Boostrap的时候，首先会执行Bootstrap的内部静态代码块，会对userDir、homeFile、baseFile属性进行初始化与设置。main方法首先daemon进行非空判断，daemon是Bootstrap类型的成员变量，初始值为null，所有会创建一个Boo">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> Tomcat请求处理的过程分析 | 枯叶未凋零 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-  <script type="text/javascript">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://xianyijun.github.io/assets/images/avatar_01.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/font-awesome.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox-thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+    
+    <script type="text/javascript">
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -139,177 +50,156 @@ Tomcat请求处理的过程分析Tomcat启动Tomcat启动是以Bootstrap的main�
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
-  </script>
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
 
-
-
-
-
-
-
-  
-  
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">枯叶未凋零</a>
+    </h1>
     
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">枯叶未凋零</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">高山仰止，景行行止，虽不能至，心向往之</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
+            <a  class="header-right-icon st-search-show-outputs"
+                href="#search">
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+            <i class="fa fa-lg fa-search"></i>
         
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
+        </a>
+    
+</header>
 
-      
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="1">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar_01.jpg"/>
+            </a>
+            <span class="sidebar-profile-name">冼毅俊</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-circle-thin"></i>
+                    <span class="sidebar-button-desc">Accueil</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bars"></i>
+                    <span class="sidebar-button-desc">Archive</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-terminal"></i>
+                    <span class="sidebar-button-desc">À propos</span>
+                </a>
+        </li>
+        
     </ul>
-  
-
-  
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/xianyijun" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/link"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-at"></i>
+                    <span class="sidebar-button-desc">Links</span>
+                </a>
+        </li>
+        
+    </ul>
+    
 </nav>
 
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Tomcat请求处理的过程分析
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-11T20:51:51+08:00" content="2016-05-11">
-              2016-05-11
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/05/11/Tomcat请求处理的过程分析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/11/Tomcat请求处理的过程分析/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+        <div class="post-header main-content-wrap text-left">
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>[toc]</p>
+        <h1 class="post-title" itemprop="headline">
+            Tomcat请求处理的过程分析
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" content="Wed May 11 2016 20:51:51 GMT+0800">
+	
+		    11 May 2016
+    	
+    </time>
+    
+</div>
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>[toc]</p>
 <h1 id="Tomcat请求处理的过程分析"><a href="#Tomcat请求处理的过程分析" class="headerlink" title="Tomcat请求处理的过程分析"></a><strong>Tomcat请求处理的过程分析</strong></h1><h2 id="Tomcat启动"><a href="#Tomcat启动" class="headerlink" title="Tomcat启动"></a><strong>Tomcat启动</strong></h2><p>Tomcat启动是以Bootstrap的main方法为入口类。<br>在加载Boostrap的时候，首先会执行Bootstrap的内部静态代码块，会对userDir、homeFile、baseFile属性进行初始化与设置。<br>main方法首先daemon进行非空判断，daemon是Bootstrap类型的成员变量，初始值为null，所有会创建一个Bootstrap对象，调用init方法，完成之后设置为daemon。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (daemon == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// Don't set daemon until init() has completed</span></span><br><span class="line">        Bootstrap bootstrap = <span class="keyword">new</span> Bootstrap();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            bootstrap.init();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">            handleThrowable(t);</span><br><span class="line">            t.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        daemon = bootstrap;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Thread.currentThread().setContextClassLoader(daemon.catalinaLoader);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        String command = <span class="string">"start"</span>;</span><br><span class="line">        <span class="keyword">if</span> (args.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            command = args[args.length - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (command.equals(<span class="string">"startd"</span>)) &#123;</span><br><span class="line">            args[args.length - <span class="number">1</span>] = <span class="string">"start"</span>;</span><br><span class="line">            daemon.load(args);</span><br><span class="line">            daemon.start();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"stopd"</span>)) &#123;</span><br><span class="line">            args[args.length - <span class="number">1</span>] = <span class="string">"stop"</span>;</span><br><span class="line">            daemon.stop();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"start"</span>)) &#123;</span><br><span class="line">            daemon.setAwait(<span class="keyword">true</span>);</span><br><span class="line">            daemon.load(args);</span><br><span class="line">            daemon.start();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"stop"</span>)) &#123;</span><br><span class="line">            daemon.stopServer(args);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"configtest"</span>)) &#123;</span><br><span class="line">            daemon.load(args);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">null</span>==daemon.getServer()) &#123;</span><br><span class="line">                System.exit(<span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            System.exit(<span class="number">0</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            log.warn(<span class="string">"Bootstrap: command \""</span> + command + <span class="string">"\" does not exist."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable t) &#123;</span><br><span class="line">        <span class="keyword">if</span> (t <span class="keyword">instanceof</span> InvocationTargetException &amp;&amp;</span><br><span class="line">                t.getCause() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            t = t.getCause();</span><br><span class="line">        &#125;</span><br><span class="line">        handleThrowable(t);</span><br><span class="line">        t.printStackTrace();</span><br><span class="line">        System.exit(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h2 id="Tomcat初始化"><a href="#Tomcat初始化" class="headerlink" title="Tomcat初始化"></a><strong>Tomcat初始化</strong></h2><p>在init方法中设置catalina.base和catalina.home系统属性进行设置，然后创建和初始化commonClassLoader、catalinaClassLoader和shareClassLoader类加载器，然后通过反射创建一个org.apache.catalina.startup.Catalina类型的实例，设置为catalinaDomain，然后调用setParentClassLoader方法将shareClassLoader作为Catalina的父类加载器。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> public void init() throws Exception &#123;</span><br><span class="line">    initClassLoaders();</span><br><span class="line">    Thread.currentThread().setContextClassLoader(catalinaLoader);</span><br><span class="line">    SecurityClassLoad.securityClassLoad(catalinaLoader);</span><br><span class="line">    // Load our startup class and call its process() method</span><br><span class="line">    if (log.isDebugEnabled())</span><br><span class="line">        log.debug(&quot;Loading startup class&quot;);</span><br><span class="line">    Class&lt;?&gt; startupClass =</span><br><span class="line">        catalinaLoader.loadClass</span><br><span class="line">        (&quot;org.apache.catalina.startup.Catalina&quot;);</span><br><span class="line">    Object startupInstance = startupClass.newInstance();</span><br><span class="line">    if (log.isDebugEnabled())</span><br><span class="line">        log.debug(&quot;Setting startup class properties&quot;);</span><br><span class="line">    String methodName = &quot;setParentClassLoader&quot;;</span><br><span class="line">    Class&lt;?&gt; paramTypes[] = new Class[1];</span><br><span class="line">    paramTypes[0] = Class.forName(&quot;java.lang.ClassLoader&quot;);</span><br><span class="line">    Object paramValues[] = new Object[1];</span><br><span class="line">    paramValues[0] = sharedLoader;</span><br><span class="line">    Method method =startupInstance.getClass().getMethod(methodName, paramTypes);</span><br><span class="line">    method.invoke(startupInstance, paramValues);</span><br><span class="line">    catalinaDaemon = startupInstance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="解析web-xml和初始化Server"><a href="#解析web-xml和初始化Server" class="headerlink" title="解析web.xml和初始化Server"></a><strong>解析web.xml和初始化Server</strong></h3><p>然后根据用户传入的参数进行判断，执行对应方法，默认为start。<br>我们启动tomcat的话，执行的分支肯定是start。<br>首先调用Bootstrap的load方法，load主要是通过反射去调用之前设置catalinaDaemon的load方法和start方法。<br>Catalina的load方法主要是创建一个Digester对tomcat的server.xml配置文件进行解析和对相关catainer容器对象进行创建，<br>然后对Server的部分属性进行设置和调用Server的init方法进行调用。Server的默认实现为StandardServer。</p>
@@ -388,385 +278,249 @@ if (await) {
 <p>map方法主要是根据uri进行匹配找到对应的wrapper，wrapper一般与servlet一一对应的，wrapper是在MapperListener\start的时候递归注册host、context、wrapper中注册的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(MessageBytes host, MessageBytes uri, String version, MappingData mappingData)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (host.isNull()) &#123;</span><br><span class="line">		host.getCharChunk().append(defaultHostName);</span><br><span class="line">	&#125;</span><br><span class="line">	host.toChars();</span><br><span class="line">	uri.toChars();</span><br><span class="line">	internalMap(host.getCharChunk(), uri.getCharChunk(), version, mappingData);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">internalMap</span><span class="params">(CharChunk host, CharChunk uri, String version, MappingData mappingData)</span></span><br><span class="line">			<span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (mappingData.host != <span class="keyword">null</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> AssertionError();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	uri.setLimit(-<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	MappedHost[] hosts = <span class="keyword">this</span>.hosts;</span><br><span class="line">	MappedHost mappedHost = exactFindIgnoreCase(hosts, host);</span><br><span class="line">	<span class="keyword">if</span> (mappedHost == <span class="keyword">null</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (defaultHostName == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		mappedHost = exactFind(hosts, defaultHostName);</span><br><span class="line">		<span class="keyword">if</span> (mappedHost == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	mappingData.host = mappedHost.object;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Context mapping</span></span><br><span class="line">	ContextList contextList = mappedHost.contextList;</span><br><span class="line">	MappedContext[] contexts = contextList.contexts;</span><br><span class="line">	<span class="keyword">int</span> pos = find(contexts, uri);</span><br><span class="line">	<span class="keyword">if</span> (pos == -<span class="number">1</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> lastSlash = -<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> uriEnd = uri.getEnd();</span><br><span class="line">	<span class="keyword">int</span> length = -<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">boolean</span> found = <span class="keyword">false</span>;</span><br><span class="line">	MappedContext context = <span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">while</span> (pos &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">		context = contexts[pos];</span><br><span class="line">		<span class="keyword">if</span> (uri.startsWith(context.name)) &#123;</span><br><span class="line">			length = context.name.length();</span><br><span class="line">			<span class="keyword">if</span> (uri.getLength() == length) &#123;</span><br><span class="line">				found = <span class="keyword">true</span>;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (uri.startsWithIgnoreCase(<span class="string">"/"</span>, length)) &#123;</span><br><span class="line">				found = <span class="keyword">true</span>;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (lastSlash == -<span class="number">1</span>) &#123;</span><br><span class="line">			lastSlash = nthSlash(uri, contextList.nesting + <span class="number">1</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			lastSlash = lastSlash(uri);</span><br><span class="line">		&#125;</span><br><span class="line">		uri.setEnd(lastSlash);</span><br><span class="line">		pos = find(contexts, uri);</span><br><span class="line">	&#125;</span><br><span class="line">	uri.setEnd(uriEnd);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!found) &#123;</span><br><span class="line">		<span class="keyword">if</span> (contexts[<span class="number">0</span>].name.equals(<span class="string">""</span>)) &#123;</span><br><span class="line">			context = contexts[<span class="number">0</span>];</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			context = <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (context == <span class="keyword">null</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	mappingData.contextPath.setString(context.name);</span><br><span class="line"></span><br><span class="line">	ContextVersion contextVersion = <span class="keyword">null</span>;</span><br><span class="line">	ContextVersion[] contextVersions = context.versions;</span><br><span class="line">	<span class="keyword">final</span> <span class="keyword">int</span> versionCount = contextVersions.length;</span><br><span class="line">	<span class="keyword">if</span> (versionCount &gt; <span class="number">1</span>) &#123;</span><br><span class="line">		Context[] contextObjects = <span class="keyword">new</span> Context[contextVersions.length];</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; contextObjects.length; i++) &#123;</span><br><span class="line">			contextObjects[i] = contextVersions[i].object;</span><br><span class="line">		&#125;</span><br><span class="line">		mappingData.contexts = contextObjects;</span><br><span class="line">		<span class="keyword">if</span> (version != <span class="keyword">null</span>) &#123;</span><br><span class="line">			contextVersion = exactFind(contextVersions, version);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (contextVersion == <span class="keyword">null</span>) &#123;</span><br><span class="line">		contextVersion = contextVersions[versionCount - <span class="number">1</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	mappingData.context = contextVersion.object;</span><br><span class="line">	mappingData.contextSlashCount = contextVersion.slashCount;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!contextVersion.isPaused()) &#123;</span><br><span class="line">		internalMapWrapper(contextVersion, uri, mappingData);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
-    
-    <div>
-      
-        
-      
-    </div>
-
-    <div>
-      
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Tomcat/" rel="tag">#Tomcat</a>
-          
+            
         </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/05/08/Spring源码分析之事务管理/" rel="next" title="Spring源码分析之事务管理">
-                <i class="fa fa-chevron-left"></i> Spring源码分析之事务管理
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/05/15/Java-Concurrent-Collection之CopyOnWriteArrayList/" rel="prev" title="Java Concurrent Collection之CopyOnWriteArrayList">
-                Java Concurrent Collection之CopyOnWriteArrayList <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-  <a class="jiathis_button_tsina"></a>
-  <a class="jiathis_button_tqq"></a>
-  <a class="jiathis_button_weixin"></a>
-  <a class="jiathis_button_cqq"></a>
-  <a class="jiathis_button_douban"></a>
-  <a class="jiathis_button_renren"></a>
-  <a class="jiathis_button_qzone"></a>
-  <a class="jiathis_button_kaixin001"></a>
-  <a class="jiathis_button_copy"></a>
-  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
-  <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" >
-  var jiathis_config={
-    hideMore:false
-  }
-</script>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-
-      
     </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/05/11/Tomcat请求处理的过程分析/"
-           data-title="Tomcat请求处理的过程分析" data-url="http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
-      </div>
-    
-  </div>
-
-
-        </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGÉ DANS</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/Tomcat/">Tomcat</a>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/15/Java-Concurrent-Collection之CopyOnWriteArrayList/"  data-tooltip="Java Concurrent Collection之CopyOnWriteArrayList">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PRÉCÉDENT</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/08/Spring源码分析之事务管理/" data-tooltip="Spring源码分析之事务管理">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">SUIVANT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
         </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="枯叶未凋零" />
-          <p class="site-author-name" itemprop="name">枯叶未凋零</p>
-          <p class="site-description motion-element" itemprop="description">高山仰止，景行行止，虽不能至，心向往之</p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">45</span>
-              <span class="site-state-item-name">日志</span>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
             </a>
-          </div>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#ds-thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">14</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
 
         
+            
+                <div id="ds-thread" class="ds-thread" data-thread-key="2016/05/11/Tomcat请求处理的过程分析/"
+     data-title="Tomcat请求处理的过程分析" data-url="http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+</div>
 
-        <div class="links-of-author motion-element">
-          
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/xianyijun" target="_blank" title="github">
-                  
-                    <i class="fa fa-globe"></i>
-                  
-                  github
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 冼毅俊. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/15/Java-Concurrent-Collection之CopyOnWriteArrayList/"  data-tooltip="Java Concurrent Collection之CopyOnWriteArrayList">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PRÉCÉDENT</span>
                 </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/xianyijun" target="_blank" title="weibo">
-                  
-                    <i class="fa fa-globe"></i>
-                  
-                  weibo
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/05/08/Spring源码分析之事务管理/" data-tooltip="Spring源码分析之事务管理">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">SUIVANT</span>
+                    <i class="fa fa-angle-right"></i>
                 </a>
-              </span>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#ds-thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
             
-          
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-google-plus"></i><span class="">Partager sur Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-facebook-official"></i><span>Partager sur Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/05/11/Tomcat请求处理的过程分析/">
+                <i class="fa fa-twitter"></i><span>Partager sur Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
         </div>
-
-        
         
 
-        
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-block">
-            <div class="links-of-blogroll-title">
-              <i class="fa fa-globe fa-fw"></i>
-              Links
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://jm.taobao.org/" title="阿里中间件团队博客" target="_blank">阿里中间件团队博客</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://www.zhangxinxu.com/" title="张鑫旭" target="_blank">张鑫旭</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://my.oschina.net/huangyong/" title="黄勇" target="_blank">黄勇</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://rednaxelafx.iteye.com/" title="RednaxelaFX" target="_blank">RednaxelaFX</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://jinnianshilongnian.iteye.com/" title="开涛" target="_blank">开涛</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://huangz.me/" title="黄健宏" target="_blank">黄健宏</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://blog.sina.com.cn/hailiangshuju" title="淘宝沈询" target="_blank">淘宝沈询</a>
-                </li>
-              
-            </ul>
-          </div>
-        
 
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Tomcat请求处理的过程分析"><span class="nav-number">1.</span> <span class="nav-text">Tomcat请求处理的过程分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat启动"><span class="nav-number">1.1.</span> <span class="nav-text">Tomcat启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat初始化"><span class="nav-number">1.2.</span> <span class="nav-text">Tomcat初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解析web-xml和初始化Server"><span class="nav-number">1.2.1.</span> <span class="nav-text">解析web.xml和初始化Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化Engine"><span class="nav-number">1.2.2.</span> <span class="nav-text">初始化Engine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化Connector"><span class="nav-number">1.2.3.</span> <span class="nav-text">初始化Connector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动Service"><span class="nav-number">1.2.4.</span> <span class="nav-text">启动Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动Listener"><span class="nav-number">1.2.5.</span> <span class="nav-text">启动Listener</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动Connector"><span class="nav-number">1.2.6.</span> <span class="nav-text">启动Connector</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动EndPoint"><span class="nav-number">1.2.6.1.</span> <span class="nav-text">启动EndPoint</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Socket对象转为内部Request"><span class="nav-number">1.3.</span> <span class="nav-text">Socket对象转为内部Request</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Processor"><span class="nav-number">1.3.1.</span> <span class="nav-text">Processor</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Request在容器中的流转"><span class="nav-number">1.4.</span> <span class="nav-text">Request在容器中的流转</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#postParseRequest"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">postParseRequest</span></a></li></ol></li></ol></li></ol></li></ol></div>
-            
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">冼毅俊</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-<div style="text-align:center;width:100%;height:50">
-备案信息:粤IC备16069701
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-  
     
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"xianyijun"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
+        
     
-  
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar_01.jpg"/>
+        
+            <h4 id="about-card-name">冼毅俊</h4>
+        
+            <h5 id="about-card-bio"><p>author.bio</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                长安
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/background-4.png');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/jquery.fancybox-thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+<!--PANGU AUTO SPACE-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/3.2.1/pangu.min.js"></script>
+<script> pangu.spacingPage(); </script>
+<!--PANGU AUTO SPACE END-->
+
+    
+        <script type="text/javascript">
+            var duoshuoQuery = {short_name:'xianyijun'};
+            (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0]
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+        </script>
+    
 
 
 
-
-
-  
-  
-  
-
-  
-
-  
-
-</body>
 </html>

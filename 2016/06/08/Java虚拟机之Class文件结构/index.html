@@ -1,137 +1,48 @@
-<!doctype html>
 
-
-
-  
-
-
-<html class="theme-next mist use-motion">
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  
-  
-  
-  
-
-  
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="枯叶未凋零">
+    <title>Java虚拟机之Class文件结构 - 枯叶未凋零</title>
+    <meta name="author" content="冼毅俊">
     
     
-  
-
-  
-
-  
-
-  
     
-      
-    
-
-    
-  
-
-  
-    
-      
-    
-
-    
-  
-
-  
-    
-    
-    <link href="//fonts.useso.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="JVM," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
+    <meta name="description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
 123456789">
-<meta property="og:type" content="article">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="Java虚拟机之Class文件结构">
 <meta property="og:url" content="http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
 123456789">
-<meta property="og:updated_time" content="2016-07-05T14:56:16.509Z">
+<meta property="og:updated_time" content="2016-08-18T06:07:57.316Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机之Class文件结构">
 <meta name="twitter:description" content="Java虚拟机之Class文件结构在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，则使用u1数组来表示。根据Java虚拟机规范，一个class文件可以描述为:
 123456789">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> Java虚拟机之Class文件结构 | 枯叶未凋零 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-  <script type="text/javascript">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://xianyijun.github.io/assets/images/avatar_01.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/font-awesome.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox-thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+    
+    <script type="text/javascript">
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -139,177 +50,156 @@
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
-  </script>
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
 
-
-
-
-
-
-
-  
-  
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">枯叶未凋零</a>
+    </h1>
     
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">枯叶未凋零</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">高山仰止，景行行止，虽不能至，心向往之</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
+            <a  class="header-right-icon st-search-show-outputs"
+                href="#search">
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+            <i class="fa fa-lg fa-search"></i>
         
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
+        </a>
+    
+</header>
 
-      
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="1">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar_01.jpg"/>
+            </a>
+            <span class="sidebar-profile-name">冼毅俊</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-circle-thin"></i>
+                    <span class="sidebar-button-desc">Accueil</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bars"></i>
+                    <span class="sidebar-button-desc">Archive</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-terminal"></i>
+                    <span class="sidebar-button-desc">À propos</span>
+                </a>
+        </li>
+        
     </ul>
-  
-
-  
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/xianyijun" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/link"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-at"></i>
+                    <span class="sidebar-button-desc">Links</span>
+                </a>
+        </li>
+        
+    </ul>
+    
 </nav>
 
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Java虚拟机之Class文件结构
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-08T10:57:49+08:00" content="2016-06-08">
-              2016-06-08
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/08/Java虚拟机之Class文件结构/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/08/Java虚拟机之Class文件结构/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+        <div class="post-header main-content-wrap text-left">
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h1 id="Java虚拟机之Class文件结构"><a href="#Java虚拟机之Class文件结构" class="headerlink" title="Java虚拟机之Class文件结构"></a><strong>Java虚拟机之Class文件结构</strong></h1><p>在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。<br>Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，<br>则使用u1数组来表示。<br>根据Java虚拟机规范，一个class文件可以描述为:</p>
+        <h1 class="post-title" itemprop="headline">
+            Java虚拟机之Class文件结构
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" content="Wed Jun 08 2016 10:57:49 GMT+0800">
+	
+		    08 Jun 2016
+    	
+    </time>
+    
+</div>
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h1 id="Java虚拟机之Class文件结构"><a href="#Java虚拟机之Class文件结构" class="headerlink" title="Java虚拟机之Class文件结构"></a><strong>Java虚拟机之Class文件结构</strong></h1><p>在Java虚拟机规范中，class文件是一个重要接口。只要语言的源文件能编译为正确的class文件，就可以在Java虚拟机上正确的运行。<br>Class文件统一使用无符号整数作为基本类型，由u1、u2、u4、u8来表示无符号单字节、２字节、4字节、８字节整数。如果是数组的话，<br>则使用u1数组来表示。<br>根据Java虚拟机规范，一个class文件可以描述为:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ClassFile&#123;</span><br><span class="line">	u4		magic;</span><br><span class="line">    u2		minor_version;</span><br><span class="line">    u2		major_version;</span><br><span class="line">    u2		constant_pool_count;</span><br><span class="line">    cp_info		constant_pool[constant_pool_count-<span class="number">1</span>];</span><br><span class="line">    u2		access_flag;</span><br><span class="line">    u2		this_class;</span><br><span class="line">    u2		super_class;</span><br><span class="line">    u2		interfaces_count;</span><br><span class="line">    u2		interfaces[interfaces_count];</span><br><span class="line">    u2		fields_count;</span><br><span class="line">    field_info		fields[fidlds_count];</span><br><span class="line">    u2		method_count;</span><br><span class="line">    method_info		method[method_count];</span><br><span class="line">    u2		attributes_count;</span><br><span class="line">    attribute_info		attributes[attributes_count];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Class文件以一个４字节的魔数开头，紧跟着两个大小版本号，然后就是常量池，常量池的个数为constant_pool_count，而常量池的项只有constant_pool_size-1个；常量池之后就是类的访问修饰符、类的自身引用、父类引用和接口个数和实现的接口引用;然后就是类的字段个数、字段描述和方法个数、方法描述；最后存放着类文件的属性信息。</p>
 <h2 id="魔数"><a href="#魔数" class="headerlink" title="魔数"></a><strong>魔数</strong></h2><p>魔数是Class文件的标志，它是用来告诉虚拟机这个文件是Class文件，魔数是一个无符号的4字节整数，固定是0xCAFEBABE，<br>如果class文件不是以0xCAFEBABE开头的话，虚拟机在进行文件验证的时候会抛出ClassFormatErroe错误:<br>Incompatiable magic value 184466110 in class file</p>
@@ -434,385 +324,249 @@
 <h2 id="Depercated属性"><a href="#Depercated属性" class="headerlink" title="Depercated属性"></a><strong>Depercated属性</strong></h2><p>Depreated属性可以用在类、字段、方法上，表示这些方法、字段、方法可能会在未来的版本中废弃.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Depreated_attribute&#123;</span><br><span class="line">	u2	attribute_name_index;</span><br><span class="line">    u4	attribute_length;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>attribute_name_index指向常量池索引，表示属性的名称，恒为Depreated，attribute_length为０,当一个类、字段、方法被注解为Depreated的话，就会有这个属性。</p>
 
-      
-    </div>
-    
-    <div>
-      
-        
-      
-    </div>
-
-    <div>
-      
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/JVM/" rel="tag">#JVM</a>
-          
+            
         </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/06/05/浅析Java锁优化/" rel="next" title="浅析Java锁优化">
-                <i class="fa fa-chevron-left"></i> 浅析Java锁优化
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/06/14/Java知乎爬虫之模拟登陆/" rel="prev" title="Java知乎爬虫之模拟登录">
-                Java知乎爬虫之模拟登录 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-  <a class="jiathis_button_tsina"></a>
-  <a class="jiathis_button_tqq"></a>
-  <a class="jiathis_button_weixin"></a>
-  <a class="jiathis_button_cqq"></a>
-  <a class="jiathis_button_douban"></a>
-  <a class="jiathis_button_renren"></a>
-  <a class="jiathis_button_qzone"></a>
-  <a class="jiathis_button_kaixin001"></a>
-  <a class="jiathis_button_copy"></a>
-  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
-  <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" >
-  var jiathis_config={
-    hideMore:false
-  }
-</script>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-
-      
     </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/06/08/Java虚拟机之Class文件结构/"
-           data-title="Java虚拟机之Class文件结构" data-url="http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
-      </div>
-    
-  </div>
-
-
-        </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGÉ DANS</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/JVM/">JVM</a>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/06/14/Java知乎爬虫之模拟登陆/"  data-tooltip="Java知乎爬虫之模拟登录">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PRÉCÉDENT</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/06/05/浅析Java锁优化/" data-tooltip="浅析Java锁优化">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">SUIVANT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
         </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="枯叶未凋零" />
-          <p class="site-author-name" itemprop="name">枯叶未凋零</p>
-          <p class="site-description motion-element" itemprop="description">高山仰止，景行行止，虽不能至，心向往之</p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">45</span>
-              <span class="site-state-item-name">日志</span>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
             </a>
-          </div>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#ds-thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">14</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
 
         
+            
+                <div id="ds-thread" class="ds-thread" data-thread-key="2016/06/08/Java虚拟机之Class文件结构/"
+     data-title="Java虚拟机之Class文件结构" data-url="http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+</div>
 
-        <div class="links-of-author motion-element">
-          
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/xianyijun" target="_blank" title="github">
-                  
-                    <i class="fa fa-globe"></i>
-                  
-                  github
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 冼毅俊. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/06/14/Java知乎爬虫之模拟登陆/"  data-tooltip="Java知乎爬虫之模拟登录">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PRÉCÉDENT</span>
                 </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/xianyijun" target="_blank" title="weibo">
-                  
-                    <i class="fa fa-globe"></i>
-                  
-                  weibo
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/06/05/浅析Java锁优化/" data-tooltip="浅析Java锁优化">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">SUIVANT</span>
+                    <i class="fa fa-angle-right"></i>
                 </a>
-              </span>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#ds-thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
             
-          
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-google-plus"></i><span class="">Partager sur Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-facebook-official"></i><span>Partager sur Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/06/08/Java虚拟机之Class文件结构/">
+                <i class="fa fa-twitter"></i><span>Partager sur Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
         </div>
-
-        
         
 
-        
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-block">
-            <div class="links-of-blogroll-title">
-              <i class="fa fa-globe fa-fw"></i>
-              Links
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://jm.taobao.org/" title="阿里中间件团队博客" target="_blank">阿里中间件团队博客</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://www.zhangxinxu.com/" title="张鑫旭" target="_blank">张鑫旭</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://my.oschina.net/huangyong/" title="黄勇" target="_blank">黄勇</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://rednaxelafx.iteye.com/" title="RednaxelaFX" target="_blank">RednaxelaFX</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://jinnianshilongnian.iteye.com/" title="开涛" target="_blank">开涛</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://huangz.me/" title="黄健宏" target="_blank">黄健宏</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://blog.sina.com.cn/hailiangshuju" title="淘宝沈询" target="_blank">淘宝沈询</a>
-                </li>
-              
-            </ul>
-          </div>
-        
 
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java虚拟机之Class文件结构"><span class="nav-number">1.</span> <span class="nav-text">Java虚拟机之Class文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#魔数"><span class="nav-number">1.1.</span> <span class="nav-text">魔数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class文件版本"><span class="nav-number">1.2.</span> <span class="nav-text">Class文件版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量池"><span class="nav-number">1.3.</span> <span class="nav-text">常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CONTSTANT-UTF8"><span class="nav-number">1.3.1.</span> <span class="nav-text">CONTSTANT_UTF8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-Class"><span class="nav-number">1.3.2.</span> <span class="nav-text">CONSTANT_Class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-Integer、CONSTANT-Long、CONSTANT-Double、CONSTANT-Float"><span class="nav-number">1.3.3.</span> <span class="nav-text">CONSTANT_Integer、CONSTANT_Long、CONSTANT_Double、CONSTANT_Float</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-String"><span class="nav-number">1.3.4.</span> <span class="nav-text">CONSTANT_String　</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-NameAndType"><span class="nav-number">1.3.5.</span> <span class="nav-text">CONSTANT_NameAndType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-Methodref和CONSTANT-Fieldref"><span class="nav-number">1.3.6.</span> <span class="nav-text">CONSTANT_Methodref和CONSTANT_Fieldref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-InterfaceMethodref"><span class="nav-number">1.3.7.</span> <span class="nav-text">CONSTANT_InterfaceMethodref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CONSTANT-MethodHandle、CONSTANT-MethodType、CONSTANT-InvokeDynamic"><span class="nav-number">1.3.8.</span> <span class="nav-text">CONSTANT_MethodHandle、CONSTANT_MethodType、CONSTANT_InvokeDynamic</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class的访问标记"><span class="nav-number">1.4.</span> <span class="nav-text">Class的访问标记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类、父类和接口"><span class="nav-number">1.5.</span> <span class="nav-text">类、父类和接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class的字段"><span class="nav-number">1.6.</span> <span class="nav-text">Class的字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class方法的基本结构"><span class="nav-number">1.7.</span> <span class="nav-text">Class方法的基本结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法执行主体－Code属性"><span class="nav-number">1.7.1.</span> <span class="nav-text">方法执行主体－Code属性　</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#记录行号－LineNumberTable"><span class="nav-number">1.7.1.1.</span> <span class="nav-text">记录行号－LineNumberTable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#局部变量和参数－LocalVariableTable"><span class="nav-number">1.7.1.2.</span> <span class="nav-text">局部变量和参数－LocalVariableTable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字节码类型校验－StackMapTable属性"><span class="nav-number">1.7.1.3.</span> <span class="nav-text">字节码类型校验－StackMapTable属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异常－Exceptions属性"><span class="nav-number">1.7.1.4.</span> <span class="nav-text">异常－Exceptions属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class来源－SourceFile"><span class="nav-number">1.8.</span> <span class="nav-text">Class来源－SourceFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态调用－BootstrapMethod属性"><span class="nav-number">1.9.</span> <span class="nav-text">动态调用－BootstrapMethod属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内部类－InnerClasses属性"><span class="nav-number">1.10.</span> <span class="nav-text">内部类－InnerClasses属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Depercated属性"><span class="nav-number">1.11.</span> <span class="nav-text">Depercated属性</span></a></li></ol></li></ol></div>
-            
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">冼毅俊</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-<div style="text-align:center;width:100%;height:50">
-备案信息:粤IC备16069701
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-  
     
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"xianyijun"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
+        
     
-  
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar_01.jpg"/>
+        
+            <h4 id="about-card-name">冼毅俊</h4>
+        
+            <h5 id="about-card-bio"><p>author.bio</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                长安
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/background-4.png');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/jquery.fancybox-thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+<!--PANGU AUTO SPACE-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/3.2.1/pangu.min.js"></script>
+<script> pangu.spacingPage(); </script>
+<!--PANGU AUTO SPACE END-->
+
+    
+        <script type="text/javascript">
+            var duoshuoQuery = {short_name:'xianyijun'};
+            (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0]
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+        </script>
+    
 
 
 
-
-
-  
-  
-  
-
-  
-
-  
-
-</body>
 </html>

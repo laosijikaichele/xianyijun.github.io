@@ -1,134 +1,45 @@
-<!doctype html>
 
-
-
-  
-
-
-<html class="theme-next mist use-motion">
+<!DOCTYPE html>
+<html lang="zh-Hans">
+    
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  
-  
-  
-  
-
-  
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="枯叶未凋零">
+    <title>浅析数据库之事务隔离级别与锁机制 - 枯叶未凋零</title>
+    <meta name="author" content="冼毅俊">
     
     
-  
-
-  
-
-  
-
-  
     
-      
-    
-
-    
-  
-
-  
-    
-      
-    
-
-    
-  
-
-  
-    
-    
-    <link href="//fonts.useso.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Mysql," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
-
-
-
-
-
-
-<meta name="description" content="浅析数据库之事务隔离级别与锁机制写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔">
-<meta property="og:type" content="article">
+    <meta name="description" content="浅析数据库之事务隔离级别与锁机制写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔">
+<meta property="og:type" content="blog">
 <meta property="og:title" content="浅析数据库之事务隔离级别与锁机制">
 <meta property="og:url" content="http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/index.html">
 <meta property="og:site_name" content="枯叶未凋零">
 <meta property="og:description" content="浅析数据库之事务隔离级别与锁机制写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔">
-<meta property="og:updated_time" content="2016-08-15T06:12:15.550Z">
+<meta property="og:updated_time" content="2016-08-18T06:07:57.296Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析数据库之事务隔离级别与锁机制">
 <meta name="twitter:description" content="浅析数据库之事务隔离级别与锁机制写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> 浅析数据库之事务隔离级别与锁机制 | 枯叶未凋零 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-  <script type="text/javascript">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://xianyijun.github.io/assets/images/avatar_01.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/font-awesome.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox-thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+    
+    <script type="text/javascript">
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -136,177 +47,156 @@
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
-  </script>
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
 
 
-
-
-
-
-
-
-  
-  
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">枯叶未凋零</a>
+    </h1>
     
-  
-
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">枯叶未凋零</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">高山仰止，景行行止，虽不能至，心向往之</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
+            <a  class="header-right-icon st-search-show-outputs"
+                href="#search">
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+            <i class="fa fa-lg fa-search"></i>
         
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
+        </a>
+    
+</header>
 
-      
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="1">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar_01.jpg"/>
+            </a>
+            <span class="sidebar-profile-name">冼毅俊</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-circle-thin"></i>
+                    <span class="sidebar-button-desc">Accueil</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bars"></i>
+                    <span class="sidebar-button-desc">Archive</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-terminal"></i>
+                    <span class="sidebar-button-desc">À propos</span>
+                </a>
+        </li>
+        
     </ul>
-  
-
-  
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/xianyijun" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/link"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-at"></i>
+                    <span class="sidebar-button-desc">Links</span>
+                </a>
+        </li>
+        
+    </ul>
+    
 </nav>
 
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
     
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                浅析数据库之事务隔离级别与锁机制
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-14T17:12:39+08:00" content="2016-08-14">
-              2016-08-14
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/14/浅析数据库之事务隔离级别与锁机制/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/14/浅析数据库之事务隔离级别与锁机制/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
+        <div class="post-header main-content-wrap text-left">
     
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h1 id="浅析数据库之事务隔离级别与锁机制"><a href="#浅析数据库之事务隔离级别与锁机制" class="headerlink" title="浅析数据库之事务隔离级别与锁机制"></a><strong>浅析数据库之事务隔离级别与锁机制</strong></h1><p>写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔离级别是通过数据库锁机制来实现的，不过当时记的不太清楚，担心把自己挖坑给埋了，就没有深入回答，现在就趁着是周日，把知识点复习一遍，把知识网络理清楚。</p>
+        <h1 class="post-title" itemprop="headline">
+            浅析数据库之事务隔离级别与锁机制
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" content="Sun Aug 14 2016 17:12:39 GMT+0800">
+	
+		    14 Aug 2016
+    	
+    </time>
+    
+</div>
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h1 id="浅析数据库之事务隔离级别与锁机制"><a href="#浅析数据库之事务隔离级别与锁机制" class="headerlink" title="浅析数据库之事务隔离级别与锁机制"></a><strong>浅析数据库之事务隔离级别与锁机制</strong></h1><p>写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔离级别是通过数据库锁机制来实现的，不过当时记的不太清楚，担心把自己挖坑给埋了，就没有深入回答，现在就趁着是周日，把知识点复习一遍，把知识网络理清楚。</p>
 <h2 id="二阶段封锁"><a href="#二阶段封锁" class="headerlink" title="二阶段封锁"></a><strong>二阶段封锁</strong></h2><p>在并发环境下，我们往往需要进行并发控制，如果不进行并发控制的话，数据会出现一系列的问题：脏读，不可重复读和幻读。<br>然后数据库在事务执行过程中，需要维护事务的ACID特性，往往需要通过加锁来进行控制。<br>在高并发的情况之下，使用锁的话，如果加锁过度，可能会导致并发的性能降低，为了提供共享资源的并发性，往往要让锁定的对象具有选择性，即尽量只锁定要修改部分的数据资源，而不是所有的资源。<br>一般情况下，我们可以通过一次封锁法来对资源进行锁定，即就是在方法执行开始阶段，通过知道需要使用哪些数据资源，就将对应的资源进行锁定，减少锁的粗粒度，在执行方法完成之后，在进行解锁，避免了死锁的发生。<br>然而在数据库事务中，这却是不可行，因为在事务执行的时候，我们不清楚我们需要对哪些资源进行操作。<br>数据库事务是使用二阶段协议（2PL）来完成的，把事务分为两个阶段：加锁阶段和解锁阶段。</p>
 <ul>
 <li><p>加锁阶段：在该阶段，我们可以进行加锁操作，在对数据进行读操作的时候，我们需要申请并获得读锁(s锁，共享锁，在事务获得锁的情况下，其他事务也可以加锁，但是不可以加排他锁)；如果要进行写操作的话，则需要申请和获得写锁（x锁，排他锁，在有事务获得写锁的情况下，其他事务不能获的其他锁，包括读锁），如果在申请期间，事务没有获得锁，则事务就会进入等待阶段，直到加锁的成功才会继续进行。</p>
@@ -508,381 +398,249 @@
 <h3 id="可串行化"><a href="#可串行化" class="headerlink" title="可串行化"></a><strong>可串行化</strong></h3><p>在可串行化的事务隔离级别中，会从MVCC并发控制退化成基于锁的并发控制，不对当前读和快照度进行区分，所有的读操作都是当前读，读加读锁（S锁），写加写锁（x锁），读写冲突，导致并发性能下降，一般不建议使用可串行化隔离级别。</p>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><strong>参考文献</strong></h1><p><a href="https://book.douban.com/subject/23008813/" target="_blank" rel="external">高性能ＭySQL</a><br><a href="http://hedengcheng.com/?p=771" target="_blank" rel="external">MySQL 加锁处理分析</a><br><a href="https://zh.wikipedia.org/wiki/%E4%BA%8B%E5%8B%99%E9%9A%94%E9%9B%A2" target="_blank" rel="external">事务隔离</a><br><a href="http://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">Innodb中的事务隔离级别和锁的关系</a></p>
 
-      
-    </div>
-    
-    <div>
-      
-        
-      
-    </div>
-
-    <div>
-      
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Mysql/" rel="tag">#Mysql</a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/11/操作系统之内存管理/" rel="next" title="操作系统之内存管理">
-                <i class="fa fa-chevron-left"></i> 操作系统之内存管理
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
         </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-        <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style">
-  <a class="jiathis_button_tsina"></a>
-  <a class="jiathis_button_tqq"></a>
-  <a class="jiathis_button_weixin"></a>
-  <a class="jiathis_button_cqq"></a>
-  <a class="jiathis_button_douban"></a>
-  <a class="jiathis_button_renren"></a>
-  <a class="jiathis_button_qzone"></a>
-  <a class="jiathis_button_kaixin001"></a>
-  <a class="jiathis_button_copy"></a>
-  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
-  <a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" >
-  var jiathis_config={
-    hideMore:false
-  }
-</script>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-
-      
     </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/08/14/浅析数据库之事务隔离级别与锁机制/"
-           data-title="浅析数据库之事务隔离级别与锁机制" data-url="http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
-      </div>
-    
-  </div>
-
-
-        </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGÉ DANS</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/Mysql/">Mysql</a>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PRÉCÉDENT</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/08/11/操作系统之内存管理/" data-tooltip="操作系统之内存管理">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">SUIVANT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
         </ul>
-      
-
-      <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="枯叶未凋零" />
-          <p class="site-author-name" itemprop="name">枯叶未凋零</p>
-          <p class="site-description motion-element" itemprop="description">高山仰止，景行行止，虽不能至，心向往之</p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">45</span>
-              <span class="site-state-item-name">日志</span>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
             </a>
-          </div>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#ds-thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
 
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">14</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
 
         
+            
+                <div id="ds-thread" class="ds-thread" data-thread-key="2016/08/14/浅析数据库之事务隔离级别与锁机制/"
+     data-title="浅析数据库之事务隔离级别与锁机制" data-url="http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+</div>
 
-        <div class="links-of-author motion-element">
-          
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/xianyijun" target="_blank" title="github">
-                  
-                    <i class="fa fa-globe"></i>
-                  
-                  github
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 冼毅俊. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="1">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PRÉCÉDENT</span>
                 </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/xianyijun" target="_blank" title="weibo">
-                  
-                    <i class="fa fa-globe"></i>
-                  
-                  weibo
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/08/11/操作系统之内存管理/" data-tooltip="操作系统之内存管理">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">SUIVANT</span>
+                    <i class="fa fa-angle-right"></i>
                 </a>
-              </span>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#ds-thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
             
-          
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="1">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-google-plus"></i><span class="">Partager sur Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-facebook-official"></i><span>Partager sur Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://xianyijun.github.io/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
+                <i class="fa fa-twitter"></i><span>Partager sur Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
         </div>
-
-        
         
 
-        
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-block">
-            <div class="links-of-blogroll-title">
-              <i class="fa fa-globe fa-fw"></i>
-              Links
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://jm.taobao.org/" title="阿里中间件团队博客" target="_blank">阿里中间件团队博客</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://www.zhangxinxu.com/" title="张鑫旭" target="_blank">张鑫旭</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://my.oschina.net/huangyong/" title="黄勇" target="_blank">黄勇</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://rednaxelafx.iteye.com/" title="RednaxelaFX" target="_blank">RednaxelaFX</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://jinnianshilongnian.iteye.com/" title="开涛" target="_blank">开涛</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://huangz.me/" title="黄健宏" target="_blank">黄健宏</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="http://blog.sina.com.cn/hailiangshuju" title="淘宝沈询" target="_blank">淘宝沈询</a>
-                </li>
-              
-            </ul>
-          </div>
-        
 
-      </section>
-
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浅析数据库之事务隔离级别与锁机制"><span class="nav-number">1.</span> <span class="nav-text">浅析数据库之事务隔离级别与锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二阶段封锁"><span class="nav-number">1.1.</span> <span class="nav-text">二阶段封锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务加锁机制"><span class="nav-number">1.2.</span> <span class="nav-text">事务加锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库锁分类"><span class="nav-number">1.2.1.</span> <span class="nav-text">数据库锁分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务隔离级别"><span class="nav-number">1.2.2.</span> <span class="nav-text">事务隔离级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#未提交读"><span class="nav-number">1.2.3.</span> <span class="nav-text">未提交读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已提交读"><span class="nav-number">1.2.4.</span> <span class="nav-text">已提交读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重复读"><span class="nav-number">1.2.5.</span> <span class="nav-text">可重复读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#读"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#幻读与不可重复读"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">幻读与不可重复读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#悲观锁与乐观锁"><span class="nav-number">1.2.5.3.</span> <span class="nav-text">悲观锁与乐观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Innodb中的乐观锁实现（MVCC）"><span class="nav-number">1.2.5.4.</span> <span class="nav-text">Innodb中的乐观锁实现（MVCC）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#当前读和快照读"><span class="nav-number">1.2.5.5.</span> <span class="nav-text">当前读和快照读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Next-Key锁"><span class="nav-number">1.2.5.6.</span> <span class="nav-text">Next Key锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可串行化"><span class="nav-number">1.2.6.</span> <span class="nav-text">可串行化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
-            
-          </div>
-        </section>
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">冼毅俊</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-<div style="text-align:center;width:100%;height:50">
-备案信息:粤IC备16069701
-</div>
-
-        
-
-        
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
-
-  
-  <script type="text/javascript" src="//cdn.jsdelivr.net/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
-
-
-
-  
-
-  
     
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"xianyijun"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-  
+        
     
-  
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar_01.jpg"/>
+        
+            <h4 id="about-card-name">冼毅俊</h4>
+        
+            <h5 id="about-card-bio"><p>author.bio</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                长安
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/background-4.png');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/jquery.fancybox-thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+<!--PANGU AUTO SPACE-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/3.2.1/pangu.min.js"></script>
+<script> pangu.spacingPage(); </script>
+<!--PANGU AUTO SPACE END-->
+
+    
+        <script type="text/javascript">
+            var duoshuoQuery = {short_name:'xianyijun'};
+            (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0]
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+            })();
+        </script>
+    
 
 
 
-
-
-  
-  
-  
-
-  
-
-  
-
-</body>
 </html>
