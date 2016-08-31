@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="枯叶未凋零">
-    <title>Archives: 2016 - 枯叶未凋零</title>
+    <title>Arquivo: 2016 - 枯叶未凋零</title>
     <meta name="author" content="冼毅俊">
     
     
@@ -99,7 +99,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-circle-thin"></i>
-                    <span class="sidebar-button-desc">Home</span>
+                    <span class="sidebar-button-desc">Início</span>
                 </a>
         </li>
         
@@ -111,7 +111,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-bars"></i>
-                    <span class="sidebar-button-desc">Archives</span>
+                    <span class="sidebar-button-desc">Arquivo</span>
                 </a>
         </li>
         
@@ -135,7 +135,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-terminal"></i>
-                    <span class="sidebar-button-desc">About</span>
+                    <span class="sidebar-button-desc">Sobre</span>
                 </a>
         </li>
         
@@ -184,15 +184,15 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2016/05/19/操作系统之进程间通信/">
-                            操作系统之进程间通信
+                        <a class="link-unstyled" href="/2016/05/23/Java如何关闭一个线程/">
+                            Java如何关闭一个线程
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" content="Thu May 19 2016 22:11:37 GMT+0800">
+    <time itemprop="datePublished" content="Mon May 23 2016 20:22:13 GMT+0800">
 	
-		    May 19, 2016
+		    23/05/2016
     	
     </time>
     
@@ -201,49 +201,33 @@
             
             
                 <div class="postShorten-content" itemprop="articleBody">
-                    <h1 id="操作系统之进程间通信"><a href="#操作系统之进程间通信" class="headerlink" title="操作系统之进程间通信"></a><strong>操作系统之进程间通信</strong></h1><p>在进程间进行通信的时候，我们常常需要考虑几个问题。<br>进程之间的信息如何进行传递，进程之间在进行资源竞争的时候如何保证不会出现交叉和如何保证访问资源之间存在依赖的时候确保正确的访问顺序。</p>
+                    <h1 id="Java如何关闭一个线程"><a href="#Java如何关闭一个线程" class="headerlink" title="Java如何关闭一个线程"></a><strong>Java如何关闭一个线程</strong></h1><p>今天下午滴滴电话面试，由于自己在自我介绍说自己比较熟悉Java并发，所以面试官一开始就问并发相关的问题：如何杀死一个线程，当时一听到这个问题，脑袋是有一点小蒙的，因为在记忆中一直没有Java手动杀死线程相关的概念，以为是linux下用kill来杀死线程，而且一直记得线程的状态只有７种:新建，可运行，运行中，睡眠，阻塞，等待，死亡，只有run方法exit或者调用执行线程的stop方法才会进入dead态，而且stop方法在java中是Deprecated的，是不推荐使用的，所有当时就回答了stop方法，然后面试官果然就问了stop是Deprecated的，问我为什么会stop被Deprecated，会出现什么问题，应该如何实现优雅关闭，不过当时问题没有太听清楚，以为要用原生方法来实现，不过记忆中一直没有印象有什么api可以实现这个功能，不过当时博主也有点想歪了，因为之前看Netty源码的时候，EventExecutorGroup有一个shutdownGracefully的方法，以为要用threadLocal来实现，不过其实在Java Api里面就有讲到这几点。</p>
+<blockquote>
+<p><a href="http://docs.oracle.com/javase/1.5.0/docs/guide/misc/threadPrimitiveDeprecation.html" target="_blank" rel="external">http://docs.oracle.com/javase/1.5.0/docs/guide/misc/threadPrimitiveDeprecation.html</a></p>
+</blockquote>
 <ul>
-<li><strong>竞争条件</strong><br>在操作系统中，多个进程间进行相互协作，往往需要对某些共享数据进行访问读写，而在多个进程进行数据读写的时候，最终结果往往取决进程运行的时序，叫做竞争条件，然而这是不可控的，因此我们需要阻止多个进程同时对共享数据进行读写，实现互斥。</li>
-<li><p><strong>临界区</strong><br>为了避免竞争条件，我们把对共享变量进行访问的程序片段称为临界区，只要我们能够在两个进程不能同时出现在临界区，即可实现互斥，避免竞争条件，但是这不能保证并发程序能够正确高效的进行协作。因此，需要满足以下的几个条件。</p>
-<ul>
-<li>任何两个进程不能同时处于其临界区中。</li>
-<li>不应该对硬件设备有所要求，即与硬件无关，不能对CPU的速度或者数量做出假设。</li>
-<li>处在临界区之外的进程不能对其他的进程进行阻塞。</li>
-<li>处在临界区外的进程不能无限期的等待，即不会发生死锁和饥饿。</li>
-</ul>
+<li><p>里面讲到为什么要废弃stop方法？<br>主要stop本身就是不安全的，stop一个线程会导致在该线程上所有锁定的monitor(管程)都会被解锁，如果之前被这些monitor保护的对象之前处于不一致状态，其他的线程看到这些对象也会处于不一致的状态，这种对象称为damaged object,如果线程在这些受损的对象上操作的时候，可能会导致任意行为，而且这种行为难以检测，不像unchecked异常，这样容易发现。ThreadDead异常会杀死其他线程，导致用户可能收不到警告，只有在正在崩坏的时候才能发现。</p>
 </li>
-<li><strong>互斥</strong><ul>
-<li>屏蔽中断<br>在单处理器系统中，由于并发进程不能重叠，只能交替，我们可以通过屏蔽中断的方法来实现互斥，即在进程进入临界区的时候，屏蔽中断，这样CPU将不会切换到其他进程，在离开临界区的时候，在打开中断，就可以实现互斥。但是屏蔽中断会导致进程只能交替进行，执行效率会降低，同时，如果是在多处理器系统中，屏蔽中断只是对执行disable指令的CPU有效，其他CPU继续运行，然后可以访问临界区，不能保证互斥。</li>
-<li>锁变量<br>我们可以通过锁变量来实现互斥，锁变量初始值为１，进程访问共享数据，进入临界区的时候，对锁变量进行检查，如果锁变量为负值，进程就被挂起，如果值为一的话，锁变量减为零，进程就立即进入临界区，接着之后的每一个进程试图去访问临界区都会让锁变量减一，然后添加到等待队列中，当进程从临界区退出后，锁变量加一，然后唤醒等待队列中一个被阻塞的线程，进程置于就绪状态，在下一次调度的时候，就可以进入临界区了。但是如果一个进程在发现锁变量为１，试图进入临界区并对锁变量进行减一操作的时候，另一个进程调度运行，也发现锁变量为１，试图进入临界区，这样的话就会导致有两个进程可以访问临界区。</li>
-<li>严格轮换法<br>严格轮换法通过turn变量，用来记录那个进程进入临界区，当一个进程０检查turn变量的时候，发现其值为０，就进入临界区，另一个进程试图访问临界区的时候，发现turn变量为０，它就会不停的循环去测试变量什么时候变量为某个值，称为忙等待。忙等待会一直循环, 损耗CPU资源，浪费CPU时间，一般用于等待时间比较短的情况，如果一个进程比另一个进程慢很多的话，就不应该轮流进入临界区。</li>
-</ul>
+<li><p>如何取代stop方法来关闭线程。<br>我们应该通过共享变量标志来表明是否线程需要停止运行的代码，而且目标线程应该有规律的去检测变量，如果变量指示线程需要停止的时候，目标线程应该有序地从它run方法中返回，同时，由于要保证变量的线程可见性，变量应该修饰为volatile或者进行同步访问。</p>
 </li>
-<li><strong>睡眠与唤醒</strong><br>睡眠是一个引起调用进程阻塞的系统调用，即将挂起，直到另一个进程将其唤醒，唤醒会将睡眠进程加入到运行队列中，直到下次调用器调度的时候才会被运行。</li>
 </ul>
-<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a><strong>信号量</strong></h2><p>信号量使用整型变量来累计唤醒次数，取值为０表示没有保存下来的唤醒操作，或者正值表示有一个或者多个唤醒操作。<br>信号量有两种操作：sleep和wakeup,对信号量执行sleep操作，首先对信号量的值进行检查，如果大于０，就将值减一，继续执行操作，否则等于０的话，进程就会睡眠。检查变量、修改变量值和可能会发生的睡眠操作都是原子操作，在操作完成之前，其他进程对信号量的操作都是不允许的。执行wakeup操作，对信号量的值加一，如果之前有进程在信号量上睡眠了，会选择一个进程进行唤醒，继续执行剩余的操作，因此，对一个有进程睡眠的信号量来说，执行wwakeup操作，不会修改信号量的值，只是在其上睡眠的进程少了一个。<br>信号量除了可以用来实现互斥，也可以用来实现同步，用来保证只有一个进程能对临界区的共享数据进行读写访问。</p>
-<h2 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量　"></a><strong>互斥量</strong>　</h2><p>互斥量是信号量的简化版本，没有信号量的计数功能，互斥量是处于两态之一的变量：解锁或者加锁，一般情况下使用整型变量来表示，０表示解锁，其他的值则表示加锁。当一个进程访问临界区的时候，需要对互斥量进行检验，如果当前的互斥量是解锁的，则访问成功，可以对临界区进行访问，否则互斥量已经加锁的话，调用进程就会阻塞，直到进入临界区的进程退出临界区为止，如果有多个进程阻塞在临界区外，则随机选择一个进程唤醒获取到锁。</p>
-<h2 id="管程"><a href="#管程" class="headerlink" title="管程　"></a><strong>管程</strong>　</h2><p>管程可以看成是一种程序结构，他包括：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">package me.kuye.demo;</span><br><span class="line"></span><br><span class="line">public class StopThread extends Thread &#123;</span><br><span class="line">	private volatile boolean stop;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void run() &#123;</span><br><span class="line">		Thread thisThread = Thread.currentThread();</span><br><span class="line">		while (!stop) &#123;</span><br><span class="line">			try &#123;</span><br><span class="line">				thisThread.sleep(1000);</span><br><span class="line">			&#125; catch (InterruptedException e) &#123;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public void shutdown() &#123;</span><br><span class="line">		this.stop = true;</span><br><span class="line">//		Thread.currentThread().interrupt();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样我们也可以用中断来实现stop线程，调用interrupt方法可能会导致几种情况：</p>
 <ul>
-<li>多个可以彼此交互并共享资源的进程。</li>
-<li>多个与资源使用有关的条件变量</li>
-<li>一个互斥锁</li>
-<li>一个用来避免静态条件的不变量</li>
+<li>如果线程阻塞在Object的wait方法或者Thread.join方法的话，中断标志位会被清除，然后抛出java.lang.InterruptedException。</li>
+<li>如果线程阻塞在interruptible channel上的I/O操作，就是说通道将被关闭，同时线程的中断状态被设置，抛出一个java.nio.channels.ClosedByInterruptException。</li>
+<li>如果线程正阻塞于一个java.nio.channels.Selector操作，则该线程的中断状态被设置，它将会立即从选择操作返回，并可能带有一个非零值，就好像调用java.nio.channels.Selector.wakeup()方法一样。</li>
+<li>如果上述条件都不成立，则该线程的中断状态标志位被设置。<br>如果线程的中断标志位被设置之后，会在某一个时间被中断并进入dead状态。<br>但是这种方法并不能保证线程准确地被中断。<br>我们一般通过中断加共享变量是实现关闭线程。</li>
 </ul>
-<p>管程提供了一种机制，可以让进程临时放弃互斥访问，等到条件变量满足之后，重新获得执行权恢复互斥访问，如果每个执行的进程在放弃互斥锁之前都能保证不变量成立，就是说所有的进程都不会导致竞态条件成立，当一个进程执行管程中的子程序时，即占用了管程，管程能保证在一个时间点之内，最多只有一个进程占用管程，即实现了互斥。<br>如果我们需要调用一个在管程中的子程序的时候，需要等到已经没有其他进程在执行该管程的子程序。每一个管程对象都一个把互斥锁，初始状态为解锁，在管程的子程序的入口给互斥锁加锁，在出口给互斥锁解锁。管程还提供条件变量为进程在无法继续执行的时候阻塞，并把另一个在管程外的进程调入到管程中。</p>
-<h2 id="消息传递"><a href="#消息传递" class="headerlink" title="消息传递　"></a><strong>消息传递</strong>　</h2><p>在操作系统中，如果两个进程之间不存在可以直接访问的共享空间，必须利用操作系统提供的消息传递方法实现进程通信，通过send和receive原语进行数据传输。</p>
-<ul>
-<li>直接通信方式：如果发送进程可以把数据直接发送到接收进程，就可以把数据挂在接收进程的消息缓冲队列上，接收进程则可以通过从缓冲队列中获取数据了。</li>
-<li>间接通信方式：可以通过创建一个一定数量消息进程缓冲的地方，叫做信箱，在使用信箱进程数据传输的时候，send和receive元素指定的地址不再是源地址或者目的地址，而是信息地址。缓冲机制主要是用来容纳那些已经发送但是还没有被接收进程接收的消息。当时我们也可以取消缓冲，调用send方法时发送进程会被阻塞，直到receive调用，这种行为可以称为rendezvous。</li>
-</ul>
-<h2 id="屏障"><a href="#屏障" class="headerlink" title="屏障　"></a><strong>屏障</strong>　</h2><p>屏障主要是用于进程组，如果应用要求所有的进程都到达一个阶段就绪，否则任何进程都不能进入下一个阶段，我们可以在每一个阶段的结尾放置一个屏障来实现这种行为，当一个进程到达屏障时，也就被屏障阻拦，主要所有的进程达到屏障，才能打破屏障，到达下一个阶段。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> me.kuye.demo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StopThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> stop;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Thread thisThread = Thread.currentThread();</span><br><span class="line">		<span class="keyword">while</span> (!stop) &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				System.out.println(<span class="string">"the thread is running"</span>);</span><br><span class="line">				thisThread.sleep(<span class="number">1000</span>);</span><br><span class="line">			&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">				shutdown();</span><br><span class="line">				System.out.println(<span class="string">"the thread is shutdown"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"the thread will be stop"</span>);</span><br><span class="line">		<span class="keyword">this</span>.stop = <span class="keyword">true</span>;</span><br><span class="line">		<span class="comment">// Thread.currentThread().interrupt();</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		StopThread thread = <span class="keyword">new</span> StopThread();</span><br><span class="line">		thread.start();</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Thread.currentThread().sleep(<span class="number">5000</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		thread.shutdown();</span><br><span class="line">		thread.interrupt();</span><br><span class="line">		System.out.println(<span class="string">"the main thread is exit"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
                     
                         
                     
                     
                         <p>
-                            <a href="/2016/05/19/操作系统之进程间通信/#post-footer" class="postShorten-excerpt_link link">
-                                COMMENT AND SHARE
+                            <a href="/2016/05/23/Java如何关闭一个线程/#post-footer" class="postShorten-excerpt_link link">
+                                Comentar e compartilhar
                             </a>
                         </p>
                     
@@ -261,19 +245,19 @@
                 <a class="btn btn--default btn--small" href="/archives/2016/page/21/">
             
                 <i class="fa fa-angle-left text-base icon-mr"></i>
-                    <span>NEWER</span>
+                    <span>POSTS MAIS NOVOS</span>
             </a>
         </li>
         
         
         <li class="pagination-next">
             <a class="btn btn--default btn--small" href="/archives/2016/page/23/">
-                    <span>OLDER</span>
+                    <span>POSTS MAIS ANTIGOS</span>
                 <i class="fa fa-angle-right text-base icon-ml"></i>
             </a>
         </li>
         
-        <li class="pagination-number">PAGE 22 OF 45</li>
+        <li class="pagination-number">página 22 de 47</li>
     </ul>
 </div>
 
@@ -307,14 +291,14 @@
         
             <h4 id="about-card-name">冼毅俊</h4>
         
-            <h5 id="about-card-bio"><p>Xupter√Java√德桌迷√虐心控√mugen爱好者√音乐杂食党√小说发烧友√基本色√鱼迷√stan√bitch√daydreamer</p>
+            <h5 id="about-card-bio"><p>author.bio</p>
 </h5>
         
         
             <h5 id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>Java研发</p>
+                <p>author.job</p>
 
             </h5>
         

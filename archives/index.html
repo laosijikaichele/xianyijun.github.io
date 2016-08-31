@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="枯叶未凋零">
-    <title>Archives - 枯叶未凋零</title>
+    <title>Arquivo - 枯叶未凋零</title>
     <meta name="author" content="冼毅俊">
     
     
@@ -99,7 +99,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-circle-thin"></i>
-                    <span class="sidebar-button-desc">Home</span>
+                    <span class="sidebar-button-desc">Início</span>
                 </a>
         </li>
         
@@ -111,7 +111,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-bars"></i>
-                    <span class="sidebar-button-desc">Archives</span>
+                    <span class="sidebar-button-desc">Arquivo</span>
                 </a>
         </li>
         
@@ -135,7 +135,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-terminal"></i>
-                    <span class="sidebar-button-desc">About</span>
+                    <span class="sidebar-button-desc">Sobre</span>
                 </a>
         </li>
         
@@ -184,15 +184,15 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2016/08/14/浅析数据库之事务隔离级别与锁机制/">
-                            浅析数据库之事务隔离级别与锁机制
+                        <a class="link-unstyled" href="/2016/08/27/读书笔记之浅析Java内存模型/">
+                            读书笔记之浅析Java内存模型
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" content="Sun Aug 14 2016 17:12:39 GMT+0800">
+    <time itemprop="datePublished" content="Sat Aug 27 2016 00:28:58 GMT+0800">
 	
-		    Aug 14, 2016
+		    27/08/2016
     	
     </time>
     
@@ -201,215 +201,127 @@
             
             
                 <div class="postShorten-content" itemprop="articleBody">
-                    <h1 id="浅析数据库之事务隔离级别与锁机制"><a href="#浅析数据库之事务隔离级别与锁机制" class="headerlink" title="浅析数据库之事务隔离级别与锁机制"></a><strong>浅析数据库之事务隔离级别与锁机制</strong></h1><p>写在前面，写这篇博文的主要原因是因为前几天阿里面试的时候，面试官问了数据库的事务隔离级别，虽然答上来了:未提交读(Read uncommitted)、提交读(Read committed)，可重复读(Repeatable reads)和可串行化(Serializable)这几个，其实当时是想深入的讲解一下，因为之前看沈询前辈的海量数据系列博文的时候，讲到的数据库的隔离级别是通过数据库锁机制来实现的，不过当时记的不太清楚，担心把自己挖坑给埋了，就没有深入回答，现在就趁着是周日，把知识点复习一遍，把知识网络理清楚。</p>
-<h2 id="二阶段封锁"><a href="#二阶段封锁" class="headerlink" title="二阶段封锁"></a><strong>二阶段封锁</strong></h2><p>在并发环境下，我们往往需要进行并发控制，如果不进行并发控制的话，数据会出现一系列的问题：脏读，不可重复读和幻读。<br>然后数据库在事务执行过程中，需要维护事务的ACID特性，往往需要通过加锁来进行控制。<br>在高并发的情况之下，使用锁的话，如果加锁过度，可能会导致并发的性能降低，为了提供共享资源的并发性，往往要让锁定的对象具有选择性，即尽量只锁定要修改部分的数据资源，而不是所有的资源。<br>一般情况下，我们可以通过一次封锁法来对资源进行锁定，即就是在方法执行开始阶段，通过知道需要使用哪些数据资源，就将对应的资源进行锁定，减少锁的粗粒度，在执行方法完成之后，在进行解锁，避免了死锁的发生。<br>然而在数据库事务中，这却是不可行，因为在事务执行的时候，我们不清楚我们需要对哪些资源进行操作。<br>数据库事务是使用二阶段协议（2PL）来完成的，把事务分为两个阶段：加锁阶段和解锁阶段。</p>
+                    <h1 id="读书笔记之浅析Java内存模型"><a href="#读书笔记之浅析Java内存模型" class="headerlink" title="读书笔记之浅析Java内存模型"></a><strong>读书笔记之浅析Java内存模型</strong></h1><h2 id="并发模型分类"><a href="#并发模型分类" class="headerlink" title="并发模型分类"></a><strong>并发模型分类</strong></h2><p>在并发编程中，最重要的是两个部分：线程通信和线程同步。<br>常见的线程通信机制有两种：共享内存和消息传递。</p>
 <ul>
-<li><p>加锁阶段：在该阶段，我们可以进行加锁操作，在对数据进行读操作的时候，我们需要申请并获得读锁(s锁，共享锁，在事务获得锁的情况下，其他事务也可以加锁，但是不可以加排他锁)；如果要进行写操作的话，则需要申请和获得写锁（x锁，排他锁，在有事务获得写锁的情况下，其他事务不能获的其他锁，包括读锁），如果在申请期间，事务没有获得锁，则事务就会进入等待阶段，直到加锁的成功才会继续进行。</p>
-</li>
-<li><p>解锁阶段　 当事务释放一个封锁之后，事务就不能够获得其他封锁了，只能进行解锁操作而不能进行加锁操作。</p>
-</li>
+<li>共享内存　在共享内存的并发模型中，线程之间通过对程序的公共状态进行共享，线程之间通过对内存中共享状态进行读写来进行隐式通信。</li>
+<li>消息传递　在消息传递的并发模型中，线程与线程之间没有共享的公共状态，只能通过显性地发送消息来进行通信。</li>
 </ul>
-<p>在事务开启后，执行update、insert、delete操作会获得对应的锁，在事务commit之后就会释放对应的锁。<br>二阶段封锁虽然无法避免封锁，但是它可以保证事务的并发调度是串行化的。</p>
-<h2 id="事务加锁机制"><a href="#事务加锁机制" class="headerlink" title="事务加锁机制"></a><strong>事务加锁机制</strong></h2><h3 id="数据库锁分类"><a href="#数据库锁分类" class="headerlink" title="数据库锁分类"></a><strong>数据库锁分类</strong></h3><p>MySQL中锁的种类很多，比较常见的有表锁和行锁。<br>表锁即锁住整张表，虽然也分为读锁和写锁，但是锁住了整张表，并发性能也会导致降低，一般用在ddl处理时候进行使用。<br>行锁是指锁住数据行，它只会锁住对应的数据行，也不会锁住整张表，并行性能比较高，ＭySQL一般使用表锁来处理并发事务。</p>
-<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a><strong>事务隔离级别</strong></h3><table>
-<thead>
-<tr>
-<th>隔离级别</th>
-<th>脏读（Dirty Read）</th>
-<th>不可重复读（NonRepeatable Read）</th>
-<th>幻读（Phantom Read）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>未提交读（Read uncommitted）</td>
-<td>可能</td>
-<td>可能</td>
-<td>可能</td>
-</tr>
-<tr>
-<td>已提交读（Read committed）</td>
-<td>不可能</td>
-<td>可能</td>
-<td>可能</td>
-</tr>
-<tr>
-<td>可重复读（Repeatable read）</td>
-<td>不可能</td>
-<td>不可能</td>
-<td>可能</td>
-</tr>
-<tr>
-<td>可串行化（Serializable ）</td>
-<td>不可能</td>
-<td>不可能</td>
-<td>不可能</td>
-</tr>
-</tbody>
-</table>
-<p>数据库操作中，使用事务隔离级别来保证并发读取数据的正确性。</p>
+<p>线程同步是指对线程与线程之间操作的发生的相对顺序进行控制的机制，在共享内存的并发模型中，进行同步是显性，必须通过指定某个方法或者代码块（即临界区）需要在线程之间进行互斥访问。而在消息传递的并发模型中，由于消息的发送必须是在消息的接收之前发生的，同步是隐式进行的。</p>
+<p>Java使用的并发模型是<strong>共享内存</strong>模型，线程与线程之间的通信是在隐式进行的。</p>
+<h2 id="Java内存模型抽象"><a href="#Java内存模型抽象" class="headerlink" title="Java内存模型抽象"></a><strong>Java内存模型抽象</strong></h2><p>在Java中，程序计数器、虚拟机栈和本地方法栈是线程私有的，不会在线程间进行共享，因此不会存在内存可见性问题，也不会受到内存模型的影响，而堆区和方法区则是线程公有的，对象的实例域和静态域都在存储在堆区，会在线程之间进行共享，即可称为共享变量。<br>Java线程之间的通信是由Java内存模型（JMM）控制，JMM决定一个线程对共享变量的读写什么时候对另一个线程可见，定义了线程与主内存之间的抽象关系，线程之间的共享变量是存储在主内存当中，而每一个线程都会有自己的工作内存，线程对共享变量的读写是发生在工作内存当中，工作内存存储着该线程用来读写共享变量的副本。然而工作内存实际上是不存在的，它是缓存、缓冲区、寄存器的一个抽象存在。</p>
+<hr>
+<p>举个例子，如果两个线程需要进行通信，目前有线程A和工作内存A、线程B和工作内存B、主内存，线程A要与线程B进行通信的话，首先线程A要将工作内存A中更新过的共享变量刷新到主内存中去，然后线程B到主内存中去读取线程A已经更新过的共享变量，对线程B的工作内存的共享变量进行更新，这样看来的话，线程A向线程B进行通信，必须要经过主内存，JMM进通过控制主内存与每一个线程的工作工作内存进行交互，来为Java程序提供了内存可见性保证。</p>
+<h2 id="重排序"><a href="#重排序" class="headerlink" title="重排序　"></a><strong>重排序</strong>　</h2><p>在程序执行的时候，为了提高性能，编译器和处理器往往会对指令重排序，重排序主要分为以下三种：</p>
 <ul>
-<li><p>未提交读：　允许脏读，就是可以读取其他会话中未提交事务修改的数据。</p>
-</li>
-<li><p>已提交读：　只能读取已经提交的数据，清除了脏读问题。</p>
-</li>
-<li><p>可重复读：　在同一个事务内的进行的查询都与事务开始时刻一致，它是Innodb的默认级别，它清除了不可重复读，但是还是存在幻象读。</p>
-</li>
-<li><p>可串行化：　完全串行话的读，每次读取的时候都需要重新获取表级共享锁，读写相互都会发生阻塞。</p>
-</li>
+<li>编译器优化的重排序，在不改变单线程程序的as-if-serial语义的情况下，会对指令的执行顺序进行重排序。</li>
+<li>指令级并行的重排序　如果指令之间不存在数据依赖性的话，现代处理器将会采用指令级并行技术将多条指令重叠执行，改变语句对应的机器指令的执行顺序。</li>
+<li>内存系统的重排序　由于处理器是用缓存行和读／写缓冲区，让加载和存储操作看上去可能是在乱序执行。</li>
 </ul>
-<h3 id="未提交读"><a href="#未提交读" class="headerlink" title="未提交读"></a><strong>未提交读</strong></h3><p>未提交读隔离级别，任何操作都不会加锁，一般都不会使用。</p>
-<h3 id="已提交读"><a href="#已提交读" class="headerlink" title="已提交读"></a><strong>已提交读</strong></h3><p>在已提交读级别中，对于update、insert、delete操作进行的所加的锁会一直持续到事务结束才释放，而对于select操作所加的锁则是在select操作完成之后就会进行释放，不会持续到事务结束才释放。因此它能避免读取在事务中间没有提交的数据，它能保证读取到读取的数据都是已提交的，避免了脏读，但是它不能保证在事务中两次读取的结果集一致。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">session</span> <span class="keyword">transaction</span> <span class="keyword">isolation</span> <span class="keyword">level</span> <span class="keyword">read</span> committed;</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">SESSION</span> binlog_format = <span class="string">'ROW'</span>;</span><br></pre></td></tr></table></figure>
+<p>对于编译器，JMM的编译器重排序规则会禁止特定类型的编译器重排序，对于处理器重排序，JMM的处理器重排序规则会要求在编译器生成指令序列的时候，插入特定类型的内存屏障，通过内存屏障指令来禁止特定类型的处理器重排序。<br>JMM确保不同的编译器和不同的处理器平台之上，通过禁止特定类型的编译器重排序和处理器重排序，保证一致的内存可见性。</p>
+<h3 id="数据依赖性"><a href="#数据依赖性" class="headerlink" title="数据依赖性"></a><strong>数据依赖性</strong></h3><p>如果两个操作对同一个变量进行访问，而且其中一个操作为写操作，就称这两个操作之间存在这数据依赖性。<br>数据依赖主要分为三种：</p>
+<ul>
+<li>写后读　在写一个变量之后，再去读这个变量</li>
+<li>写后写　在写一个变量之后，再去写这个变量</li>
+<li>读后写  在读一个变量之后，再去写这个变量</li>
+</ul>
+<p>在以上三种情况下，如果操作的指令发生了重排序，操作的执行结果就会被改变。<br>编译器和处理器都可能会对操作进行重排序，不过编译器和处理器的重排序会遵循数据依赖性，不会改变存在数据依赖关系的两个操作的执行顺序。（此处的数据依赖性是在单个处理器中执行的指令序列和单个线程中执行的操作，不同处理器之间和不同线程之间的数据依赖不会被处理器和编译器考虑）</p>
+<h3 id="as-if-serial语义"><a href="#as-if-serial语义" class="headerlink" title="as-if-serial语义"></a><strong>as-if-serial语义</strong></h3><p>as-if-serial语义的意思指：无论如何进行重排序（编译器和处理器为了提供并行度），单线程程序的执行结果是不会发生改变。编译器、Runtime和处理器都必须遵循as-if-serial语义。<br>为了遵守as-if-serial语义，编译器和处理器都不会对存在数据依赖关系的操作做重排序，因为这种重排序会对执行结果做出改变，但是如果不存在依赖关系的话，编译器和处理器可能会对操作做重排序。<br>as-if-serial语义是单线程程序看起来是按照程序的顺序来执行的，让单线程程序无需担心重排序和内存可见性问题。</p>
+<h2 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a><strong>内存屏障</strong></h2><p>为了减少内存访问带来的延迟，现代的处理器一般使用写缓冲区来临时保存向内存写入的数据，写缓冲区可以保证指令流水线持续运行，避免由于处理器停顿等待向内存写入数据而产生的延迟，同时可以通过批处理的方式刷新写缓冲区，以及合并写缓冲区对同一内存地址的多次写，可以减少对内存总线的占用，不过写缓冲区只对它所在缓冲区可见，这会导致处理器对内存的读／写操作的执行顺序，不一定会与内存实际发生的读／写操作顺序一致（读写操作重排序）</p>
+<p>为了保证内存可见性，Java编译器会在生成的指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序，JMM把内存屏障分为以下四类：</p>
 <table>
 <thead>
 <tr>
-<th>事务Ａ</th>
-<th>事务B</th>
+<th>屏障类型</th>
+<th style="text-align:center">指令实例</th>
+<th style="text-align:right">说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>set autocommit = 0</td>
-<td>set autocommit = 0</td>
+<td>LoadLoad Barriers</td>
+<td style="text-align:center">Load1;LoadLoad;Load2</td>
+<td style="text-align:right">确保Load1数据的装载，之前于Load2以及所有后续装载指令的装载</td>
 </tr>
 <tr>
-<td>update user set education=’暨南大学’ where userId=30000;</td>
+<td>StoreStore Barriers</td>
+<td style="text-align:center">Store1;StoreStore;Store2</td>
+<td style="text-align:right">确保在Store1数据对其他处理器可见，之前于Store2以及所有后续存储指令的存储</td>
 </tr>
 <tr>
-<td></td>
-<td>update user set education=’暨南大学’ where userId=30000; </td>
+<td>LoadStore Barriers</td>
+<td style="text-align:center">Load1;LoadStore;Store2</td>
+<td style="text-align:right">确保Load1数据装载，之前于Store2以所有后续的存储指令刷新到内存</td>
 </tr>
 <tr>
-<td></td>
-<td>ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction</td>
-</tr>
-<tr>
-<td>commit</td>
+<td>StoreLoad Barriers</td>
+<td style="text-align:center">Store1;StoreLoad;Load2</td>
+<td style="text-align:right">确保Store1数据对其他处理器可见，之前于Load2以及所有后续装载指令的装载，StoreLoad Barriers会使该屏障之前的所有内存访问指令完成之后，才执行该屏障之后的内存访问指令</td>
 </tr>
 </tbody>
 </table>
-<p>为了防止并发过程中发生修改冲突，在事务A中对userId=30000的数据行进行加锁，如果一直不进行commit的话，事务B一直在申请得不到锁，会一直等待超时。<br>不过这处需要注意，因为userId是索引列，在进行加锁的只是对索引列值为30000的数据行进行加锁，而不会对其他数据行进行加锁，但是如果要加锁的数据列是没有索引的话，他会对所有的数据行进行加锁，因为在执行SQL的时候，数据库并不知道哪些数据行对应的数据行是需要进行加锁的，因为如果where条件无法通过索引进行快速过滤的话，存储引擎会将所有的记录加锁之后返回，然后再在服务层进行过滤。(Innodb只有在访问数据行的时候才会进行加锁，索引能够减少Innodb访问的行数，从而减少锁的数量，但这是只有Innodb能够在存储引擎层能够过滤掉所有不需要的行的时候才有效，如果索引无法过滤掉无效的行的话，只有Innodb访问数据行检索到数据并返回到服务层的时候，where子句才有进行过滤)<br>不过实际上，MySQL5.1版本之后在这进行了优化，Innodb可以在服务层过滤掉数据行，对这些过滤掉的数据行进行释放锁，不需要等到事务提交之后才释放锁。</p>
-<h3 id="可重复读"><a href="#可重复读" class="headerlink" title="可重复读"></a><strong>可重复读</strong></h3><p>可重复读的事务隔离级别是Innodb的默认隔离级别。可重复度事务隔离级别对于select所加的读锁和insert、update、delete操作所加的写锁都会一直持续到事务结束才会进行释放。</p>
-<h4 id="读"><a href="#读" class="headerlink" title="读"></a><strong>读</strong></h4><p>读即是可重复读，即在一个事务中对同一个查询进行多次读取，能够看到同样的数据行。</p>
-<table>
-<thead>
-<tr>
-<th>事务Ａ</th>
-<th>事务B</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>set autocommit = 0</td>
-<td>set autocommit = 0</td>
-</tr>
-<tr>
-<td>select * from user where userId=30000</td>
-</tr>
-<tr>
-<td></td>
-<td>update user set education=’暨南大学’ where userId=30000; </td>
-</tr>
-<tr>
-<td></td>
-<td>commit</td>
-</tr>
-<tr>
-<td>select * from user where userId=30000</td>
-</tr>
-<tr>
-<td>commit</td>
-</tr>
-</tbody>
-</table>
-<p>如果在读已提交事务隔离级别的情况下，在这事务A的两次查询当中，两次查询得到的结果集是不相同的，即不可重复读的。</p>
-<p>如果在可重复读的隔离级别下：</p>
-<table>
-<thead>
-<tr>
-<th>事务Ａ</th>
-<th>事务B</th>
-<th>事务C</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>set autocommit = 0</td>
-<td>set autocommit = 0</td>
-<td>set autocommit = 0</td>
-</tr>
-<tr>
-<td>select * from user where roleId=300</td>
-</tr>
-<tr>
-<td></td>
-<td>update user set education=’暨南大学’ where roleId=300;</td>
-</tr>
-<tr>
-<td></td>
-<td>commit</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>insert into user values(null,”西安大学”,300)</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>commit</td>
-</tr>
-<tr>
-<td>select * from user where roleId=300</td>
-<td></td>
-</tr>
-<tr>
-<td>commit</td>
-</tr>
-</tbody>
-</table>
-<p>在这并发事务中，我们可以看到事务A先进行了一次读取，在事务B中进行了一次数据的修改，在事务C中进行了一次数据的插入，不过在事务A中第二次读取得到的数据与第一次完全相同，即它是可以进行重读的。<br>不过在这里我们首先需要对幻读和不可重复读这两种并发导致的问题进行区分</p>
-<h4 id="幻读与不可重复读"><a href="#幻读与不可重复读" class="headerlink" title="幻读与不可重复读"></a><strong>幻读与不可重复读</strong></h4><p>不可重复读主要是针对与delete和update操作来讲的，而幻读主要是针对insert操作来讲的，即不可重复读是针对数据库中已有的数据，而幻读是对原不在数据库中的数据来讲的。<br>如果是使用锁机制来实现这两种隔离级别的话（可串行化和可重复读）的话。在重复读中，查询语句在第一次读取数据后，就会对读取的数据进行加锁，那么其他事务就无法对加锁的数据进行修改，就可以实现重复读取，但是这些的话无法对insert进来新的数据进行加锁，这样的话，在事务A读取数据或者修改数据之后，事务B还是可以进行insert操作的,这样的话，在事务A就会发现多了一条新的记录，即出现了幻读，不可以通过行锁来避免，这需要可串行化隔离级别，读用读锁，写用写锁，读写互斥，来避免幻读。<br>不过以上讲的是使用悲观锁机制来处理这两种问题，不过在MySQL中，都是使用以乐观锁为理论基础的MVCC（多版本并发控制）来避免问题。</p>
-<h4 id="悲观锁与乐观锁"><a href="#悲观锁与乐观锁" class="headerlink" title="悲观锁与乐观锁"></a><strong>悲观锁与乐观锁</strong></h4><ul>
-<li>悲观锁　</li>
-</ul>
-<p>悲观锁是指数据对外部环境（本系统当前的其他事务或者其他外部系统的事务处理）保持保守悲观态度，即在整个数据处理的过程中，将数据处于锁定状态，其他事务无法进行修改。悲观锁的实现，往往是依靠数据库提供的锁机制(只有通过数据库层面才能保证数据访问的排他性)来实现的。<br>在悲观锁的情况下，为了保证事务的隔离性，通过一致性锁进行读写锁定，在读取数据的时候进行加锁，其他事务无法修改这些数据。 在修改删除数据时候也要加锁，其他事务无法读取数据。</p>
+<h3 id="Happens-before原则"><a href="#Happens-before原则" class="headerlink" title="Happens-before原则"></a><strong>Happens-before原则</strong></h3><p>happens-before原则是指如果两个操作之间存在happens-before关系，那么第一个操作执行的结果会对第二个操作可见，这两个操作可以是在同一个线程内，也可以是在不同线程当中。</p>
 <ul>
-<li>乐观锁　<br>乐观锁相对于悲观锁而已，乐观锁机制采取比较宽松的加锁机制，悲观锁是通过依靠数据库的锁机制实现的，认为在大部分情况存在着并发访问，需要加锁来保证操作的独占性。而乐观锁则认为在大部分情况下是不存在并发访问的，不需要加锁来保证数据的独占性，而是通过数据版本（Version）记录机制来为数据作一个版本标识，即在基于数据库表的版本解决方案则是通过在数据库表增加一个version字段来实现，在进行数据读取的时候，将版本号进行一同读取，在对数据进行更新的时候，对版本号进行加一操作，同时，在提交的时候会对提交数据的版本号与数据库表对应记录的当前版本号进行对比，如果当前提交数据的版本对在数据库表中记录的版本号大的话，就进行更新，否则就认为是过期数据。</li>
+<li>程序顺序原则：在一个线程中的每个操作，happens-before与该线程中的任意后续操作。</li>
+<li>监视器锁原则  对一个监视器的解锁，happens-before与随后对这个监视器的加锁</li>
+<li>volatile变量原则　对一个volatile域的写，happens-before与任意后续对这个volatile域的读。</li>
+<li>传递性：如果A操作happens-before B，且B happens-before　C,那么A happens-before C.</li>
 </ul>
-<h4 id="Innodb中的乐观锁实现（MVCC）"><a href="#Innodb中的乐观锁实现（MVCC）" class="headerlink" title="Innodb中的乐观锁实现（MVCC）"></a><strong>Innodb中的乐观锁实现（MVCC）</strong></h4><p>在MVCC的Innodb实现中，它是通过在每行数据后添加两个额外的隐藏值来实现MVCC，这两个值一个是用于记录该行数据是在什么时候被创建的，另外一个是用来记录该行数据什么时候过期或者删除，不过它存储的不是具体的时间戳，而是事务的版本号，每开启一个事务，事务的版本号就会递增。<br>在可重复读的事务隔离级别的时候，进行以下操作的时候，事务版本号的修改如下：</p>
+<h2 id="顺序一致性模型"><a href="#顺序一致性模型" class="headerlink" title="顺序一致性模型　"></a><strong>顺序一致性模型</strong>　</h2><p>如果程序为正确进行同步，就可能会存在数据竞争，Java内存模型对数据竞争做出以下定义：</p>
 <ul>
-<li>Select的时候，Innodb只会查找版本早于当前事务版本的数据行，可以保证事务读取的行，要么是事务开始之前就已经存在的，要么是事务自身插入或者修改过的。还有可以读取行的删除版本没有定义或者大于当前事务版本号的，用来确保事务读取到的行，在事务开始之前未被删除。</li>
-<li>Insert的时候会为新插入的每一行保存当前系统版本号作为行版本号。</li>
-<li>Delete的时候为删除的每一行保存当前系统版本号作为行删除标志。</li>
-<li>Update的时候会新插入一行新记录，保存当前系统版本号作为行版本号，同时保存当前系统版本号到原来的行作为行删除标志。</li>
+<li>在一个线程中写一个变量</li>
+<li>在另一个线程读同一个变量</li>
+<li>读写没有通过同步进行排序</li>
 </ul>
-<p>通过保存这两个额外系统版本号，使得大多数读操作不需要进行加锁，使得读性能得到提高，也能保证只会读取到符合标准的行，不过每行记录都需要额外的存储空间。MVCC只有在REPEATABLE READ和READ COMMITTED这两个隔离级别下工作，其他两个隔离界别与MVCC不兼容，因为READ UNCOMMITTED总是读取最新的数据行，而不是符合事务版本的数据行，而SERUAKIZABLE则会对所有读取的行加锁。</p>
-<p>在ＭySQL的innodb MVCC实现中，能在在可重复读的事务隔离界别中能够保证对读取的数据行进行加锁，而且在读取数据的时候会有获取一个范围锁（range-locks），保证读取的范围加锁，新的满足满足条件的记录不能插入（间隙锁），避免了幻读现象。</p>
-<h4 id="当前读和快照读"><a href="#当前读和快照读" class="headerlink" title="当前读和快照读"></a><strong>当前读和快照读</strong></h4><p>在Innodb的ＭVCC并发控制的系统，读操作可以分为两种：当前读和快照读。</p>
+<p>当代吗中存在数据竞争的时候，程序的执行结果可能会出现意想不到的结果。<br>当一个多线程程序正确进行同步，这个程序将会是一个没有数据竞争的程序。</p>
+<p>JMM对正确同步的多线程程序做出了以下的保证：<br>如果程序是正确同步（广义同步，包括常用的同步原语final、volatile和final）的，程序的执行将具有顺序一致性，即程序的执行结果与在顺序一致性中的执行结果相同，</p>
+<h3 id="顺序一致性模型-1"><a href="#顺序一致性模型-1" class="headerlink" title="顺序一致性模型"></a><strong>顺序一致性模型</strong></h3><p>顺序一致性内存模型提供了极强的内存可见性保证，主要是保证两大特性：</p>
 <ul>
-<li>快照读：快照读是简单的select操作，不加锁。</li>
-<li>当前读：特殊的读操作，insert、update、delete操作，属于当前读，需要进行加锁。</li>
+<li>一个线程中的所有操作必须按照程序的顺序来执行</li>
+<li>所有线程都只能看到一个单一的操作的执行顺序，在顺序一致性内存模型中，每一个操作都必须原子执行且立即对所有线程可见</li>
 </ul>
-<p>当前读会读取记录的最新版本，在读取之后，同时会对记录加锁，保证其他并发事务不能修改当前记录。</p>
-<p>在进行update/delete操作的时候，当ＭySQL Server接收到SQL之后，会根据where条件，读取第一条满足条件的数据，然后Innodb引擎会将第一条记录返回，并进行加锁，等MySQL Server接收到记录之后，会再放起一个Update/Delete请求，对数据进行更新或者删除操作，一条记录操作完成之后，再去读取下一条记录，直到没有符合条件的记录位置。</p>
-<p>Insert操作的话会为可能突发Unique Key的冲突检查，也会进行一个当前读的操作。</p>
-<h4 id="Next-Key锁"><a href="#Next-Key锁" class="headerlink" title="Next Key锁"></a><strong>Next Key锁</strong></h4><p>上面我们讲到MySQL Innodb MVCC实现,可以避免当前读的幻读问题，它是通过Next Key锁来实现的。<br>Next Key锁是指行锁与GAP（间隙锁）的合并。</p>
-<p>行锁可以防止不同事务版本的数据修改提交时造成数据冲突的情况，但是它不能避免其他事务插入数据的问题。<br>在可重复读的事务隔离级别下，在事务A进行了Update/delete操作的操作之后进行加锁（Gap锁），事务B无法插入新数据，事务A能够保持操作前后数据保持一致，避免了幻读。</p>
-<p>如果在检索的时候使用了索引列，Innodb存储引擎使用的是B+树索引，会在最外层节点将数据分为一段段的区间，在事务进行Update／delete操作的时候，不仅仅会锁住对应的数据行，同时也会锁住对应数据行附近的区间，加入GAP锁，这样的话事务B的话就无法对附近区间进行insert操作，这样的话Innodb在很多时候锁住不需要锁的区间。</p>
-<p>如果检索的列不是索引列，那么就会给全表加入GAP锁，不过GAP锁不会向行锁一样在MySQL Server层过滤不满足条件的锁，因为没有索引，也没有排序，就没有区别，这样的话除非事务提交，否则其他事务无法插入任何数据。</p>
-<p>这样的话，通过行锁防止事务的删除和修改，通过GAP防止其他事务的新增，行锁和GAP锁结合形成的Next-key锁防止了在可重复读隔离级别下写数据时的幻读问题。</p>
-<h3 id="可串行化"><a href="#可串行化" class="headerlink" title="可串行化"></a><strong>可串行化</strong></h3><p>在可串行化的事务隔离级别中，会从MVCC并发控制退化成基于锁的并发控制，不对当前读和快照度进行区分，所有的读操作都是当前读，读加读锁（S锁），写加写锁（x锁），读写冲突，导致并发性能下降，一般不建议使用可串行化隔离级别。</p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><strong>参考文献</strong></h1><p><a href="https://book.douban.com/subject/23008813/" target="_blank" rel="external">高性能ＭySQL</a><br><a href="http://hedengcheng.com/?p=771" target="_blank" rel="external">MySQL 加锁处理分析</a><br><a href="https://zh.wikipedia.org/wiki/%E4%BA%8B%E5%8B%99%E9%9A%94%E9%9B%A2" target="_blank" rel="external">事务隔离</a><br><a href="http://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">Innodb中的事务隔离级别和锁的关系</a></p>
+<p>在顺序一致性模型中有一个单一的全局内存，这个内存通过与任意一个线程连接，同时每一个线程都必须要按照程序的顺序来执行内存读写操作，由于在任意一个时间点，最多只能有一个线程可以连接到内存，当多个线程并发执行时，可以实现把所有线程的所有内存读／写操作串行化。如果未同步程序在顺序一致性模型中虽然整体执行顺序无序，但是所有线程都只能看到一个一致的整体执行顺序，因为顺序一致性模型中的每个操作都必须立即对任意线程可见。</p>
+<p>但是在JMM中就无法保证，未同步程序在JMM中不但整体的执行顺序是无序的，而且所有线程看到的操作执行顺序也可能不一致.</p>
+<p>如果程序正确实现了同步，根据JMM规范，该程序的执行结果在与顺序一致性模型中的执行结果相同。</p>
+<p>在顺序一致性模型中，所有的操作完成按照程序的顺序串行执行，而在JMM中，临界区内的代理是可以重排序的，JMM会在退出临界区和进入临界区的时候进行处理使其能与顺序一致性模型相同的内存视图，由于临界区互斥访问的特性，其他线程无法访问当前线程在临界区中执行操作的重排序，这种重排序提供了执行效率而又没有改变程序的执行结果。</p>
+<p>如果程序没有正确实现重排序，JMM只能提供最小安全性：线程执行时读取到的值，要么是之前某个线程写入的值，要是是默认值，保证变量读取到的值是不会无中生有的，为了保证最小安全性，JMM在堆上分配对象的时候，首先会清零内存空间，然后才会在上面分配对象（同步操作），即在已清零的内存空间分配对象时，域的默认初始化已经完成了。</p>
+<p>未同步程序在JMM中的执行时候，整体是无序的，执行结果也是无法预知的，跟顺序一直性模型有以下差异。</p>
+<ul>
+<li>顺序一致性模型保证单线程内的操作会按程序的顺序执行，而JMM不保证单线程内的操作会按程序的顺序执行。</li>
+<li>顺序一致性模型保证所有的线程之恩那个看到一致的操作执行顺序，而JMM不保证所有线程看到一致的操作执行顺序。</li>
+<li>JMM不保证对64为的long型和double型变量的读写操作具有原子性，而顺序一致性模型保证对所有的内存读写操作具有原子性。</li>
+</ul>
+<h2 id="volite"><a href="#volite" class="headerlink" title="volite"></a><strong>volite</strong></h2><p>使用volatile变量的单个读写操作，与对一个普通变量的读写操作使用同一个锁进行同步的执行结果是相同的，<br>锁的happens-before规则保证了释放锁和获取锁的两个线程之间的内存可见性，这表明队一个volatile变量的读，总是能看到任意线程对这个volatile变量最后的写入，同时锁表明了在临界区的代码执行具有原子性，即64位的long和double的volatile变量都具有原子性，不过如果是多个操作的话则不保证原子性。<br>volatile保证了下列特性：</p>
+<ul>
+<li>可见性  对一个volatile变量的读，总是可以看到其他线程对volatile变量的最后的写入。</li>
+<li>原子性  在对任意单个volatile变量的读写具有原子性，但对复合操作不具有原子性。</li>
+</ul>
+<h3 id="volatile变量的happens-before关系"><a href="#volatile变量的happens-before关系" class="headerlink" title="volatile变量的happens before关系　"></a><strong>volatile变量的happens before关系</strong>　</h3><p>volatile的读-写与锁的释放-加锁具有相同的内存效果，volatile写和锁的释放具有相同的内存语义，volatile读与锁的获取具有相同的内存语义。</p>
+<p>volatile写的内存语义：当写一个volatile变量的时候，JMM会把该线程对应的工作内存中的共享变量值刷新到主内存中<br>volatile读的内存语义：当读一个volatile变量的时候，JMM会把该线程对应的工作内存置为无效，线程接下来将主内存中读取共享变量。<br>如果有两个线程对volatile变量读写的时候，线程A写一个volatile变量，然后线程B读取这个volatile变量，其实就是线程A通过主内存向线程B发送消息。</p>
+<h3 id="volatile内存语义的实现"><a href="#volatile内存语义的实现" class="headerlink" title="volatile内存语义的实现　"></a><strong>volatile内存语义的实现</strong>　</h3><p>重排序主要分为编译器重排序和处理器重排序，为了实现volatile内存语义实现，JMM做出了以下的限制<br>|  是否能重排序 | 第二个操作  | ||<br>|   ——  | —— | ——|<br>| 第一个操作  | 普通读／写  | volatile读  | volatile写  |<br>|  普通读／写 | Yes |    Yes   |    No      |<br>|  volatile读 | No  |    No     |    No   |<br>|  volatile写 |   Yes  |   No      |   No    |   </p>
+<p>从表中我们可以知道，当<strong>第二个操作</strong>为<strong>volatile写操作</strong>的时候，无论第一个操作是什么，都不能进行重排序，即保证volatile写之前的操作不会重排序到volatile写之后。<br>当<strong>第一个操作</strong>为<strong>volatile读操作</strong>的时候，无论第二个操作为什么操作，都不会发生重排序，即保证了volatile读之后的操作不会重排序到volatile读之前去。<br>还有当第一个操作为volatile写的时候，第二个操作为volatile读操作的时候，这两个操作之间也不会发生重排序。</p>
+<p>为了实现volatile的内存语义，编译器在生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。</p>
+<p>JMM采取了保守策略：</p>
+<ul>
+<li>它会在每个volatile写操作的前面插入一个StoreStore屏障，后面插入一个StoreLoad屏障；</li>
+<li>在每一个volatile读操作后面插入一个LoadLoad屏障，读操作后面插入一个LoadStore屏障。</li>
+</ul>
+<p>volatile写后面是会添加一个StoreLoad屏障，它主要是用来保证volatile写与后面可能会有volatile变量的读写操作重排序，因为编译器无法判断一个volatile写后面是否需要插入一个StoreLoad屏障（volatile写之后方法立即访问），为了保证正确实现volatile的内存语义，JMM在这里采用了<strong>保守策略</strong>，在每一个volatile写后面或者在每个volatile读的前面都插入一个StoreLoad屏障</p>
+<h2 id="False-Sharing和Cache-Line"><a href="#False-Sharing和Cache-Line" class="headerlink" title="False Sharing和Cache Line"></a><strong>False Sharing和Cache Line</strong></h2><p>Cache Line即缓存行，是指CPU从内存中读取数据时，并不是一次只读一个字节，而是会一次读取64字节长度的连续内存块，而这个连续内存块就是缓存行。<br>False Sharing即伪共享，是指多个线程修改同一个缓存行的不同变量时，会相互发生影响，需要重新加载缓存行，导致性能降低，因为虽然变量的修改逻辑是相互独立的，但是在同一个缓冲行上的数据是同一维护的，一致性的粗粒度并不是单个元素上。<br>一个CPU核心在加载缓存行数据的时候可能需要执行上百条执行，当一个核心要等待另一个核心来重新加载缓存行的话，就需要等待，即停止运转（stall）,因此我们需要减少伪共享来减少stall的发生。<br>我们可以通过填充的方法来让原本存储在同一个缓冲行的两个变量，在被并发访问的时候位于不同的缓冲行中。<br>也可以使用＠Contended 对需要避免进行陷入伪共享的字段进行注解，它会提醒JVM将字段放到不同的缓存行中。</p>
+<h3 id="CPU缓存结构"><a href="#CPU缓存结构" class="headerlink" title="CPU缓存结构"></a><strong>CPU缓存结构</strong></h3><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/cache.jpg" alt="cpu"></p>
+<p>现代CPU缓存结构主要分为3个级别，级别越小的缓存越接近CPU,读取的速度越快，但是容量也越小。<br>L1 Cache是最接近CPU的缓存，它的容量最小，速度最快，在每一个核中存在着两个L1 Cache，一个是用来存储操作数，一个用存储操作指令。<br>L2 Cache比L1 Cache大一级，存储的容量更大，不过速度稍慢，一般情况下，每一个核都存在一个独立的L2 Cache。<br>L3 Cache是三级缓存，级别最大，速度最慢，在同一个CPU插槽之间的核共享一个L3　Cache。</p>
+<p>当CPU运作的时候，它首先会去L1 Cache中查找数据，然后到L2 Cache，再到L3 Cache，如果在三级缓存中都没有找到需要的数据，那么就会从CPU中获取数据，查找的路径越长，耗时也越大。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><strong>参考文献</strong></h1><blockquote>
+<p><a href="http://www.infoq.com/cn/author/%E7%A8%8B%E6%99%93%E6%98%8E#文章" target="_blank" rel="external">InfoQ之深入Java内存模型</a></p>
+<p><a href="http://robsjava.blogspot.com/2014/03/what-is-false-sharing.html" target="_blank" rel="external">What is @Contended and False Sharing</a></p>
+</blockquote>
 
                     
                         
                     
                     
                         <p>
-                            <a href="/2016/08/14/浅析数据库之事务隔离级别与锁机制/#post-footer" class="postShorten-excerpt_link link">
-                                COMMENT AND SHARE
+                            <a href="/2016/08/27/读书笔记之浅析Java内存模型/#post-footer" class="postShorten-excerpt_link link">
+                                Comentar e compartilhar
                             </a>
                         </p>
                     
@@ -425,12 +337,12 @@
         
         <li class="pagination-next">
             <a class="btn btn--default btn--small" href="/archives/page/2/">
-                    <span>OLDER</span>
+                    <span>POSTS MAIS ANTIGOS</span>
                 <i class="fa fa-angle-right text-base icon-ml"></i>
             </a>
         </li>
         
-        <li class="pagination-number">PAGE 1 OF 45</li>
+        <li class="pagination-number">página 1 de 47</li>
     </ul>
 </div>
 
@@ -464,14 +376,14 @@
         
             <h4 id="about-card-name">冼毅俊</h4>
         
-            <h5 id="about-card-bio"><p>Xupter√Java√德桌迷√虐心控√mugen爱好者√音乐杂食党√小说发烧友√基本色√鱼迷√stan√bitch√daydreamer</p>
+            <h5 id="about-card-bio"><p>author.bio</p>
 </h5>
         
         
             <h5 id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>Java研发</p>
+                <p>author.job</p>
 
             </h5>
         

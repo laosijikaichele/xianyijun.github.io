@@ -99,7 +99,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-circle-thin"></i>
-                    <span class="sidebar-button-desc">Home</span>
+                    <span class="sidebar-button-desc">Início</span>
                 </a>
         </li>
         
@@ -111,7 +111,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-bars"></i>
-                    <span class="sidebar-button-desc">Archives</span>
+                    <span class="sidebar-button-desc">Arquivo</span>
                 </a>
         </li>
         
@@ -135,7 +135,7 @@
                     >
                 
                     <i class="sidebar-button-icon fa fa-lg fa-terminal"></i>
-                    <span class="sidebar-button-desc">About</span>
+                    <span class="sidebar-button-desc">Sobre</span>
                 </a>
         </li>
         
@@ -183,15 +183,15 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2016/05/31/浅析设计模式之单例模式-Java版/">
-                            浅析设计模式之单例模式(Java版)
+                        <a class="link-unstyled" href="/2016/06/04/浅析Java并发之锁机制/">
+                            浅析Java并发之锁机制
                         </a>
                     
                 </h1>
                 <div class="postShorten-meta">
-    <time itemprop="datePublished" content="Tue May 31 2016 22:25:00 GMT+0800">
+    <time itemprop="datePublished" content="Sat Jun 04 2016 22:18:58 GMT+0800">
 	
-		    May 31, 2016
+		    04/06/2016
     	
     </time>
     
@@ -200,33 +200,46 @@
             
             
                 <div class="postShorten-content" itemprop="articleBody">
-                    <h1 id="浅析设计模式之单例模式-Java版"><a href="#浅析设计模式之单例模式-Java版" class="headerlink" title="浅析设计模式之单例模式(Java版)"></a><strong>浅析设计模式之单例模式(Java版)</strong></h1><h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a><strong>单例模式</strong></h2><p>单例模式能够保证一个类只有一个实例，并且自行实例化并向整个系统提供实例。</p>
-<h3 id="单例模式的优点"><a href="#单例模式的优点" class="headerlink" title="单例模式的优点　"></a><strong>单例模式的优点</strong>　</h3><ul>
-<li>单例模式在内存中只有一个实例，减少了系统的内存开支，减少了对象创建和销毁时的性能损耗。</li>
-<li>单例模式只有一个实例，如果对象在创建的时候需要进行一些耗资源的操作的话，可以减少系统的资源损耗。</li>
-<li>单例模式可以避免对资源的多重占用，避免同时对同一个资源文件操作。</li>
-<li>单例模式可以在系统设置全局访问点，优化和共享资源访问。</li>
-</ul>
-<h3 id="单例模式的缺点"><a href="#单例模式的缺点" class="headerlink" title="单例模式的缺点"></a><strong>单例模式的缺点</strong></h3><p>-　单例模式一般没有接口，难以扩展。</p>
-<p>-　单例模式对测试是不利，在开发环境中，如果单例对象没有完成的话，是不能进行测试的。</p>
-<p>-　单例模式与单一职责冲突，单例类把“单例”与业务逻辑耦合在一起的。</p>
-<h2 id="单例模式实现"><a href="#单例模式实现" class="headerlink" title="单例模式实现"></a><strong>单例模式实现</strong></h2><h3 id="懒汉模式"><a href="#懒汉模式" class="headerlink" title="懒汉模式"></a><strong>懒汉模式</strong></h3><ul>
-<li>双重检验锁</li>
-</ul>
-<p>为了实现线程安全，Java使用了双重检验锁来实现，在第一次检查是在同步块之外，是用来判断当前的singleton是否为null，如果为null,为了防止并发环境下，多个线程同时去创建singleton实例，导致在内存中singleton实例不唯一，使用sychronzied关键字进行同步，进入同步块之后，还需要进行null判断，防止之前if语句有多个线程进入，最后进行singleton实例的创建和初始化。<br>在这里singleton变量使用volatile修饰，volatile修饰主要是为了保证变量的线程可见性和禁止重排序。对象的创建并不是原子操作，它在不影响最后结果的情况下，会对操作指令执行优化和重排序，创建操作可分为三个操作：为实例对象分配内存、初始化singleton的实例变量、将实例对象指向分配的内存空间。在实际情况下，可能会发生对象还没有完成初始化就将对象指向给分配的内存空间，导致singleton不为null，即发生了不安全发布，导致在使用singleton的时候出错。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcurrentSafeSingleton</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> ConcurrentSafeSingleton singleton;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">ConcurrentSafeSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ConcurrentSafeSingleton <span class="title">getSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">synchronized</span> (ConcurrentSafeSingleton.class) &#123;</span><br><span class="line">				<span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">					singleton = <span class="keyword">new</span> ConcurrentSafeSingleton();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> singleton;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+                    <h1 id="浅析Java并发之锁机制"><a href="#浅析Java并发之锁机制" class="headerlink" title="浅析Java并发之锁机制"></a><strong>浅析Java并发之锁机制</strong></h1><h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a><strong>线程安全</strong></h2><p>锁在并发编程经常会使用到，主要是用来保护临界区资源不会因为被多个线程同时访问而受到破坏，如果多个线程对临界区资源进行访问的话，可能会导致数据的不一致性，程序运行会得到错误的结果。<br>通过锁的话，我们可以实现线程安全，即并发环境下，多个线程对对象进行访问，对象的状态始终保持一致，并且能与在单线程环境下运行得到相同的结果，即线程的行为是正确的。</p>
+<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a><strong>对象头</strong></h2><p>在Java虚拟机中(特指Hotspot)，对象在内存中存储的布局主要分为三个部分对象头，实例数据和对齐填充。<br>在这里我们主要讲一下对象头，对象头包括两个部分对象运行时数据和类型指针，跟锁相关的主要运行时数据这一块。<br>运行时数据主要包括hashcode、Gc分代年龄、锁状态持有的锁、偏向线程ID、偏向时间戳等。这部分被称为Mark Word.Mark Work是一个非固定的数据结构，它能根据对象的状态对存储空间进行复用。</p>
 <ul>
-<li>静态内部类</li>
+<li>在32位系统中，普通对象的对象头如下</li>
 </ul>
-<p>由于内部类只有在调用的时候才会进行类加载和初始化，因此我们可以通过静态内存类对singleton对象进行持有，在需要使用singleton对象的时候，才调用getSingleton进行实例对象的初始化。类加载是单线程的操作，JVM保证只有一个线程在执行类的加载操作，其他试图去加载类的线程都会阻塞在执行类加载的线程的外面，等待类加载操作的完成返回。这样保证了singleton实例初始化的线程安全性。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InnerClassSingleton</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</span><br><span class="line">		<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> InnerClassSingleton SINGLETON = <span class="keyword">new</span> InnerClassSingleton();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">InnerClassSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> InnerClassSingleton <span class="title">getSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> SingletonHolder.SINGLETON;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="饿汉模式"><a href="#饿汉模式" class="headerlink" title="饿汉模式"></a><strong>饿汉模式</strong></h3><p>我们可以通过static final对变量进行修饰，保证对象的安全发布。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton SINGLETON = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> SINGLETON;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcode : 25 | age : 4 | biased_lock : 1 | lock : 2</span><br></pre></td></tr></table></figure>
+<p>表示在Mark Word中有25位比特用来表明对象的哈希值，4位比特表示对象的分代年龄，1位比特表示是否为偏向锁，2位比特表示锁的信息。</p>
+<ul>
+<li>偏向锁<br>对于偏向锁的对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JavaThread* : <span class="number">23</span> | epoch : <span class="number">2</span> | age : <span class="number">4</span> | biased_lock　：<span class="number">1</span> | <span class="number">01</span></span><br></pre></td></tr></table></figure>
+<p>前23位比特表示持有锁的线程，后两位比特表示偏向锁的时间戳(epoch)，4位比特表示对象年龄，年龄后一位比特固定为1，表示偏向锁，最后2位表示可偏向/未锁定。</p>
+<ul>
+<li>轻量级锁</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">| ptr : 30 | 00 | locked</span><br></pre></td></tr></table></figure>
+<p>当对象被轻量级锁锁定的时候，ptr指向获得锁的线程栈中该对象的真实对象头，最后2位比特为00.</p>
+<ul>
+<li>重量级锁</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|ptr : 30 | 01 | monitor</span><br></pre></td></tr></table></figure>
+<p>当对象被重量级锁锁定的时候，ptr指向的是Monitor，最后两位比特是01</p>
+<ul>
+<li>未锁定</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcode : 25 | age : 4 | biased_lock : 0 | 01</span><br></pre></td></tr></table></figure>
+<p>前29位表示对象的哈希值和年龄，倒数第三位为0,最后两位为01,表示未锁定，虚拟机通过倒数第三位来判断是否为偏向锁。</p>
+<h2 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a><strong>锁机制</strong></h2><h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a><strong>偏向锁</strong></h3><p>偏向锁表示如果程序没有竞争，就取消之前已经取得锁读的线程同步操作，即某一锁被线程获取后，进入偏向模式，当线程再次请求这个锁的时候，就不需要再进行相关的同步操作，节省时间。如果在线程持有锁期间，有其他线程进行锁请求，则锁退出偏向模式。<br>在JVM使用-XX:+UseBiasedLocking可以设置启动偏向锁。当锁对象处于偏向模式时，对象头会记录获得锁的线程。</p>
+<h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a><strong>轻量级锁</strong></h3><p>如果偏向锁失败，虚拟机会让线程去申请轻量级锁。轻量级锁在虚拟机中是使用BasicObjectLock的对象实现。对象内部持有BasicLock对象和一个持有该锁的对象指针。BasicObjectLock对象存储在Java虚拟机栈的栈帧中，在BasicLock对象内部维护displaced_header用来备份对象的Mark Word，obj字段指向轻量级锁对象<br>当对象被轻量级锁锁定的时候，Mark Word最后两位比特为0,整个Mark Word为执行BasicLock对象的指针，由于BasicObjectLock对象在虚拟机栈中，因此指针必然指向轻量级锁所在的虚拟机栈空间，即我们只需要判断某一个线程是否持有该对象锁时，只需要判断该对象头的指针是否在当前线程的栈地址范围内就可以了。<br>轻量级加锁操作首先由BasicLock通过备份原对象的Mark Word，然后通过cas操作，尝试将BasicLock复制到对象头的Mark Word,如果复制成功，则加锁成功，否则加锁失败，那么轻量级锁可能会膨胀为重量级锁。</p>
+<h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a><strong>重量级锁</strong></h3><p>当轻量级锁失败的时候，虚拟机就有可能使用重量级锁，对象头的Mark Word的最后两位比特会被设置为01,然后Mark Work会指向monitor对象的指针。<br>轻量级锁失败后，启用重量级锁的时候会废弃BasicLock备份的对象头信息，然后正式启用重量级锁，首先获取对象的ObjectMonitor，然后试图去进入该锁。在试图进入临界区的时候，线程可能会被挂起。</p>
+<h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a><strong>自旋锁</strong></h3><p>锁膨胀的时候，线程有可能会被挂起，虚拟机为了线程能够尽快进入临界区而不是被挂起，虚拟机会使用自旋锁。<br>自旋锁可以让线程在没有得到锁的时候，不被挂起，而是去执行一个空循环，在执行若干的循环后，如果线程获得锁，则继续执行，否则的话，线程就会被挂起。<br>自旋锁对于那些竞争不怎么激烈，锁占用时间短的并发线程，可以减少挂起几率，保证线程执行的连贯，否则对于那些锁竞争激烈，锁占用时间长的并发程序，自旋锁在自旋等待之后仍然没有获得锁的话，浪费了CPU时间，最后还是会被挂起，浪费了系统资源。<br>在JDK1.6的时候，可以通过-XX:+UseSpinning参数来开启自旋锁，使用-XX:PreBlockSpin参数来设置自旋锁的等待次数。<br>在JDK1.7的时候，虚拟机取消了自旋锁的参数设置，虚拟机会自行调整自旋锁和等待次数。</p>
+<h3 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a><strong>锁消除</strong></h3><p>锁清除是指虚拟机在JIT编译的时候，通过对运行上下文的扫描，基于逃逸分析技术，去除不可能存在共享资源竞争的锁，可以通过锁清除，减少请求锁的时间。<br>逃逸分析和锁消除可以通过-XX:+DoEscapeAnalysis和-XX:+EliminateLocks开启，不过锁消除必须是使用在-server模式下。</p>
 
                     
                         
                     
                     
                         <p>
-                            <a href="/2016/05/31/浅析设计模式之单例模式-Java版/#post-footer" class="postShorten-excerpt_link link">
-                                COMMENT AND SHARE
+                            <a href="/2016/06/04/浅析Java并发之锁机制/#post-footer" class="postShorten-excerpt_link link">
+                                Comentar e compartilhar
                             </a>
                         </p>
                     
@@ -244,19 +257,19 @@
                 <a class="btn btn--default btn--small" href="/page/16/">
             
                 <i class="fa fa-angle-left text-base icon-mr"></i>
-                    <span>NEWER</span>
+                    <span>POSTS MAIS NOVOS</span>
             </a>
         </li>
         
         
         <li class="pagination-next">
             <a class="btn btn--default btn--small" href="/page/18/">
-                    <span>OLDER</span>
+                    <span>POSTS MAIS ANTIGOS</span>
                 <i class="fa fa-angle-right text-base icon-ml"></i>
             </a>
         </li>
         
-        <li class="pagination-number">PAGE 17 OF 45</li>
+        <li class="pagination-number">página 17 de 47</li>
     </ul>
 </div>
 
@@ -289,14 +302,14 @@
         
             <h4 id="about-card-name">冼毅俊</h4>
         
-            <h5 id="about-card-bio"><p>Xupter√Java√德桌迷√虐心控√mugen爱好者√音乐杂食党√小说发烧友√基本色√鱼迷√stan√bitch√daydreamer</p>
+            <h5 id="about-card-bio"><p>author.bio</p>
 </h5>
         
         
             <h5 id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>Java研发</p>
+                <p>author.job</p>
 
             </h5>
         
