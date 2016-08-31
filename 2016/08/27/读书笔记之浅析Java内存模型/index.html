@@ -28,7 +28,7 @@
 
 线程同步是指对线程与线">
 <meta property="og:image" content="http://7xrl91.com1.z0.glb.clouddn.com/cache.jpg">
-<meta property="og:updated_time" content="2016-08-30T14:37:35.923Z">
+<meta property="og:updated_time" content="2016-08-31T04:24:07.744Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="读书笔记之浅析Java内存模型">
 <meta name="twitter:description" content="读书笔记之浅析Java内存模型并发模型分类在并发编程中，最重要的是两个部分：线程通信和线程同步。常见的线程通信机制有两种：共享内存和消息传递。
@@ -223,7 +223,7 @@
 <h2 id="Java内存模型抽象"><a href="#Java内存模型抽象" class="headerlink" title="Java内存模型抽象"></a><strong>Java内存模型抽象</strong></h2><p>在Java中，程序计数器、虚拟机栈和本地方法栈是线程私有的，不会在线程间进行共享，因此不会存在内存可见性问题，也不会受到内存模型的影响，而堆区和方法区则是线程公有的，对象的实例域和静态域都在存储在堆区，会在线程之间进行共享，即可称为共享变量。<br>Java线程之间的通信是由Java内存模型（JMM）控制，JMM决定一个线程对共享变量的读写什么时候对另一个线程可见，定义了线程与主内存之间的抽象关系，线程之间的共享变量是存储在主内存当中，而每一个线程都会有自己的工作内存，线程对共享变量的读写是发生在工作内存当中，工作内存存储着该线程用来读写共享变量的副本。然而工作内存实际上是不存在的，它是缓存、缓冲区、寄存器的一个抽象存在。</p>
 <hr>
 <p>举个例子，如果两个线程需要进行通信，目前有线程A和工作内存A、线程B和工作内存B、主内存，线程A要与线程B进行通信的话，首先线程A要将工作内存A中更新过的共享变量刷新到主内存中去，然后线程B到主内存中去读取线程A已经更新过的共享变量，对线程B的工作内存的共享变量进行更新，这样看来的话，线程A向线程B进行通信，必须要经过主内存，JMM进通过控制主内存与每一个线程的工作工作内存进行交互，来为Java程序提供了内存可见性保证。</p>
-<h2 id="重排序"><a href="#重排序" class="headerlink" title="重排序　"></a><strong>重排序</strong>　</h2><p>在程序执行的时候，为了提高性能，编译器和处理器往往会对指令重排序，重排序主要分为以下三种：</p>
+<h2 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a><strong>重排序</strong></h2><p>在程序执行的时候，为了提高性能，编译器和处理器往往会对指令重排序，重排序主要分为以下三种：</p>
 <ul>
 <li>编译器优化的重排序，在不改变单线程程序的as-if-serial语义的情况下，会对指令的执行顺序进行重排序。</li>
 <li>指令级并行的重排序　如果指令之间不存在数据依赖性的话，现代处理器将会采用指令级并行技术将多条指令重叠执行，改变语句对应的机器指令的执行顺序。</li>
@@ -239,8 +239,7 @@
 <p>在以上三种情况下，如果操作的指令发生了重排序，操作的执行结果就会被改变。<br>编译器和处理器都可能会对操作进行重排序，不过编译器和处理器的重排序会遵循数据依赖性，不会改变存在数据依赖关系的两个操作的执行顺序。（此处的数据依赖性是在单个处理器中执行的指令序列和单个线程中执行的操作，不同处理器之间和不同线程之间的数据依赖不会被处理器和编译器考虑）</p>
 <h3 id="as-if-serial语义"><a href="#as-if-serial语义" class="headerlink" title="as-if-serial语义"></a><strong>as-if-serial语义</strong></h3><p>as-if-serial语义的意思指：无论如何进行重排序（编译器和处理器为了提供并行度），单线程程序的执行结果是不会发生改变。编译器、Runtime和处理器都必须遵循as-if-serial语义。<br>为了遵守as-if-serial语义，编译器和处理器都不会对存在数据依赖关系的操作做重排序，因为这种重排序会对执行结果做出改变，但是如果不存在依赖关系的话，编译器和处理器可能会对操作做重排序。<br>as-if-serial语义是单线程程序看起来是按照程序的顺序来执行的，让单线程程序无需担心重排序和内存可见性问题。</p>
 <h2 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a><strong>内存屏障</strong></h2><p>为了减少内存访问带来的延迟，现代的处理器一般使用写缓冲区来临时保存向内存写入的数据，写缓冲区可以保证指令流水线持续运行，避免由于处理器停顿等待向内存写入数据而产生的延迟，同时可以通过批处理的方式刷新写缓冲区，以及合并写缓冲区对同一内存地址的多次写，可以减少对内存总线的占用，不过写缓冲区只对它所在缓冲区可见，这会导致处理器对内存的读／写操作的执行顺序，不一定会与内存实际发生的读／写操作顺序一致（读写操作重排序）</p>
-<p>为了保证内存可见性，Java编译器会在生成的指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序，JMM把内存屏障分为以下四类：</p>
-<table>
+<h2 id="为了保证内存可见性，Java编译器会在生成的指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序，JMM把内存屏障分为以下四类："><a href="#为了保证内存可见性，Java编译器会在生成的指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序，JMM把内存屏障分为以下四类：" class="headerlink" title="为了保证内存可见性，Java编译器会在生成的指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序，JMM把内存屏障分为以下四类："></a>为了保证内存可见性，Java编译器会在生成的指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序，JMM把内存屏障分为以下四类：</h2><table>
 <thead>
 <tr>
 <th>屏障类型</th>
@@ -271,6 +270,7 @@
 </tr>
 </tbody>
 </table>
+<hr>
 <h3 id="Happens-before原则"><a href="#Happens-before原则" class="headerlink" title="Happens-before原则"></a><strong>Happens-before原则</strong></h3><p>happens-before原则是指如果两个操作之间存在happens-before关系，那么第一个操作执行的结果会对第二个操作可见，这两个操作可以是在同一个线程内，也可以是在不同线程当中。</p>
 <ul>
 <li>程序顺序原则：在一个线程中的每个操作，happens-before与该线程中的任意后续操作。</li>
@@ -322,10 +322,8 @@
 <h3 id="CPU缓存结构"><a href="#CPU缓存结构" class="headerlink" title="CPU缓存结构"></a><strong>CPU缓存结构</strong></h3><p><img src="http://7xrl91.com1.z0.glb.clouddn.com/cache.jpg" alt="cpu"></p>
 <p>现代CPU缓存结构主要分为3个级别，级别越小的缓存越接近CPU,读取的速度越快，但是容量也越小。<br>L1 Cache是最接近CPU的缓存，它的容量最小，速度最快，在每一个核中存在着两个L1 Cache，一个是用来存储操作数，一个用存储操作指令。<br>L2 Cache比L1 Cache大一级，存储的容量更大，不过速度稍慢，一般情况下，每一个核都存在一个独立的L2 Cache。<br>L3 Cache是三级缓存，级别最大，速度最慢，在同一个CPU插槽之间的核共享一个L3　Cache。</p>
 <p>当CPU运作的时候，它首先会去L1 Cache中查找数据，然后到L2 Cache，再到L3 Cache，如果在三级缓存中都没有找到需要的数据，那么就会从CPU中获取数据，查找的路径越长，耗时也越大。</p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><strong>参考文献</strong></h1><blockquote>
-<p><a href="http://www.infoq.com/cn/author/%E7%A8%8B%E6%99%93%E6%98%8E#文章" target="_blank" rel="external">InfoQ之深入Java内存模型</a></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a><strong>参考文献</strong></h1><p><a href="http://www.infoq.com/cn/author/%E7%A8%8B%E6%99%93%E6%98%8E#文章" target="_blank" rel="external">InfoQ之深入Java内存模型</a></p>
 <p><a href="http://robsjava.blogspot.com/2014/03/what-is-false-sharing.html" target="_blank" rel="external">What is @Contended and False Sharing</a></p>
-</blockquote>
 
             
         </div>
